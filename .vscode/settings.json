@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
+    "appbar",
     "buhay",
+    "nesvier",
     "Schyler"
   ],
-  "dart.flutterSdkPath": ".fvm/versions/3.24.3"
+  "dart.flutterSdkPath": ".fvm/versions/3.24.3",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

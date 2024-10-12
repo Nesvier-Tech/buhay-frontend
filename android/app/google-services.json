@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "910258929518",
+    "project_id": "buhay-437307",
+    "storage_bucket": "buhay-437307.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910258929518:android:b22dcb02380f4acb1f0b7f",
+        "android_client_info": {
+          "package_name": "com.nesvier.buhay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTraLEmH96w6IaDzSSZpCHj_lzLTNuA_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
