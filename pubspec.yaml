@@ -44,6 +44,7 @@ dependencies:
   firebase_remote_config: ^5.1.3
   firebase_vertexai: ^0.2.3+4
   firebase_data_connect: ^0.1.2
+  go_router: ^14.3.0
 
 dev_dependencies:
   flutter_test:
