@@ -6,7 +6,8 @@
     "grayscale",
     "hexcode",
     "nesvier",
-    "Schyler"
+    "Schyler",
+    "vertexai"
   ],
   "dart.flutterSdkPath": ".fvm/versions/3.24.3",
   "java.configuration.updateBuildConfiguration": "interactive"
