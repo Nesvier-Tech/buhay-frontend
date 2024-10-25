@@ -1,22 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'firebase_options.dart';
 import 'router/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const BuhayApp());
 }
 
 class BuhayApp extends StatelessWidget {
   const BuhayApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -39,8 +37,17 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Buhay - Disaster Response App'),
       ),
-      body: const Center(
-        child: Text('Hello, World!'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Hello, World!'),
+            ElevatedButton(
+              onPressed: () => context.go('/nstp-map'),
+              child: const Text('Go to NSTP Map'),
+            ),
+          ],
+        ),
       ),
     );
   }
