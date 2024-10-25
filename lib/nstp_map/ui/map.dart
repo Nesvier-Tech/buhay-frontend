@@ -29,12 +29,14 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     super.initState();
     final String mapboxAccessToken =
         'pk.eyJ1IjoicGlwc3kiLCJhIjoiY20yb2UxNzJlMDV2cDJqcjExcnE4MWptMyJ9.rvSI4DjiyracHOOctSw_ZA';
+    final String googleToken = 'AIzaSyDiNjcAgV78JyNFsSG7azjR6ItsH6D2Llg';
     MapboxOptions.setAccessToken(mapboxAccessToken);
     _mapController = NSTPMapController(
       mapboxAccessToken: mapboxAccessToken,
       currentLocation: const LatLng(14.6539, 121.0685),
+      googleToken: googleToken,
     );
-    _searchController = custom.SearchController(mapboxAccessToken);
+    _searchController = custom.SearchController(mapboxAccessToken, googleToken);
   }
 
   void _showLocationInfo(LatLng point) {
@@ -117,6 +119,12 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
                             onTapListener: _handleMapTap,
                             onCameraChangeListener: _onCameraChange,
                           ),
+                          if (markerScreenPosition != null)
+                            Positioned(
+                              left: markerScreenPosition!.dx - 20,
+                              top: markerScreenPosition!.dy - 40,
+                              child: _buildMarker(),
+                            ),
                           Positioned(
                             top: 16,
                             left: 16,
@@ -144,12 +152,6 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
                               ),
                             ),
                           ),
-                          if (markerScreenPosition != null)
-                            Positioned(
-                              left: markerScreenPosition!.dx - 20,
-                              top: markerScreenPosition!.dy - 40,
-                              child: _buildMarker(),
-                            ),
                         ],
                       ),
                     ),

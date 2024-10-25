@@ -10,11 +10,14 @@ class NSTPMapController {
   LatLng currentLocation;
   LatLng? markerPosition;
   bool showSidebar = false;
+  final String googleToken;
 
   NSTPMapController({
     required this.mapboxAccessToken,
     required this.currentLocation,
-  }) : searchData = SearchData(mapboxAccessToken);
+    required this.googleToken, // Added googleToken as a required parameter
+  }) : searchData = SearchData(
+            mapboxAccessToken, googleToken); // Now it can be accessed
 
   void onMapCreated(MapboxMap map) {
     mapboxMap = map;
@@ -38,6 +41,7 @@ class NSTPMapController {
   }
 
   void _flyToLocation(LatLng location) {
+    currentLocation = location;
     mapboxMap?.flyTo(
       CameraOptions(
         center: Point.fromJson({
@@ -45,7 +49,7 @@ class NSTPMapController {
         }),
         zoom: 15.0,
       ),
-      MapAnimationOptions(duration: 2000),
+      MapAnimationOptions(duration: 1000),
     );
   }
 
@@ -63,18 +67,5 @@ class NSTPMapController {
       return Offset(screenPoint.x, screenPoint.y);
     }
     return null;
-  }
-
-  void flyToLocation(LatLng location) {
-    currentLocation = location;
-    mapboxMap?.flyTo(
-      CameraOptions(
-        center: Point.fromJson({
-          'coordinates': [location.longitude, location.latitude]
-        }),
-        zoom: 18.0,
-      ),
-      MapAnimationOptions(duration: 1000),
-    );
   }
 }
