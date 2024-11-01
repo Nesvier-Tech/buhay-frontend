@@ -18,6 +18,13 @@ class MapFormState extends State<MapForm> {
   final FormController _controller = FormController();
 
   @override
+  void initState() {
+    super.initState();
+    // Pass latitude and longitude to the controller
+    _controller.setCoordinates(widget.latitude, widget.longitude);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
@@ -163,7 +170,7 @@ class MapFormState extends State<MapForm> {
               ),
             SizedBox(height: 10),
             FormBuilderTextField(
-              name: 'photos',
+              name: 'photo_reference',
               decoration: InputDecoration(
                 icon: Icon(Icons.camera),
                 labelText: 'Photo Reference (URL)',

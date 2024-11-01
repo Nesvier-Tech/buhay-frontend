@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+// import '../api/database.dart';
 
 class FormController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  double latitude = 0;
+  double longitude = 0;
   bool isRealData = false;
   bool isEvacuationSite = false;
   final List<String> evacuationSitesTypes = [
@@ -13,6 +16,11 @@ class FormController {
     'School',
     'Others'
   ];
+
+  void setCoordinates(String latitude, String longitude) {
+    this.latitude = double.parse(latitude);
+    this.longitude = double.parse(longitude);
+  }
 
   void toggleRealData(bool? value) {
     isRealData = value ?? false;
@@ -100,7 +108,15 @@ class FormController {
       final formData = getFormData();
       if (areAllRequiredFieldsFilled(formData)) {
         // Process the form data
-        onSuccess(formData);
+        final data = processFormData(formData);
+
+        // if (isEvacuationSite) {
+        //   saveDataToDatabase(data, true);
+        // } else {
+        //   saveDataToDatabase(data, false);
+        // }
+
+        onSuccess(data);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please fill all required fields')),
@@ -111,5 +127,32 @@ class FormController {
         const SnackBar(content: Text('Please correct the errors in the form')),
       );
     }
+  }
+
+  Map<String, dynamic> processFormData(Map<String, dynamic> formData) {
+    final data = <String, dynamic>{
+      'latitude': latitude,
+      'longitude': longitude,
+      'photo_reference': formData['photo_reference'],
+    };
+
+    if (formData['evacuation_site'] == false) {
+      data.addAll({
+        'calendar': formData['calendar'],
+        'flood_level': formData['flood_level'],
+        'data_type': formData['data_type'],
+        'reference': formData['reference'],
+      });
+    } else {
+      data.addAll({
+        'evacuation_center_name': formData['evacuation_center_name'],
+        'evacuation_center_type': formData['evacuation_center_type'],
+        'evacuation_center_capacity': formData['evacuation_center_capacity'],
+        'evacuation_center_current_accomodation':
+            formData['evacuation_center_current_accomodation'],
+      });
+    }
+
+    return data;
   }
 }
