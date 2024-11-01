@@ -84,6 +84,16 @@ class FormController {
     ]);
   }
 
+  String? Function(String?) validatePhotos() {
+    return (String? value) {
+      if (value != null && value.isNotEmpty) {
+        return FormBuilderValidators.url(errorText: 'Please enter a valid URL')(
+            value);
+      }
+      return null;
+    };
+  }
+
   void submitForm(
       BuildContext context, Function(Map<String, dynamic>) onSuccess) {
     if (validateAndSaveForm()) {

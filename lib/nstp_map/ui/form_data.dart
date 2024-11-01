@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import '../controller/form_controller.dart';
 
 class MapForm extends StatefulWidget {
@@ -163,18 +162,13 @@ class MapFormState extends State<MapForm> {
                 ],
               ),
             SizedBox(height: 10),
-            FormBuilder(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FormBuilderImagePicker(
-                    name: 'photos',
-                    decoration:
-                        const InputDecoration(labelText: 'Photo Reference'),
-                    maxImages: 1,
-                  ),
-                ],
+            FormBuilderTextField(
+              name: 'photos',
+              decoration: InputDecoration(
+                icon: Icon(Icons.camera),
+                labelText: 'Photo Reference (URL)',
               ),
+              validator: _controller.validatePhotos(),
             ),
             SizedBox(height: 10),
             ElevatedButton(
