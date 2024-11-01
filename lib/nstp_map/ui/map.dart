@@ -21,6 +21,47 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   Offset? markerScreenPosition;
   bool isSearched = false;
   bool isTapped = false;
+  List<Offset> floodMarkersScreenPositions = [];
+  List<Offset> evacSiteMarkersScreenPositions = [];
+  late MapboxMap mapboxMap;
+
+  // TODO: Replace with actual data
+  List<Map<String, dynamic>> sampleLocations = [
+    {
+      'name': 'Location 1',
+      'latitude': 14.6565430008,
+      'longitude': 121.0674749691,
+    },
+    {
+      'name': 'Location 2',
+      'latitude': 14.6574656897,
+      'longitude': 121.0685507078,
+    },
+    {
+      'name': 'Location 3',
+      'latitude': 14.6540920010,
+      'longitude': 121.0684811427,
+    }
+  ];
+
+  // TODO: Replace with actual data
+  List<Map<String, dynamic>> esampleLocations = [
+    {
+      'name': 'Location 1',
+      'latitude': 14.6575330008,
+      'longitude': 121.0674749691,
+    },
+    {
+      'name': 'Location 2',
+      'latitude': 14.6584556897,
+      'longitude': 121.0685507078,
+    },
+    {
+      'name': 'Location 3',
+      'latitude': 14.6530820010,
+      'longitude': 121.0684811427,
+    }
+  ];
 
   bool get isDesktop => MediaQuery.of(_buildContext).size.width > 600;
 
@@ -80,6 +121,30 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     return true;
   }
 
+  void _showMarkers(
+      List<Map<String, dynamic>> locations, List<Offset> markerPositions) {
+    markerPositions.clear();
+    for (var location in locations) {
+      mapboxMap
+          .pixelForCoordinate(Point.fromJson({
+        'coordinates': [location['longitude'], location['latitude']]
+      }))
+          .then((point) {
+        setState(() {
+          markerPositions.add(Offset(point.x, point.y));
+        });
+      });
+    }
+  }
+
+  void _showEvacSiteMarkers() {
+    _showMarkers(sampleLocations, evacSiteMarkersScreenPositions);
+  }
+
+  void _showFloodDataMarkers() {
+    _showMarkers(esampleLocations, floodMarkersScreenPositions);
+  }
+
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
@@ -119,6 +184,26 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
                             onTapListener: _handleMapTap,
                             onCameraChangeListener: _onCameraChange,
                           ),
+                          for (var entry in floodMarkersScreenPositions)
+                            Positioned(
+                              left: entry.dx - 20,
+                              top: entry.dy - 40,
+                              child: Column(
+                                children: [
+                                  _buildFloodMarker(),
+                                ],
+                              ),
+                            ),
+                          for (var entry in evacSiteMarkersScreenPositions)
+                            Positioned(
+                              left: entry.dx - 20,
+                              top: entry.dy - 40,
+                              child: Column(
+                                children: [
+                                  _buildEvacSiteMarker(),
+                                ],
+                              ),
+                            ),
                           if (markerScreenPosition != null)
                             Positioned(
                               left: markerScreenPosition!.dx - 20,
@@ -167,7 +252,23 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   Widget _buildMarker() {
     return const Icon(
-      Icons.location_pin,
+      Icons.add_location_alt,
+      color: Colors.black,
+      size: 40,
+    );
+  }
+
+  Widget _buildEvacSiteMarker() {
+    return const Icon(
+      Icons.health_and_safety,
+      color: Colors.blue,
+      size: 40,
+    );
+  }
+
+  Widget _buildFloodMarker() {
+    return const Icon(
+      Icons.flood,
       color: Colors.red,
       size: 40,
     );
@@ -189,6 +290,8 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   void _onCameraChange(CameraChangedEventData eventData) {
     _updateMarkerPosition();
+    _showEvacSiteMarkers();
+    _showFloodDataMarkers();
   }
 
   void _showBottomSheet(LatLng point) {
@@ -286,6 +389,9 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   }
 
   void _onMapCreated(MapboxMap mapboxMap) {
+    this.mapboxMap = mapboxMap;
     _mapController.onMapCreated(mapboxMap);
+    _showEvacSiteMarkers();
+    _showFloodDataMarkers();
   }
 }
