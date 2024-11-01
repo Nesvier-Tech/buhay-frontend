@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "appbar",
+    "appwrite",
     "buhay",
     "fullscreen",
     "grayscale",
@@ -11,5 +12,6 @@
   ],
   "dart.flutterSdkPath": ".fvm/versions/3.24.4",
   "java.configuration.updateBuildConfiguration": "interactive",
-  "autoHide.autoHideSideBar": false
+  "autoHide.autoHideSideBar": false,
+  "autoHide.autoHidePanel": false
 }

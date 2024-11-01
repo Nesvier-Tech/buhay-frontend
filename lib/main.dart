@@ -1,3 +1,4 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +7,17 @@ import 'router/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase Initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Appwrite Initialization
+  Client client =
+      Client().setEndpoint('https://cloud.appwrite.io/v1').setProject('buhay');
+  Account account = Account(client);
+  print(account);
 
   runApp(const BuhayApp());
 }
