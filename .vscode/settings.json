@@ -9,6 +9,7 @@
     "Schyler",
     "vertexai"
   ],
-  "dart.flutterSdkPath": ".fvm/versions/3.24.3",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "dart.flutterSdkPath": ".fvm/versions/3.24.4",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "autoHide.autoHideSideBar": false
 }
