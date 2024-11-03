@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import '../api/search_data.dart';
+// import '../api/database.dart';
 
 class NSTPMapController {
   final String mapboxAccessToken;
   final SearchData searchData;
+  // final DatabaseData database;
+  // Client client;
   MapboxMap? mapboxMap;
   LatLng currentLocation;
   LatLng? markerPosition;
@@ -16,8 +19,9 @@ class NSTPMapController {
     required this.mapboxAccessToken,
     required this.currentLocation,
     required this.googleToken, // Added googleToken as a required parameter
-  }) : searchData = SearchData(
-            mapboxAccessToken, googleToken); // Now it can be accessed
+    // required this.client,
+  }) : searchData = SearchData(mapboxAccessToken, googleToken);
+  // : database = DatabaseData(client);
 
   void onMapCreated(MapboxMap map) {
     mapboxMap = map;
@@ -68,4 +72,12 @@ class NSTPMapController {
     }
     return null;
   }
+
+  // Future<List<Map<String, dynamic>>> getFloodData() async {
+  //   return database.fetchFloodData();
+  // }
+
+  // Future<List<Map<String, dynamic>>> getEvacSitesData() async {
+  //   return database.fetchEvacuationSitesData();
+  // }
 }

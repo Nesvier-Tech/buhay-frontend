@@ -25,44 +25,6 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   List<Offset> evacSiteMarkersScreenPositions = [];
   late MapboxMap mapboxMap;
 
-  // TODO: Replace with actual data
-  List<Map<String, dynamic>> sampleLocations = [
-    {
-      'name': 'Location 1',
-      'latitude': 14.6565430008,
-      'longitude': 121.0674749691,
-    },
-    {
-      'name': 'Location 2',
-      'latitude': 14.6574656897,
-      'longitude': 121.0685507078,
-    },
-    {
-      'name': 'Location 3',
-      'latitude': 14.6540920010,
-      'longitude': 121.0684811427,
-    }
-  ];
-
-  // TODO: Replace with actual data
-  List<Map<String, dynamic>> esampleLocations = [
-    {
-      'name': 'Location 1',
-      'latitude': 14.6575330008,
-      'longitude': 121.0674749691,
-    },
-    {
-      'name': 'Location 2',
-      'latitude': 14.6584556897,
-      'longitude': 121.0685507078,
-    },
-    {
-      'name': 'Location 3',
-      'latitude': 14.6530820010,
-      'longitude': 121.0684811427,
-    }
-  ];
-
   bool get isDesktop => MediaQuery.of(_buildContext).size.width > 600;
 
   @override
@@ -76,6 +38,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
       mapboxAccessToken: mapboxAccessToken,
       currentLocation: const LatLng(14.6539, 121.0685),
       googleToken: googleToken,
+      //  need to pass client here
     );
     _searchController = custom.SearchController(mapboxAccessToken, googleToken);
   }
@@ -121,29 +84,32 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     return true;
   }
 
-  void _showMarkers(
-      List<Map<String, dynamic>> locations, List<Offset> markerPositions) {
-    markerPositions.clear();
-    for (var location in locations) {
-      mapboxMap
-          .pixelForCoordinate(Point.fromJson({
-        'coordinates': [location['longitude'], location['latitude']]
-      }))
-          .then((point) {
-        setState(() {
-          markerPositions.add(Offset(point.x, point.y));
-        });
-      });
-    }
-  }
+  // void _showMarkers(
+  //     List<Map<String, dynamic>> locations, List<Offset> markerPositions) {
+  //   markerPositions.clear();
+  //   for (var location in locations) {
+  //     mapboxMap
+  //         .pixelForCoordinate(Point.fromJson({
+  //       'coordinates': [location['longitude'], location['latitude']]
+  //     }))
+  //         .then((point) {
+  //       setState(() {
+  //         markerPositions.add(Offset(point.x, point.y));
+  //       });
+  //     });
+  //   }
+  // }
 
-  void _showEvacSiteMarkers() {
-    _showMarkers(sampleLocations, evacSiteMarkersScreenPositions);
-  }
+  // void _showEvacSiteMarkers() {
+  //   List<Map<String, dynamic>> evacSiteLocations =
+  //       _mapController.getEvacSitesData();
+  //   _showMarkers(evacSiteLocations, evacSiteMarkersScreenPositions);
+  // }
 
-  void _showFloodDataMarkers() {
-    _showMarkers(esampleLocations, floodMarkersScreenPositions);
-  }
+  // void _showFloodDataMarkers() {
+  //   List<Map<String, dynamic>> floodLocations = _mapController.getFloodData();
+  //   _showMarkers(floodLocations, floodMarkersScreenPositions);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -290,8 +256,8 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   void _onCameraChange(CameraChangedEventData eventData) {
     _updateMarkerPosition();
-    _showEvacSiteMarkers();
-    _showFloodDataMarkers();
+    // _showEvacSiteMarkers();
+    // _showFloodDataMarkers();
   }
 
   void _showBottomSheet(LatLng point) {
@@ -391,7 +357,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     _mapController.onMapCreated(mapboxMap);
-    _showEvacSiteMarkers();
-    _showFloodDataMarkers();
+    // _showEvacSiteMarkers();
+    // _showFloodDataMarkers();
   }
 }

@@ -15,7 +15,8 @@ class MapForm extends StatefulWidget {
 }
 
 class MapFormState extends State<MapForm> {
-  final FormController _controller = FormController();
+  final FormController _controller =
+      FormController(); // need to pass client here
 
   @override
   void initState() {

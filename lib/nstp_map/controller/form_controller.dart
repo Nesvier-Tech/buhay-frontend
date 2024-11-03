@@ -16,6 +16,12 @@ class FormController {
     'School',
     'Others'
   ];
+  // final DatabaseData database;
+  // Client client;
+
+  FormController() {
+    // database = DatabaseData(client);
+  }
 
   void setCoordinates(String latitude, String longitude) {
     this.latitude = double.parse(latitude);
@@ -111,9 +117,9 @@ class FormController {
         final data = processFormData(formData);
 
         // if (isEvacuationSite) {
-        //   saveDataToDatabase(data, true);
+        //   database.saveDataToDatabase(data, true);
         // } else {
-        //   saveDataToDatabase(data, false);
+        //   database.saveDataToDatabase(data, false);
         // }
 
         onSuccess(data);
