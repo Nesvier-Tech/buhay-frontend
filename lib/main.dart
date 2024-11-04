@@ -2,6 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'env/env.dart';
 import 'firebase_options.dart';
 import 'router/app_router.dart';
 
@@ -17,6 +18,11 @@ Future<void> main() async {
   Client client =
       Client().setEndpoint('https://cloud.appwrite.io/v1').setProject('buhay');
   Account account = Account(client);
+
+  // Env test.
+  print(Env.openAiApiKey1);
+  print(Env.googleGeminiApiKey1);
+  print(Env.perplexityApiKey1);
 
   runApp(const BuhayApp());
 }
