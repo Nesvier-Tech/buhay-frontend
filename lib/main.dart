@@ -17,7 +17,6 @@ Future<void> main() async {
   Client client =
       Client().setEndpoint('https://cloud.appwrite.io/v1').setProject('buhay');
   Account account = Account(client);
-  print(account);
 
   runApp(const BuhayApp());
 }
