@@ -77,5 +77,50 @@ void main() {
         expect(Env.googleMapsApiKeyWeb1, isNot(''));
       });
     });
+
+    group('googleMapsApiKeyIp1', () {
+      test('should not return null', () {
+        expect(Env.googleMapsApiKeyIp1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.googleMapsApiKeyIp1, isA<String>());
+      });
+
+      // Should not return an empty String.
+      test('should not return an empty String', () {
+        expect(Env.googleMapsApiKeyIp1, isNot(''));
+      });
+    });
+
+    group('appwriteProjectId', () {
+      test('should not return null', () {
+        expect(Env.appwriteProjectId, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.appwriteProjectId, isA<String>());
+      });
+
+      // Should not return an empty String.
+      test('should not return an empty String', () {
+        expect(Env.appwriteProjectId, isNot(''));
+      });
+    });
+
+    group('appwriteEndpoint', () {
+      test('should not return null', () {
+        expect(Env.appwriteEndpoint, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.appwriteEndpoint, isA<String>());
+      });
+
+      // Should not return an empty String.
+      test('should not return an empty String', () {
+        expect(Env.appwriteEndpoint, isNot(''));
+      });
+    });
   });
 }

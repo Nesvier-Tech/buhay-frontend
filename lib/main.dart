@@ -1,21 +1,23 @@
-import 'package:appwrite/appwrite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'firebase_options.dart';
 import 'router/app_router.dart';
+import 'service_locator/app_service_locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Firebase Initialization
+  // Firebase Initialization.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Appwrite Initialization
-  Client client =
-      Client().setEndpoint('https://cloud.appwrite.io/v1').setProject('buhay');
+  // Service Locator Initialization.
+  final GetIt getIt = GetIt.instance;
+  final AppServiceLocator appServiceLocator = AppServiceLocator(getIt: getIt);
+  appServiceLocator.setup();
 
   runApp(const BuhayApp());
 }

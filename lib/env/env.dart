@@ -6,6 +6,7 @@ part 'env.g.dart';
 /// `fvm dart run build_runner build --delete-conflicting-outputs`
 @Envied(path: '.env')
 abstract class Env {
+  // LLMs.
   @EnviedField(varName: 'OPENAI_API_KEY_1', obfuscate: true)
   static final String openAiApiKey1 = _Env.openAiApiKey1;
 
@@ -15,6 +16,7 @@ abstract class Env {
   @EnviedField(varName: 'PERPLEXITY_API_KEY_1', obfuscate: true)
   static final String perplexityApiKey1 = _Env.perplexityApiKey1;
 
+  // Google Maps.
   @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_ANDROID_1', obfuscate: true)
   static final String googleMapsApiKeyAndroid1 = _Env.googleMapsApiKeyAndroid1;
 
@@ -23,4 +25,11 @@ abstract class Env {
 
   @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_IP_1', obfuscate: true)
   static final String googleMapsApiKeyIp1 = _Env.googleMapsApiKeyIp1;
+
+  // Appwrite.
+  @EnviedField(varName: 'APPWRITE_PROJECT_ID', obfuscate: true)
+  static final String appwriteProjectId = _Env.appwriteProjectId;
+
+  @EnviedField(varName: 'APPWRITE_ENDPOINT', obfuscate: true)
+  static final String appwriteEndpoint = _Env.appwriteEndpoint;
 }
