@@ -27,12 +27,21 @@ class AppNavigationDrawer extends StatelessWidget {
           },
         ),
 
-        // Google Maps
+        // Google Maps Experiment.
         ListTile(
           title: const Text('Google Maps Experiment'),
           onTap: () {
             // User GoRouter to navigate to the Google Maps Experiment Page.
             GoRouter.of(context).push('/google-maps-experiment');
+          },
+        ),
+
+        // Appwrite Auth Experiment.
+        ListTile(
+          title: const Text('Appwrite Auth Experiment'),
+          onTap: () {
+            // User GoRouter to navigate to the Appwrite Auth Experiment Page.
+            GoRouter.of(context).push('/appwrite-auth-experiment');
           },
         ),
       ],
