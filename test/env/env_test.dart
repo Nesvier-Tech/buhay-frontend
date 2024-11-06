@@ -48,18 +48,33 @@ void main() {
       });
     });
 
-    group('googleMapsApiKey1', () {
+    group('googleMapsApiKeyAndroid1', () {
       test('should not return null', () {
-        expect(Env.googleMapsApiKey1, isNotNull);
+        expect(Env.googleMapsApiKeyAndroid1, isNotNull);
       });
 
       test('should return a String', () {
-        expect(Env.googleMapsApiKey1, isA<String>());
+        expect(Env.googleMapsApiKeyAndroid1, isA<String>());
       });
 
       // Should not return an empty String.
       test('should not return an empty String', () {
-        expect(Env.googleMapsApiKey1, isNot(''));
+        expect(Env.googleMapsApiKeyAndroid1, isNot(''));
+      });
+    });
+
+    group('googleMapsApiKeyWeb1', () {
+      test('should not return null', () {
+        expect(Env.googleMapsApiKeyWeb1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.googleMapsApiKeyWeb1, isA<String>());
+      });
+
+      // Should not return an empty String.
+      test('should not return an empty String', () {
+        expect(Env.googleMapsApiKeyWeb1, isNot(''));
       });
     });
   });
