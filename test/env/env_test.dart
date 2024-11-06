@@ -47,5 +47,20 @@ void main() {
         expect(Env.perplexityApiKey1, isNot(''));
       });
     });
+
+    group('googleMapsApiKey1', () {
+      test('should not return null', () {
+        expect(Env.googleMapsApiKey1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.googleMapsApiKey1, isA<String>());
+      });
+
+      // Should not return an empty String.
+      test('should not return an empty String', () {
+        expect(Env.googleMapsApiKey1, isNot(''));
+      });
+    });
   });
 }

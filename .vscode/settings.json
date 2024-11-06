@@ -3,6 +3,7 @@
     "appbar",
     "appwrite",
     "buhay",
+    "dotenv",
     "fullscreen",
     "grayscale",
     "hexcode",

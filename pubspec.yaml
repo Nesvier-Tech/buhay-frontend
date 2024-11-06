@@ -55,6 +55,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc_test: ^9.1.7
   envied: ^0.5.4+1
+  google_maps_flutter: ^2.9.0
 
 dev_dependencies:
   flutter_test:
