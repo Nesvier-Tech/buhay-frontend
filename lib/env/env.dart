@@ -20,4 +20,7 @@ abstract class Env {
 
   @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_WEB_1', obfuscate: true)
   static final String googleMapsApiKeyWeb1 = _Env.googleMapsApiKeyWeb1;
+
+  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_IP_1', obfuscate: true)
+  static final String googleMapsApiKeyIp1 = _Env.googleMapsApiKeyIp1;
 }
