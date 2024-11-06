@@ -15,6 +15,9 @@ abstract class Env {
   @EnviedField(varName: 'PERPLEXITY_API_KEY_1', obfuscate: true)
   static final String perplexityApiKey1 = _Env.perplexityApiKey1;
 
-  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_1', obfuscate: true)
-  static final String googleMapsApiKey1 = _Env.googleMapsApiKey1;
+  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_ANDROID_1', obfuscate: true)
+  static final String googleMapsApiKeyAndroid1 = _Env.googleMapsApiKeyAndroid1;
+
+  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY_WEB_1', obfuscate: true)
+  static final String googleMapsApiKeyWeb1 = _Env.googleMapsApiKeyWeb1;
 }
