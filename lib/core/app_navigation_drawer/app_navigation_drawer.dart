@@ -30,6 +30,16 @@ class AppNavigationDrawer extends StatelessWidget {
           },
         ),
 
+        // NSTP Map.
+        ListTile(
+          leading: const Icon(Icons.map),
+          title: const Text('NSTP Map'),
+          onTap: () {
+            // User GoRouter to navigate to the NSTP Map Page.
+            GoRouter.of(context).push('/nstp-map');
+          },
+        ),
+
         // Google Maps Experiment.
         ListTile(
           leading: const Icon(Icons.map),

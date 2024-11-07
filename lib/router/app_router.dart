@@ -5,6 +5,7 @@ import '../features/appwrite_auth_experiment/presentation/appwrite_auth_experime
 import '../features/google_maps_experiment/presentation/google_maps_experiment_page.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
+import '../nstp_map/ui/map.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -18,6 +19,15 @@ class AppRouter {
           return const HomePage();
         },
         pageBuilder: pageBuilder(child: const HomePage()),
+      ),
+
+      // NSTP Map Page.
+      GoRoute(
+        path: '/nstp-map',
+        builder: (BuildContext context, GoRouterState state) {
+          return const NSTPMapScreen();
+        },
+        pageBuilder: pageBuilder(child: const NSTPMapScreen()),
       ),
 
       // Google Maps Experiment Page.

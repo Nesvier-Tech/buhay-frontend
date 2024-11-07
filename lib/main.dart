@@ -10,8 +10,6 @@ import 'service_locator/app_service_locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Firebase Initialization.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
