@@ -41,7 +41,7 @@ android {
          * For Appwrite build error fix
          * (ref: https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812).
          */
-        jvmTarget = 17
+        jvmTarget = "17"
     }
 
     defaultConfig {
