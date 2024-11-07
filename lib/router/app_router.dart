@@ -16,26 +16,7 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const HomePage();
         },
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const HomePage(),
-            transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child,
-            ) {
-              // Change the opacity of the page using a Curve based on the
-              // animation's value.
-              return FadeTransition(
-                opacity:
-                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                child: child,
-              );
-            },
-          );
-        },
+        pageBuilder: pageBuilder(child: const HomePage()),
       ),
 
       // Google Maps Experiment Page.
@@ -44,24 +25,7 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const GoogleMapsExperimentPage();
         },
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const GoogleMapsExperimentPage(),
-            transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child,
-            ) {
-              return FadeTransition(
-                opacity:
-                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                child: child,
-              );
-            },
-          );
-        },
+        pageBuilder: pageBuilder(child: const GoogleMapsExperimentPage()),
       ),
 
       // Appwrite Auth Experiment Page.
@@ -70,25 +34,33 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const AppwriteAuthExperimentPage();
         },
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const AppwriteAuthExperimentPage(),
-            transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child,
-            ) {
-              return FadeTransition(
-                opacity:
-                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                child: child,
-              );
-            },
-          );
-        },
+        pageBuilder: pageBuilder(child: const AppwriteAuthExperimentPage()),
       ),
     ],
   );
+
+  static Page<dynamic> Function(BuildContext, GoRouterState) pageBuilder({
+    required Widget child,
+  }) {
+    return (
+      BuildContext context,
+      GoRouterState state,
+    ) {
+      return CustomTransitionPage(
+        key: state.pageKey,
+        child: child,
+        transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          return FadeTransition(
+            opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+            child: child,
+          );
+        },
+      );
+    };
+  }
 }
