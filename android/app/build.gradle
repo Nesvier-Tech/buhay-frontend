@@ -6,20 +6,42 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+
+    // For Google Maps.
+    id 'com.google.secrets_gradle_plugin' version '0.6.1'
 }
 
 android {
     namespace = "com.nesvier.buhay"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // ndkVersion = flutter.ndkVersion
+
+    /**
+     * For Appwrite build error fix
+     * (ref: https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812).
+     */
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        // sourceCompatibility = JavaVersion.VERSION_1_8
+        // targetCompatibility = JavaVersion.VERSION_1_8
+
+        /**
+         * For Appwrite build error fix
+         * (ref: https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812).
+         */
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        // jvmTarget = JavaVersion.VERSION_1_8
+
+        /**
+         * For Appwrite build error fix
+         * (ref: https://github.com/flutter/flutter/issues/156304#issuecomment-2397707812).
+         */
+        jvmTarget = 17
     }
 
     defaultConfig {

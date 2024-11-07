@@ -1,10 +1,24 @@
 {
   "cSpell.words": [
     "appbar",
+    "appwrite",
     "buhay",
+    "datetime",
+    "dotenv",
+    "formfield",
+    "fullscreen",
+    "grayscale",
+    "hexcode",
+    "latlong",
+    "MAPBOX",
     "nesvier",
-    "Schyler"
+    "NSTP",
+    "OPENAI",
+    "Schyler",
+    "vertexai"
   ],
-  "dart.flutterSdkPath": ".fvm/versions/3.24.3",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "dart.flutterSdkPath": ".fvm/versions/3.24.4",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "autoHide.autoHideSideBar": false,
+  "autoHide.autoHidePanel": false
 }
