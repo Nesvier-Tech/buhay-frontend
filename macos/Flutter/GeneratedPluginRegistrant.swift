@@ -6,6 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import device_info_plus
+import file_selector_macos
 import firebase_analytics
 import firebase_app_check
 import firebase_auth
