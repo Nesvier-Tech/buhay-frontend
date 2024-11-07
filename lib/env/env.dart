@@ -32,4 +32,11 @@ abstract class Env {
 
   @EnviedField(varName: 'APPWRITE_ENDPOINT', obfuscate: true)
   static final String appwriteEndpoint = _Env.appwriteEndpoint;
+
+  // Mapbox.
+  @EnviedField(varName: 'MAPBOX_SECRET_ACCESS_TOKEN_1', obfuscate: true)
+  static final String mapboxSecretAccessToken1 = _Env.mapboxSecretAccessToken1;
+
+  @EnviedField(varName: 'MAPBOX_PUBLIC_ACCESS_TOKEN_1', obfuscate: true)
+  static final String mapboxPublicAccessToken1 = _Env.mapboxPublicAccessToken1;
 }

@@ -9,18 +9,21 @@ class AppNavigationDrawer extends StatelessWidget {
     return NavigationDrawer(
       children: <Widget>[
         ListTile(
+          leading: const Icon(Icons.home),
           title: const Text('Home'),
           onTap: () {
-            Navigator.of(context).pushNamed('/');
+            GoRouter.of(context).go('/');
           },
         ),
         ListTile(
+          leading: const Icon(Icons.info),
           title: const Text('About'),
           onTap: () {
             Navigator.of(context).pushNamed('/about');
           },
         ),
         ListTile(
+          leading: const Icon(Icons.contact_page),
           title: const Text('Contact'),
           onTap: () {
             Navigator.of(context).pushNamed('/contact');
@@ -29,6 +32,7 @@ class AppNavigationDrawer extends StatelessWidget {
 
         // Google Maps Experiment.
         ListTile(
+          leading: const Icon(Icons.map),
           title: const Text('Google Maps Experiment'),
           onTap: () {
             // User GoRouter to navigate to the Google Maps Experiment Page.
@@ -38,10 +42,21 @@ class AppNavigationDrawer extends StatelessWidget {
 
         // Appwrite Auth Experiment.
         ListTile(
+          leading: const Icon(Icons.security),
           title: const Text('Appwrite Auth Experiment'),
           onTap: () {
             // User GoRouter to navigate to the Appwrite Auth Experiment Page.
             GoRouter.of(context).push('/appwrite-auth-experiment');
+          },
+        ),
+
+        // Mapbox Experiment.
+        ListTile(
+          leading: const Icon(Icons.map),
+          title: const Text('Mapbox Experiment'),
+          onTap: () {
+            // User GoRouter to navigate to the Mapbox Experiment Page.
+            GoRouter.of(context).push('/mapbox-experiment');
           },
         ),
       ],

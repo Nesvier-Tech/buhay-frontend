@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
+import 'env/env.dart';
 import 'firebase_options.dart';
 import 'router/app_router.dart';
 import 'service_locator/app_service_locator.dart';
@@ -19,13 +21,16 @@ Future<void> main() async {
   final AppServiceLocator appServiceLocator = AppServiceLocator(getIt: getIt);
   appServiceLocator.setup();
 
+  // Mapbox Initialization.
+  final String mapboxPublicAccessToken = Env.mapboxPublicAccessToken1;
+  MapboxOptions.setAccessToken(mapboxPublicAccessToken);
+
   runApp(const BuhayApp());
 }
 
 class BuhayApp extends StatelessWidget {
   const BuhayApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

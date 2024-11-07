@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Env', () {
+    // LLMs.
     group('openAiApiKey1', () {
       test('should not return null', () {
         expect(Env.openAiApiKey1, isNotNull);
@@ -27,7 +28,6 @@ void main() {
         expect(Env.googleGeminiApiKey1, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.googleGeminiApiKey1, isNot(''));
       });
@@ -42,12 +42,12 @@ void main() {
         expect(Env.perplexityApiKey1, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.perplexityApiKey1, isNot(''));
       });
     });
 
+    // Google Maps.
     group('googleMapsApiKeyAndroid1', () {
       test('should not return null', () {
         expect(Env.googleMapsApiKeyAndroid1, isNotNull);
@@ -57,7 +57,6 @@ void main() {
         expect(Env.googleMapsApiKeyAndroid1, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.googleMapsApiKeyAndroid1, isNot(''));
       });
@@ -87,12 +86,12 @@ void main() {
         expect(Env.googleMapsApiKeyIp1, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.googleMapsApiKeyIp1, isNot(''));
       });
     });
 
+    // Appwrite.
     group('appwriteProjectId', () {
       test('should not return null', () {
         expect(Env.appwriteProjectId, isNotNull);
@@ -102,7 +101,6 @@ void main() {
         expect(Env.appwriteProjectId, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.appwriteProjectId, isNot(''));
       });
@@ -117,9 +115,37 @@ void main() {
         expect(Env.appwriteEndpoint, isA<String>());
       });
 
-      // Should not return an empty String.
       test('should not return an empty String', () {
         expect(Env.appwriteEndpoint, isNot(''));
+      });
+    });
+
+    // Mapbox.
+    group('mapboxSecretAccessToken1', () {
+      test('should not return null', () {
+        expect(Env.mapboxSecretAccessToken1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.mapboxSecretAccessToken1, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.mapboxSecretAccessToken1, isNot(''));
+      });
+    });
+
+    group('mapboxPublicAccessToken1', () {
+      test('should not return null', () {
+        expect(Env.mapboxPublicAccessToken1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.mapboxPublicAccessToken1, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.mapboxPublicAccessToken1, isNot(''));
       });
     });
   });
