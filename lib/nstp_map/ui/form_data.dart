@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
+
 import '../controller/form_controller.dart';
 
 class MapForm extends StatefulWidget {
@@ -15,13 +16,11 @@ class MapForm extends StatefulWidget {
 }
 
 class MapFormState extends State<MapForm> {
-  final FormController _controller =
-      FormController(); // need to pass client here
+  final FormController _controller = FormController();
 
   @override
   void initState() {
     super.initState();
-    // Pass latitude and longitude to the controller
     _controller.setCoordinates(widget.latitude, widget.longitude);
   }
 
@@ -183,7 +182,12 @@ class MapFormState extends State<MapForm> {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
               ),
-              onPressed: () => _controller.submitForm(context, (formData) {}),
+              onPressed: () {
+                _controller.submitForm(context, (formData) {});
+                if (_controller.formKey.currentState!.saveAndValidate()) {
+                  Navigator.pop(context);
+                }
+              },
               child: Text('Submit'),
             ),
           ],

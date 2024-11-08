@@ -33,6 +33,21 @@ abstract class Env {
   @EnviedField(varName: 'APPWRITE_ENDPOINT', obfuscate: true)
   static final String appwriteEndpoint = _Env.appwriteEndpoint;
 
+  // Appwrite Dev Database ID
+  @EnviedField(varName: 'APPWRITE_DEV_DATABASE_ID', obfuscate: true)
+  static final String appwriteDevDatabaseId = _Env.appwriteDevDatabaseId;
+
+  // Appwrite Flood Data Collection ID
+  @EnviedField(varName: 'APPWRITE_FLOOD_DATA_COLLECTION_ID', obfuscate: true)
+  static final String appwriteFloodDataCollectionId =
+      _Env.appwriteFloodDataCollectionId;
+
+  // Appwrite Evacuation Sites Collection ID
+  @EnviedField(
+      varName: 'APPWRITE_EVACUATION_SITES_COLLECTION_ID', obfuscate: true)
+  static final String appwriteEvacuationSitesCollectionId =
+      _Env.appwriteEvacuationSitesCollectionId;
+
   // Mapbox.
   @EnviedField(varName: 'MAPBOX_SECRET_ACCESS_TOKEN_1', obfuscate: true)
   static final String mapboxSecretAccessToken1 = _Env.mapboxSecretAccessToken1;
