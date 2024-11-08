@@ -1,38 +1,35 @@
 import 'package:appwrite/appwrite.dart';
 
 import '../../env/env.dart';
-import 'package:dart_appwrite/dart_appwrite.dart' as appwrite;
 
 class DatabaseData {
   DatabaseData(this.client, this.databases);
-  final appwrite.Client client;
-  final appwrite.Databases databases;
+  final Client client;
+  final Databases databases;
 
   Future<void> saveDataToDatabase(
       Map<String, dynamic> data, bool isEvacuationSite) async {
     if (isEvacuationSite) {
       try {
-        final document = await databases.createDocument(
+        await databases.createDocument(
             databaseId: Env.appwriteDevDatabaseId,
             collectionId: Env
                 .appwriteEvacuationSitesCollectionId, // Change to evacuation site collection ID
             documentId: ID.unique(),
             data: data);
-        print('Document created: ${document.$id}');
-      } on AppwriteException catch (e) {
-        print(e.message);
+      } on AppwriteException {
+        // print(e.message);
       }
     } else {
       try {
-        final document = await databases.createDocument(
+        await databases.createDocument(
             databaseId: Env.appwriteDevDatabaseId,
             collectionId: Env
                 .appwriteFloodDataCollectionId, // Change to flood data collection ID
             documentId: ID.unique(),
             data: data);
-        print('Document created: ${document.$id}');
-      } on AppwriteException catch (e) {
-        print(e.message);
+      } on AppwriteException {
+        // print(e.message);
       }
     }
   }
@@ -46,10 +43,8 @@ class DatabaseData {
             Query.select(["latitude", "longitude"])
           ]);
 
-      print(response.documents);
       return response.documents.map((doc) => doc.data).toList();
-    } on AppwriteException catch (e) {
-      print(e.message);
+    } on AppwriteException {
       return [];
     }
   }
@@ -62,10 +57,8 @@ class DatabaseData {
           queries: [
             Query.select(["latitude", "longitude"])
           ]);
-      print(response.documents);
       return response.documents.map((doc) => doc.data).toList();
-    } on AppwriteException catch (e) {
-      print(e.message);
+    } on AppwriteException {
       return [];
     }
   }

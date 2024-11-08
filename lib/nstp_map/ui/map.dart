@@ -1,4 +1,6 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -28,6 +30,12 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   late MapboxMap mapboxMap;
   late Future<List<Map<String, dynamic>>> evacSiteLocations;
   late Future<List<Map<String, dynamic>>> floodLocations;
+  late Realtime realtime;
+
+  List<String> databaseCredentials = [
+    'databases.${Env.appwriteDevDatabaseId}.collections.${Env.appwriteEvacuationSitesCollectionId}.documents',
+    'databases.${Env.appwriteDevDatabaseId}.collections.${Env.appwriteFloodDataCollectionId}.documents',
+  ];
 
   bool get isDesktop => MediaQuery.of(_buildContext).size.width > 600;
 
@@ -45,6 +53,20 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     _searchController = custom.SearchController(mapboxAccessToken, googleToken);
     evacSiteLocations = _mapController.getEvacSitesData();
     floodLocations = _mapController.getFloodData();
+    _updateFloodaAndEvacSiteMarkers();
+  }
+
+  void _updateFloodaAndEvacSiteMarkers() {
+    realtime = GetIt.I<Realtime>();
+    final subscription = realtime.subscribe(databaseCredentials);
+    subscription.stream.listen((response) {
+      setState(() {
+        evacSiteLocations = _mapController.getEvacSitesData();
+        floodLocations = _mapController.getFloodData();
+      });
+      _showEvacSiteMarkers();
+      _showFloodDataMarkers();
+    });
   }
 
   void _showLocationInfo(LatLng point) {

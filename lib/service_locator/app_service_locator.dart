@@ -1,4 +1,4 @@
-import 'package:dart_appwrite/dart_appwrite.dart';
+import 'package:appwrite/appwrite.dart';
 import 'package:get_it/get_it.dart';
 
 import '../env/env.dart';
@@ -15,6 +15,8 @@ class AppServiceLocator {
         .setProject(Env.appwriteProjectId);
 
     _getIt.registerLazySingleton<Client>(() => client);
+
+    _getIt.registerLazySingleton<Realtime>(() => Realtime(_getIt()));
 
     _getIt.registerLazySingleton<Databases>(() => Databases(_getIt()));
 

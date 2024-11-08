@@ -65,7 +65,6 @@ dependencies:
   form_builder_image_picker: ^4.1.0
   http: ^1.2.2
   uuid: ^4.5.1
-  dart_appwrite: ^12.1.0
 
 dev_dependencies:
   flutter_test:
