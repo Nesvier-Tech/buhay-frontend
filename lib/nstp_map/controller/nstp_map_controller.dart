@@ -1,14 +1,18 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
+import '../api/database.dart';
 import '../api/search_data.dart';
-// import '../api/database.dart';
 
 class NSTPMapController {
   final String mapboxAccessToken;
-  final SearchData searchData;
-  // final DatabaseData database;
-  // Client client;
+  late final SearchData searchData;
+  late final DatabaseData databaseData;
+  final Databases database = GetIt.I<Databases>();
+  Client client = GetIt.I<Client>();
   MapboxMap? mapboxMap;
   LatLng currentLocation;
   LatLng? markerPosition;
@@ -18,10 +22,11 @@ class NSTPMapController {
   NSTPMapController({
     required this.mapboxAccessToken,
     required this.currentLocation,
-    required this.googleToken, // Added googleToken as a required parameter
-    // required this.client,
-  }) : searchData = SearchData(mapboxAccessToken, googleToken);
-  // : database = DatabaseData(client);
+    required this.googleToken,
+  }) {
+    searchData = SearchData(mapboxAccessToken, googleToken);
+    databaseData = DatabaseData(client, database);
+  }
 
   void onMapCreated(MapboxMap map) {
     mapboxMap = map;
@@ -73,11 +78,11 @@ class NSTPMapController {
     return null;
   }
 
-  // Future<List<Map<String, dynamic>>> getFloodData() async {
-  //   return database.fetchFloodData();
-  // }
+  Future<List<Map<String, dynamic>>> getFloodData() async {
+    return databaseData.fetchFloodData();
+  }
 
-  // Future<List<Map<String, dynamic>>> getEvacSitesData() async {
-  //   return database.fetchEvacuationSitesData();
-  // }
+  Future<List<Map<String, dynamic>>> getEvacSitesData() async {
+    return databaseData.fetchEvacuationSitesData();
+  }
 }

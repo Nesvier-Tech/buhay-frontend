@@ -1,4 +1,6 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -19,6 +21,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   late NSTPMapController _mapController;
   late custom.SearchController _searchController;
   int lengthOfDecimalPlaces = 10;
+  int maxWidth = 1000;
   late BuildContext _buildContext;
   Offset? markerScreenPosition;
   bool isSearched = false;
@@ -26,22 +29,45 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   List<Offset> floodMarkersScreenPositions = [];
   List<Offset> evacSiteMarkersScreenPositions = [];
   late MapboxMap mapboxMap;
+  late Future<List<Map<String, dynamic>>> evacSiteLocations;
+  late Future<List<Map<String, dynamic>>> floodLocations;
+  late Realtime realtime;
 
-  bool get isDesktop => MediaQuery.of(_buildContext).size.width > 600;
+  List<String> databaseCredentials = [
+    'databases.${Env.appwriteDevDatabaseId}.collections.${Env.appwriteEvacuationSitesCollectionId}.documents',
+    'databases.${Env.appwriteDevDatabaseId}.collections.${Env.appwriteFloodDataCollectionId}.documents',
+  ];
+
+  bool get isDesktop => MediaQuery.of(_buildContext).size.width > maxWidth;
 
   @override
   void initState() {
     super.initState();
     final String mapboxAccessToken = Env.mapboxPublicAccessToken1;
-    final String googleToken = Env.googleMapsApiKeyAndroid1;
+    final String googleToken = Env.googleMapsApiKey1;
     MapboxOptions.setAccessToken(mapboxAccessToken);
     _mapController = NSTPMapController(
       mapboxAccessToken: mapboxAccessToken,
       currentLocation: const LatLng(14.6539, 121.0685),
       googleToken: googleToken,
-      //  need to pass client here
     );
     _searchController = custom.SearchController(mapboxAccessToken, googleToken);
+    evacSiteLocations = _mapController.getEvacSitesData();
+    floodLocations = _mapController.getFloodData();
+    _updateFloodAndEvacSiteMarkers();
+  }
+
+  void _updateFloodAndEvacSiteMarkers() {
+    realtime = GetIt.I<Realtime>();
+    final subscription = realtime.subscribe(databaseCredentials);
+    subscription.stream.listen((response) {
+      setState(() {
+        evacSiteLocations = _mapController.getEvacSitesData();
+        floodLocations = _mapController.getFloodData();
+      });
+      _showEvacSiteMarkers();
+      _showFloodDataMarkers();
+    });
   }
 
   void _showLocationInfo(LatLng point) {
@@ -85,32 +111,30 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     return true;
   }
 
-  // void _showMarkers(
-  //     List<Map<String, dynamic>> locations, List<Offset> markerPositions) {
-  //   markerPositions.clear();
-  //   for (var location in locations) {
-  //     mapboxMap
-  //         .pixelForCoordinate(Point.fromJson({
-  //       'coordinates': [location['longitude'], location['latitude']]
-  //     }))
-  //         .then((point) {
-  //       setState(() {
-  //         markerPositions.add(Offset(point.x, point.y));
-  //       });
-  //     });
-  //   }
-  // }
+  void _showMarkers(Future<List<Map<String, dynamic>>> locations,
+      List<Offset> markerPositions) async {
+    markerPositions.clear();
+    final locationsList = await locations;
+    for (var location in locationsList) {
+      mapboxMap
+          .pixelForCoordinate(Point.fromJson({
+        'coordinates': [location['longitude'], location['latitude']]
+      }))
+          .then((point) {
+        setState(() {
+          markerPositions.add(Offset(point.x, point.y));
+        });
+      });
+    }
+  }
 
-  // void _showEvacSiteMarkers() {
-  //   List<Map<String, dynamic>> evacSiteLocations =
-  //       _mapController.getEvacSitesData();
-  //   _showMarkers(evacSiteLocations, evacSiteMarkersScreenPositions);
-  // }
+  void _showEvacSiteMarkers() {
+    _showMarkers(evacSiteLocations, evacSiteMarkersScreenPositions);
+  }
 
-  // void _showFloodDataMarkers() {
-  //   List<Map<String, dynamic>> floodLocations = _mapController.getFloodData();
-  //   _showMarkers(floodLocations, floodMarkersScreenPositions);
-  // }
+  void _showFloodDataMarkers() {
+    _showMarkers(floodLocations, floodMarkersScreenPositions);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,26 +176,26 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
                               onTapListener: _handleMapTap,
                               onCameraChangeListener: _onCameraChange,
                             ),
-                            // for (var entry in floodMarkersScreenPositions)
-                            //   Positioned(
-                            //     left: entry.dx - 20,
-                            //     top: entry.dy - 40,
-                            //     child: Column(
-                            //       children: [
-                            //         _buildFloodMarker(),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // for (var entry in evacSiteMarkersScreenPositions)
-                            //   Positioned(
-                            //     left: entry.dx - 20,
-                            //     top: entry.dy - 40,
-                            //     child: Column(
-                            //       children: [
-                            //         _buildEvacSiteMarker(),
-                            //       ],
-                            //     ),
-                            //   ),
+                            for (var entry in floodMarkersScreenPositions)
+                              Positioned(
+                                left: entry.dx - 20,
+                                top: entry.dy - 40,
+                                child: Column(
+                                  children: [
+                                    _buildFloodMarker(),
+                                  ],
+                                ),
+                              ),
+                            for (var entry in evacSiteMarkersScreenPositions)
+                              Positioned(
+                                left: entry.dx - 20,
+                                top: entry.dy - 40,
+                                child: Column(
+                                  children: [
+                                    _buildEvacSiteMarker(),
+                                  ],
+                                ),
+                              ),
                             if (markerScreenPosition != null)
                               Positioned(
                                 left: markerScreenPosition!.dx - 20,
@@ -250,7 +274,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   void _updateMarkerPosition() async {
     final screenPosition = await _mapController.getMarkerScreenPosition();
-    if (screenPosition != null) {
+    if (screenPosition != null && mounted) {
       setState(() {
         markerScreenPosition = screenPosition;
       });
@@ -259,8 +283,8 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   void _onCameraChange(CameraChangedEventData eventData) {
     _updateMarkerPosition();
-    // _showEvacSiteMarkers();
-    // _showFloodDataMarkers();
+    _showEvacSiteMarkers();
+    _showFloodDataMarkers();
   }
 
   void _showBottomSheet(LatLng point) {
@@ -273,7 +297,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
           return OrientationBuilder(
             builder: (context, orientation) {
               // Check if we should close the bottom sheet
-              if (MediaQuery.of(context).size.width > 600) {
+              if (MediaQuery.of(context).size.width > maxWidth) {
                 Navigator.of(context).pop();
                 // Show sidebar instead
                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -360,7 +384,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     _mapController.onMapCreated(mapboxMap);
-    // _showEvacSiteMarkers();
-    // _showFloodDataMarkers();
+    _showEvacSiteMarkers();
+    _showFloodDataMarkers();
   }
 }

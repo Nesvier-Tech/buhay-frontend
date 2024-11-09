@@ -1,6 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/web.dart';
+import 'package:logger/logger.dart';
 
 import '../env/env.dart';
 
@@ -14,9 +14,14 @@ class AppServiceLocator {
     final Client client = Client()
         .setEndpoint(Env.appwriteEndpoint)
         .setProject(Env.appwriteProjectId);
-    final Account account = Account(client);
 
-    _getIt.registerLazySingleton<Account>(() => account);
+    _getIt.registerLazySingleton<Client>(() => client);
+
+    _getIt.registerLazySingleton<Realtime>(() => Realtime(_getIt()));
+
+    _getIt.registerLazySingleton<Databases>(() => Databases(_getIt()));
+
+    _getIt.registerLazySingleton<Account>(() => Account(_getIt()));
 
     // Logger Initialization.
     final Logger logger = Logger();
