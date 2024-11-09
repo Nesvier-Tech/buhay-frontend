@@ -12,6 +12,7 @@ class FormController {
   double latitude = 0;
   double longitude = 0;
   bool isRealData = false;
+  String email = '';
   bool isEvacuationSite = false;
   final List<String> evacuationSitesTypes = [
     'Covered Court',
@@ -27,9 +28,10 @@ class FormController {
     databaseData = DatabaseData(client, database);
   }
 
-  void setCoordinates(String latitude, String longitude) {
+  void setCoordinates(String latitude, String longitude, String email) {
     this.latitude = double.parse(latitude);
     this.longitude = double.parse(longitude);
+    this.email = email;
   }
 
   void toggleRealData(bool? value) {
@@ -137,6 +139,7 @@ class FormController {
 
   Map<String, dynamic> processFormData(Map<String, dynamic> formData) {
     final data = <String, dynamic>{
+      'email': email,
       'latitude': latitude,
       'longitude': longitude,
       'photo_reference': formData['photo_reference'],

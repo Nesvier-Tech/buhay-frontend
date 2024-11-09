@@ -1,8 +1,13 @@
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:logger/logger.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -247,10 +252,76 @@ class _LoginFormState extends State<LoginForm> {
           // Log in button.
           FilledButton(
             onPressed: () async {
+              late final String email;
+              late final String password;
+
               if (_formKey.currentState?.saveAndValidate() ?? false) {
-                final String email = _formKey.currentState?.value['email'];
-                final String password =
-                    _formKey.currentState?.value['password'];
+                email = _formKey.currentState?.value['email'];
+                password = _formKey.currentState?.value['password'];
+              }
+
+              // Logger.
+              GetIt.I<Logger>().i('Email: $email | Password: $password');
+
+              // Log in via appwrite auth.
+              final Account account = GetIt.I<Account>();
+
+              try {
+                // Show loading dialog.
+                showDialog<AlertDialog>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Logging in...'),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          LoadingAnimationWidget.discreteCircle(
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 100.0,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+
+                await account.createEmailPasswordSession(
+                    email: email, password: password);
+
+                if (context.mounted) {
+                  // Close loading dialog.
+                  Navigator.of(context).pop();
+
+                  // Navigate to home page. Pass the email to the map page.
+                  GoRouter.of(context).go('/nstp-map', extra: email);
+                }
+              } catch (e) {
+                // Show alert dialog.
+                if (context.mounted) {
+                  await showDialog<AlertDialog>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: Text(e.toString()),
+                        actions: <TextButton>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+
+                // Close loading dialog.
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
               }
             },
             child: const Text('Log in'),

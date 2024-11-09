@@ -1,7 +1,10 @@
 import 'package:appwrite/appwrite.dart';
+// import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:logger/logger.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../../env/env.dart';
@@ -94,9 +97,9 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     isSearched = true;
     isTapped = false;
 
-    if (mounted) {
-      _showLocationInfo(_mapController.currentLocation);
-    }
+    // if (mounted) {
+    //   _showLocationInfo(_mapController.currentLocation);
+    // }
   }
 
   bool _handleMapTap(MapContentGestureContext mapContext) {
@@ -138,6 +141,9 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final String userEmail = GoRouterState.of(context).extra as String;
+    GetIt.I<Logger>().i('User email: $userEmail');
+
     _buildContext = context;
     return Material(
       child: SafeArea(
@@ -348,6 +354,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     return MapForm(
       latitude: point.latitude.toStringAsFixed(lengthOfDecimalPlaces),
       longitude: point.longitude.toStringAsFixed(lengthOfDecimalPlaces),
+      email: GoRouterState.of(_buildContext).extra as String,
     );
   }
 
@@ -373,6 +380,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
                 latitude: point.latitude.toStringAsFixed(lengthOfDecimalPlaces),
                 longitude:
                     point.longitude.toStringAsFixed(lengthOfDecimalPlaces),
+                email: GoRouterState.of(_buildContext).extra as String,
               ),
             ),
           ),

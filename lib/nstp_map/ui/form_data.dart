@@ -6,10 +6,15 @@ import 'package:intl/intl.dart';
 import '../controller/form_controller.dart';
 
 class MapForm extends StatefulWidget {
-  const MapForm({super.key, required this.latitude, required this.longitude});
+  const MapForm(
+      {super.key,
+      required this.latitude,
+      required this.longitude,
+      required this.email});
 
   final String latitude;
   final String longitude;
+  final String email;
 
   @override
   MapFormState createState() => MapFormState();
@@ -21,7 +26,7 @@ class MapFormState extends State<MapForm> {
   @override
   void initState() {
     super.initState();
-    _controller.setCoordinates(widget.latitude, widget.longitude);
+    _controller.setCoordinates(widget.latitude, widget.longitude, widget.email);
   }
 
   @override

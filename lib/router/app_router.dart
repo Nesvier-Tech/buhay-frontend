@@ -12,6 +12,7 @@ class AppRouter {
   const AppRouter._();
 
   static final GoRouter router = GoRouter(
+    initialLocation: '/sign-in',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(
