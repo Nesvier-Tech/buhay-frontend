@@ -44,7 +44,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   void initState() {
     super.initState();
     final String mapboxAccessToken = Env.mapboxPublicAccessToken1;
-    final String googleToken = Env.googleMapsApiKeyIp1;
+    final String googleToken = Env.googleMapsApiKey1;
     MapboxOptions.setAccessToken(mapboxAccessToken);
     _mapController = NSTPMapController(
       mapboxAccessToken: mapboxAccessToken,
@@ -54,10 +54,10 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     _searchController = custom.SearchController(mapboxAccessToken, googleToken);
     evacSiteLocations = _mapController.getEvacSitesData();
     floodLocations = _mapController.getFloodData();
-    _updateFloodaAndEvacSiteMarkers();
+    _updateFloodAndEvacSiteMarkers();
   }
 
-  void _updateFloodaAndEvacSiteMarkers() {
+  void _updateFloodAndEvacSiteMarkers() {
     realtime = GetIt.I<Realtime>();
     final subscription = realtime.subscribe(databaseCredentials);
     subscription.stream.listen((response) {
@@ -140,103 +140,105 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   Widget build(BuildContext context) {
     _buildContext = context;
     return Material(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final searchWidth = isDesktop
-              ? constraints.maxWidth * 0.75
-              : constraints.maxWidth - 32;
-          return Column(
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    if (isDesktop && _mapController.showSidebar)
-                      SizedBox(
-                        width: 400,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: _showSidebar(_mapController.currentLocation),
-                        ),
-                      ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          MapWidget(
-                            cameraOptions: CameraOptions(
-                              center: Point.fromJson({
-                                'coordinates': [
-                                  _mapController.currentLocation.longitude,
-                                  _mapController.currentLocation.latitude
-                                ]
-                              }),
-                              zoom: 18.0,
-                            ),
-                            onMapCreated: _onMapCreated,
-                            onTapListener: _handleMapTap,
-                            onCameraChangeListener: _onCameraChange,
+      child: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final searchWidth = isDesktop
+                ? constraints.maxWidth * 0.75
+                : constraints.maxWidth - 32;
+            return Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      if (isDesktop && _mapController.showSidebar)
+                        SizedBox(
+                          width: 400,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: _showSidebar(_mapController.currentLocation),
                           ),
-                          for (var entry in floodMarkersScreenPositions)
-                            Positioned(
-                              left: entry.dx - 20,
-                              top: entry.dy - 40,
-                              child: Column(
-                                children: [
-                                  _buildFloodMarker(),
-                                ],
+                        ),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            MapWidget(
+                              cameraOptions: CameraOptions(
+                                center: Point.fromJson({
+                                  'coordinates': [
+                                    _mapController.currentLocation.longitude,
+                                    _mapController.currentLocation.latitude
+                                  ]
+                                }),
+                                zoom: 18.0,
                               ),
+                              onMapCreated: _onMapCreated,
+                              onTapListener: _handleMapTap,
+                              onCameraChangeListener: _onCameraChange,
                             ),
-                          for (var entry in evacSiteMarkersScreenPositions)
-                            Positioned(
-                              left: entry.dx - 20,
-                              top: entry.dy - 40,
-                              child: Column(
-                                children: [
-                                  _buildEvacSiteMarker(),
-                                ],
+                            for (var entry in floodMarkersScreenPositions)
+                              Positioned(
+                                left: entry.dx - 20,
+                                top: entry.dy - 40,
+                                child: Column(
+                                  children: [
+                                    _buildFloodMarker(),
+                                  ],
+                                ),
                               ),
-                            ),
-                          if (markerScreenPosition != null)
+                            for (var entry in evacSiteMarkersScreenPositions)
+                              Positioned(
+                                left: entry.dx - 20,
+                                top: entry.dy - 40,
+                                child: Column(
+                                  children: [
+                                    _buildEvacSiteMarker(),
+                                  ],
+                                ),
+                              ),
+                            if (markerScreenPosition != null)
+                              Positioned(
+                                left: markerScreenPosition!.dx - 20,
+                                top: markerScreenPosition!.dy - 40,
+                                child: _buildMarker(),
+                              ),
                             Positioned(
-                              left: markerScreenPosition!.dx - 20,
-                              top: markerScreenPosition!.dy - 40,
-                              child: _buildMarker(),
-                            ),
-                          Positioned(
-                            top: 16,
-                            left: 16,
-                            right: 16,
-                            child: Container(
-                              width: searchWidth,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
+                              top: 16,
+                              left: 16,
+                              right: 16,
+                              child: Container(
+                                width: searchWidth,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SearchWidget(
+                                    controller: _searchController,
+                                    onSearch: _searchPlace,
+                                    width: searchWidth - 16,
                                   ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SearchWidget(
-                                  controller: _searchController,
-                                  onSearch: _searchPlace,
-                                  width: searchWidth - 16,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

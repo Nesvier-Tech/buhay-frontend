@@ -91,6 +91,20 @@ void main() {
       });
     });
 
+    group('googleMapsApiKey1', () {
+      test('should not return null', () {
+        expect(Env.googleMapsApiKey1, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.googleMapsApiKey1, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.googleMapsApiKey1, isNot(''));
+      });
+    });
+
     // Appwrite.
     group('appwriteProjectId', () {
       test('should not return null', () {

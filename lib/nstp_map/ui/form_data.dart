@@ -155,10 +155,10 @@ class MapFormState extends State<MapForm> {
                   ),
                   SizedBox(height: 10),
                   FormBuilderTextField(
-                    name: 'evacuation_center_current_accomodation',
+                    name: 'evacuation_center_current_accommodation',
                     decoration: InputDecoration(
                       icon: Icon(Icons.list),
-                      labelText: 'Evacuation Center Current Accomodation',
+                      labelText: 'Evacuation Center Current Accommodation',
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),

@@ -53,7 +53,7 @@ class FormController {
       return formData['evacuation_center_name'] != null &&
           formData['evacuation_center_type'] != null &&
           formData['evacuation_center_capacity'] != null &&
-          formData['evacuation_center_current_accomodation'] != null;
+          formData['evacuation_center_current_accommodation'] != null;
     } else {
       return formData['calendar'] != null &&
           formData['flood_level'] != null &&
@@ -156,8 +156,8 @@ class FormController {
         'evacuation_center_type': formData['evacuation_center_type'],
         'evacuation_center_capacity':
             int.parse(formData['evacuation_center_capacity']),
-        'evacuation_center_accomodation':
-            int.parse(formData['evacuation_center_current_accomodation']),
+        'evacuation_center_accommodation':
+            int.parse(formData['evacuation_center_current_accommodation']),
       });
     }
 
