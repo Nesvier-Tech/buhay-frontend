@@ -8,6 +8,15 @@ class AppNavigationDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationDrawer(
       children: <Widget>[
+        // Sign In Page.
+        ListTile(
+          leading: const Icon(Icons.login),
+          title: const Text('Sign In'),
+          onTap: () {
+            GoRouter.of(context).go('/sign-in');
+          },
+        ),
+
         ListTile(
           leading: const Icon(Icons.home),
           title: const Text('Home'),
