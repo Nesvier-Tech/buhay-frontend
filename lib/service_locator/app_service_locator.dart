@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/web.dart';
 
 import '../env/env.dart';
 
@@ -16,5 +17,9 @@ class AppServiceLocator {
     final Account account = Account(client);
 
     _getIt.registerLazySingleton<Account>(() => account);
+
+    // Logger Initialization.
+    final Logger logger = Logger();
+    _getIt.registerLazySingleton(() => logger);
   }
 }

@@ -1,21 +1,25 @@
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:latlong2/latlong.dart';
+import 'package:logger/logger.dart';
 
 class SearchData {
+  SearchData(this.accessToken, this.googleToken);
+
   final String accessToken;
   final String googleToken;
-
-  SearchData(this.accessToken, this.googleToken);
 
   Future<LatLng?> searchPlace(String query) async {
     final url =
         'https://maps.googleapis.com/maps/api/geocode/json?address=$query&bounds=14.589369,120.9903521|14.7764137,121.1337681&key=$googleToken';
 
     final response = await http.get(Uri.parse(url));
-
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+
+      GetIt.I<Logger>().d(data);
+
       if (data['results'].isNotEmpty) {
         final feature = data['results'][0];
         final coordinates = feature['geometry']['location'];
