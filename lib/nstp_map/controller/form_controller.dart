@@ -104,10 +104,6 @@ class FormController {
 
   String? Function(String?) validatePhotos() {
     return (String? value) {
-      if (value != null && value.isNotEmpty) {
-        return FormBuilderValidators.url(errorText: 'Please enter a valid URL')(
-            value);
-      }
       return null;
     };
   }

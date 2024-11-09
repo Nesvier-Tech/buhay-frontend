@@ -21,6 +21,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
   late NSTPMapController _mapController;
   late custom.SearchController _searchController;
   int lengthOfDecimalPlaces = 10;
+  int maxWidth = 1000;
   late BuildContext _buildContext;
   Offset? markerScreenPosition;
   bool isSearched = false;
@@ -37,7 +38,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
     'databases.${Env.appwriteDevDatabaseId}.collections.${Env.appwriteFloodDataCollectionId}.documents',
   ];
 
-  bool get isDesktop => MediaQuery.of(_buildContext).size.width > 600;
+  bool get isDesktop => MediaQuery.of(_buildContext).size.width > maxWidth;
 
   @override
   void initState() {
@@ -294,7 +295,7 @@ class _NSTPMapScreenState extends State<NSTPMapScreen> {
           return OrientationBuilder(
             builder: (context, orientation) {
               // Check if we should close the bottom sheet
-              if (MediaQuery.of(context).size.width > 600) {
+              if (MediaQuery.of(context).size.width > maxWidth) {
                 Navigator.of(context).pop();
                 // Show sidebar instead
                 WidgetsBinding.instance.addPostFrameCallback((_) {
