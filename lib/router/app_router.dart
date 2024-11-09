@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/appwrite_auth_experiment/presentation/appwrite_auth_experiment_page.dart';
+import '../features/auth/presentation/sign_in_page.dart';
 import '../features/google_maps_experiment/presentation/google_maps_experiment_page.dart';
 import '../features/home/presentation/home_page.dart';
 import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
@@ -12,6 +13,15 @@ class AppRouter {
 
   static final GoRouter router = GoRouter(
     routes: <RouteBase>[
+      // SignIn Page.
+      GoRoute(
+        path: '/sign-in',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignInPage();
+        },
+        pageBuilder: pageBuilder(child: const SignInPage()),
+      ),
+
       // Home Page.
       GoRoute(
         path: '/',

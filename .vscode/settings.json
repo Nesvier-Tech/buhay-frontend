@@ -17,6 +17,7 @@
     "NSTP",
     "OPENAI",
     "Schyler",
+    "unfocus",
     "vertexai"
   ],
   "dart.flutterSdkPath": ".fvm/versions/3.24.4",
