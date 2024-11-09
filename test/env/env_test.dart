@@ -104,6 +104,42 @@ void main() {
       test('should not return an empty String', () {
         expect(Env.appwriteProjectId, isNot(''));
       });
+
+      test('should not return null', () {
+        expect(Env.appwriteDevDatabaseId, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.appwriteDevDatabaseId, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.appwriteDevDatabaseId, isNot(''));
+      });
+
+      test('should not return null', () {
+        expect(Env.appwriteFloodDataCollectionId, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.appwriteFloodDataCollectionId, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.appwriteFloodDataCollectionId, isNot(''));
+      });
+
+      test('should not return null', () {
+        expect(Env.appwriteEvacuationSitesCollectionId, isNotNull);
+      });
+
+      test('should return a String', () {
+        expect(Env.appwriteEvacuationSitesCollectionId, isA<String>());
+      });
+
+      test('should not return an empty String', () {
+        expect(Env.appwriteEvacuationSitesCollectionId, isNot(''));
+      });
     });
 
     group('appwriteEndpoint', () {
