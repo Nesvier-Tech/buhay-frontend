@@ -3,14 +3,31 @@ import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import '../controller/map_controller.dart';
 
-class MapboxMapWidget extends StatelessWidget {
-  MapboxMapWidget({super.key, required this.currentLocation})
-      : mapController = MapController(
-            currentLocation: currentLocation,
-            marker: const Icon(Icons.location_on, size: 50.0));
+class MapboxMapWidget extends StatefulWidget {
+  const MapboxMapWidget(
+      {super.key, required this.currentLocation, required this.setMap});
 
-  final MapController mapController;
+  final Function(MapboxMap) setMap;
   final LatLng currentLocation;
+
+  @override
+  State<MapboxMapWidget> createState() => _MapboxMapWidgetState();
+}
+
+class _MapboxMapWidgetState extends State<MapboxMapWidget> {
+  late final MapController mapController;
+  late LatLng currentLocation;
+  Offset? markerScreenPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    currentLocation = widget.currentLocation;
+    mapController = MapController(
+      currentLocation: currentLocation,
+      // marker: const Icon(Icons.location_on),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +44,11 @@ class MapboxMapWidget extends StatelessWidget {
           bearing: 0.0,
           pitch: 0.0,
         ),
-        onMapCreated: mapController.onMapCreated,
-        onCameraChangeListener: mapController.onCameraChangeListener,
+        onMapCreated: (MapboxMap map) {
+          mapController.onMapCreated(map);
+          widget.setMap(map);
+        },
+        // onCameraChangeListener: mapController.onCameraChangeListener,
       ),
     );
   }

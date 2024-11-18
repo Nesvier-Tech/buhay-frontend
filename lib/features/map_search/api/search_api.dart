@@ -18,7 +18,7 @@ class MapSearchApi {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      GetIt.I<Logger>().d(data);
+      GetIt.I<Logger>().d("Extracted");
 
       if (data['results'].isNotEmpty) {
         final feature = data['results'][0];

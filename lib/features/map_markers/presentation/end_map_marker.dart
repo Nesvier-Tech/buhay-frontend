@@ -6,9 +6,9 @@ class EndMapMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Icon(
-      Icons.circle,
-      size: 30,
-      color: Colors.blue,
+      Icons.location_on,
+      size: 40,
+      color: Colors.red,
     );
   }
 }

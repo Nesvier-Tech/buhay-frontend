@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../../map_search/controller/search_controller.dart';
 
 class SearchDropdownWidget extends StatelessWidget {
@@ -7,11 +8,13 @@ class SearchDropdownWidget extends StatelessWidget {
     required this.message,
     required this.controller,
     required this.isTyping,
+    required this.onSearch,
   });
 
   final String message;
   final MapSearchController controller;
   final ValueNotifier<bool> isTyping;
+  final Function(LatLng) onSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,11 @@ class SearchDropdownWidget extends StatelessWidget {
                   controller.textController.text = suggestions[index];
                   controller.suggestions.value = [];
                   isTyping.value = false;
-                  controller.searchPlace(suggestions[index]);
+                  controller.searchPlace(suggestions[index]).then((latLng) {
+                    if (latLng != null) {
+                      onSearch(latLng);
+                    }
+                  });
                 },
               );
             },

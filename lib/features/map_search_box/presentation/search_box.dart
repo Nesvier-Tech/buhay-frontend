@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../../map_search/controller/search_controller.dart';
 
 class SearchBoxWidget extends StatelessWidget {
-  const SearchBoxWidget(
-      {super.key,
-      required this.message,
-      required this.controller,
-      required this.isTyping});
+  const SearchBoxWidget({
+    super.key,
+    required this.message,
+    required this.controller,
+    required this.isTyping,
+    required this.onSearch,
+  });
 
   final String message;
   final MapSearchController controller;
   final ValueNotifier<bool> isTyping;
+  final Function(LatLng) onSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,11 @@ class SearchBoxWidget extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
           ),
         ),
-        onSubmitted: (value) {
-          controller.searchPlace(value);
+        onSubmitted: (value) async {
+          final latLng = await controller.searchPlace(value);
+          if (latLng != null) {
+            onSearch(latLng);
+          }
           isTyping.value = false;
         },
         onChanged: (value) {
