@@ -8,6 +8,7 @@ import '../../features/map_search/presentation/search.dart';
 import '../controller/system_controller.dart';
 import '../../features/map_markers/presentation/start_map_marker.dart';
 import '../../features/map_markers/presentation/end_map_marker.dart';
+import '../../features/map_submit/presentation/map_submit.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -71,8 +72,15 @@ class _MapPageState extends State<MapPage> {
                     onSearch: _searchPlace,
                     boxType: false,
                   ),
+                  Spacer(),
+                  if (systemController.isValidRouteRequest())
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 100.0),
+                      child:
+                          MapSubmitWidget(systemController: systemController),
+                    ),
                 ],
-              )
+              ),
             ],
           ),
         ),

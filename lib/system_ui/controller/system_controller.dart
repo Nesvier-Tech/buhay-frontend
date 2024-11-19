@@ -103,4 +103,10 @@ class SystemController {
 
     return null;
   }
+
+  bool isValidRouteRequest() {
+    return startMarkerPosition != null &&
+        endMarkerPosition != null &&
+        startMarkerPosition != endMarkerPosition;
+  }
 }
