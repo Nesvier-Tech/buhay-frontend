@@ -1,5 +1,5 @@
-import 'package:buhay/env/env.dart';
-import 'package:buhay/features/mapbox/presentation/mapbox.dart';
+import '../../env/env.dart';
+import '../../features/mapbox/presentation/mapbox.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
@@ -92,9 +92,9 @@ class _MapPageState extends State<MapPage> {
 
   void _updateMarkerPosition() async {
     final startScreenPosition =
-        await systemController.getStartMarkerScreenPosition();
+        await systemController.getMarkerScreenPosition(true);
     final endScreenPosition =
-        await systemController.getEndMarkerScreenPosition();
+        await systemController.getMarkerScreenPosition(false);
     setState(() {
       startMarkerScreenPosition = startScreenPosition;
       endMarkerScreenPosition = endScreenPosition;

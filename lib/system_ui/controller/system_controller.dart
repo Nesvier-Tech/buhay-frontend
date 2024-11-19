@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -81,8 +80,8 @@ class SystemController {
     }
   }
 
-  Future<Offset?> getStartMarkerScreenPosition() async {
-    if (mapboxMap != null && startMarkerPosition != null) {
+  Future<Offset?> getMarkerScreenPosition(bool isStartMarker) async {
+    if (isStartMarker && mapboxMap != null && startMarkerPosition != null) {
       final screenPoint = await mapboxMap!.pixelForCoordinate(Point.fromJson({
         'coordinates': [
           startMarkerPosition!.longitude,
@@ -91,11 +90,8 @@ class SystemController {
       }));
       return Offset(screenPoint.x, screenPoint.y);
     }
-    return null;
-  }
 
-  Future<Offset?> getEndMarkerScreenPosition() async {
-    if (mapboxMap != null && endMarkerPosition != null) {
+    if (!isStartMarker && mapboxMap != null && endMarkerPosition != null) {
       final screenPoint = await mapboxMap!.pixelForCoordinate(Point.fromJson({
         'coordinates': [
           endMarkerPosition!.longitude,
@@ -104,6 +100,7 @@ class SystemController {
       }));
       return Offset(screenPoint.x, screenPoint.y);
     }
+
     return null;
   }
 }

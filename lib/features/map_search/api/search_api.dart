@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:logger/logger.dart';
 

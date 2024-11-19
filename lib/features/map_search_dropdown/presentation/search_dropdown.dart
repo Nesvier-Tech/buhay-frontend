@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../../map_search/controller/search_controller.dart';
 
 class SearchDropdownWidget extends StatefulWidget {

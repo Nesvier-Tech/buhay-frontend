@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import '../../../system_ui/controller/system_controller.dart';
 
 class MapboxMapWidget extends StatefulWidget {
