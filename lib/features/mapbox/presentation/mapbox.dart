@@ -5,10 +5,14 @@ import '../controller/map_controller.dart';
 
 class MapboxMapWidget extends StatefulWidget {
   const MapboxMapWidget(
-      {super.key, required this.currentLocation, required this.setMap});
+      {super.key,
+      required this.currentLocation,
+      required this.setMap,
+      required this.updateUI});
 
   final Function(MapboxMap) setMap;
   final LatLng currentLocation;
+  final Function(void) updateUI;
 
   @override
   State<MapboxMapWidget> createState() => _MapboxMapWidgetState();
@@ -48,7 +52,7 @@ class _MapboxMapWidgetState extends State<MapboxMapWidget> {
           mapController.onMapCreated(map);
           widget.setMap(map);
         },
-        // onCameraChangeListener: mapController.onCameraChangeListener,
+        onCameraChangeListener: widget.updateUI,
       ),
     );
   }

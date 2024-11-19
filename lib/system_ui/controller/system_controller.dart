@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class SystemController {
@@ -9,20 +7,19 @@ class SystemController {
 
   LatLng currentLocation;
   MapboxMap? mapboxMap;
-  Offset? markerScreenPosition;
+  LatLng? markerPosition;
 
-  Future<void> setCurrentLocation(LatLng searchedLocation) async {
-    currentLocation = searchedLocation;
-    if (mapboxMap != null) {
-      flyToLocation(currentLocation);
-      markerScreenPosition = await getMarkerScreenPosition(currentLocation);
-    }
-    GetIt.I<Logger>().d('Current location: $currentLocation');
+  void onMapCreated(MapboxMap map) {
+    mapboxMap = map;
   }
 
-  void setMap(MapboxMap map) {
-    mapboxMap = map;
-    GetIt.I<Logger>().d('Map Created');
+  Future<void> setCurrentLocation(LatLng searchedLocation) async {
+    final newLatLng = searchedLocation;
+    if (mapboxMap != null) {
+      flyToLocation(newLatLng);
+      markerPosition = newLatLng;
+      currentLocation = newLatLng;
+    }
   }
 
   void flyToLocation(LatLng location) {
@@ -38,11 +35,13 @@ class SystemController {
     );
   }
 
-  Future<Offset> getMarkerScreenPosition(LatLng location) async {
-    final screenPoint = await mapboxMap!.pixelForCoordinate(Point.fromJson({
-      'coordinates': [location.longitude, location.latitude]
-    }));
-    GetIt.I<Logger>().d('Marker Screen Position: $screenPoint');
-    return Offset(screenPoint.x, screenPoint.y);
+  Future<Offset?> getMarkerScreenPosition() async {
+    if (mapboxMap != null && markerPosition != null) {
+      final screenPoint = await mapboxMap!.pixelForCoordinate(Point.fromJson({
+        'coordinates': [markerPosition!.longitude, markerPosition!.latitude]
+      }));
+      return Offset(screenPoint.x, screenPoint.y);
+    }
+    return null;
   }
 }

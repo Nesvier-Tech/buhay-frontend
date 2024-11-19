@@ -1,8 +1,8 @@
 import 'package:buhay/env/env.dart';
 import 'package:flutter/material.dart';
-// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
-import '../../features/mapbox/presentation/mapbox.dart';
+
 import '../../features/map_search/presentation/search.dart';
 import '../controller/system_controller.dart';
 import '../../features/map_markers/presentation/start_map_marker.dart';
@@ -19,6 +19,7 @@ class _MapPageState extends State<MapPage> {
   String mapboxAccessToken = "";
   String googleToken = "";
   late SystemController systemController;
+  Offset? markerScreenPosition;
 
   @override
   void initState() {
@@ -37,26 +38,34 @@ class _MapPageState extends State<MapPage> {
         body: Center(
           child: Stack(
             children: <Widget>[
-              MapboxMapWidget(
-                currentLocation: systemController.currentLocation,
-                setMap: systemController.setMap,
+              MapWidget(
+                cameraOptions: CameraOptions(
+                  center: Point.fromJson({
+                    'coordinates': [
+                      systemController.currentLocation.longitude,
+                      systemController.currentLocation.latitude
+                    ]
+                  }),
+                  zoom: 14.0,
+                  bearing: 0.0,
+                  pitch: 0.0,
+                ),
+                onMapCreated: systemController.onMapCreated,
+                onCameraChangeListener: _onCameraChangeListener,
               ),
-
-              if (systemController.markerScreenPosition != null)
+              if (markerScreenPosition != null)
                 Positioned(
-                  left: systemController.markerScreenPosition!.dx - 20,
-                  top: systemController.markerScreenPosition!.dy - 40,
+                  left: markerScreenPosition!.dx - 20,
+                  top: markerScreenPosition!.dy - 40,
                   child: StartMapMarker(),
                 ),
-              // const StartMapMarker(),
-              // const EndMapMarker(),
               Column(
                 children: <Widget>[
                   MapSearchWidget(
                       message: 'Choose starting location',
                       mapboxAccessToken: mapboxAccessToken,
                       googleToken: googleToken,
-                      onSearch: systemController.setCurrentLocation),
+                      onSearch: _searchPlace),
                   //     MapSearchWidget(
                   //       message: 'Choose destination',
                   //       mapboxAccessToken: mapboxAccessToken,
@@ -70,5 +79,22 @@ class _MapPageState extends State<MapPage> {
         ),
       ),
     );
+  }
+
+  void _onCameraChangeListener(CameraChangedEventData eventData) {
+    _updateMarkerPosition();
+  }
+
+  void _searchPlace(LatLng location) {
+    systemController.setCurrentLocation(location);
+    setState(() {});
+    _updateMarkerPosition();
+  }
+
+  void _updateMarkerPosition() async {
+    final screenPosition = await systemController.getMarkerScreenPosition();
+    setState(() {
+      markerScreenPosition = screenPosition;
+    });
   }
 }

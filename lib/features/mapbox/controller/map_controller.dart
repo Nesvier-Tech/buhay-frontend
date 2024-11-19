@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+// import 'package:get_it/get_it.dart';
+// import 'package:logger/logger.dart';
 // import 'marker_controller.dart';
 
 class MapController {
@@ -15,6 +17,7 @@ class MapController {
 
   void onMapCreated(MapboxMap map) {
     mapboxMap = map;
+    // GetIt.I<Logger>().d('Map Created Controller: $mapboxMap.toString()');
   }
 
   // void onCameraChangeListener(CameraChangedEventData eventData) {
