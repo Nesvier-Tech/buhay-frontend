@@ -2,26 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../../map_search/controller/search_controller.dart';
 
-class SearchDropdownWidget extends StatelessWidget {
+class SearchDropdownWidget extends StatefulWidget {
   const SearchDropdownWidget({
     super.key,
     required this.message,
     required this.controller,
     required this.isTyping,
     required this.onSearch,
+    required this.boxType,
   });
 
   final String message;
   final MapSearchController controller;
   final ValueNotifier<bool> isTyping;
-  final Function(LatLng) onSearch;
+  final Function(LatLng, bool) onSearch;
+  final bool boxType;
 
+  @override
+  State<SearchDropdownWidget> createState() => _SearchDropdownWidgetState();
+}
+
+class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<List<String>>(
-      valueListenable: controller.suggestions,
+      valueListenable: widget.controller.suggestions,
       builder: (context, suggestions, _) {
-        if (!isTyping.value || suggestions.isEmpty) {
+        if (!widget.isTyping.value || suggestions.isEmpty) {
           return Container();
         }
 
@@ -43,12 +50,14 @@ class SearchDropdownWidget extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  controller.textController.text = suggestions[index];
-                  controller.suggestions.value = [];
-                  isTyping.value = false;
-                  controller.searchPlace(suggestions[index]).then((latLng) {
+                  widget.controller.textController.text = suggestions[index];
+                  widget.controller.suggestions.value = [];
+                  widget.isTyping.value = false;
+                  widget.controller
+                      .searchPlace(suggestions[index])
+                      .then((latLng) {
                     if (latLng != null) {
-                      onSearch(latLng);
+                      widget.onSearch(latLng, widget.boxType);
                     }
                   });
                 },

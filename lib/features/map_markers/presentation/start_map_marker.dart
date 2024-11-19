@@ -7,7 +7,7 @@ class StartMapMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Icon(
       Icons.circle,
-      size: 30,
+      size: 20,
       color: Colors.blue,
     );
   }

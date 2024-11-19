@@ -1,4 +1,5 @@
 import 'package:buhay/env/env.dart';
+import 'package:buhay/features/mapbox/presentation/mapbox.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
@@ -6,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../controller/system_controller.dart';
 import '../../features/map_markers/presentation/start_map_marker.dart';
-// import '../../features/map_markers/presentation/end_map_marker.dart';
+import '../../features/map_markers/presentation/end_map_marker.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -19,16 +20,17 @@ class _MapPageState extends State<MapPage> {
   String mapboxAccessToken = "";
   String googleToken = "";
   late SystemController systemController;
-  Offset? markerScreenPosition;
+  Offset? startMarkerScreenPosition;
+  Offset? endMarkerScreenPosition;
 
   @override
   void initState() {
+    LatLng defaultLocation = const LatLng(14.6539, 121.0685);
     super.initState();
     mapboxAccessToken = Env.mapboxPublicAccessToken1;
     googleToken = Env.googleMapsApiKey1;
 
-    systemController =
-        SystemController(currentLocation: const LatLng(14.6539, 121.0685));
+    systemController = SystemController(currentLocation: defaultLocation);
   }
 
   @override
@@ -38,40 +40,37 @@ class _MapPageState extends State<MapPage> {
         body: Center(
           child: Stack(
             children: <Widget>[
-              MapWidget(
-                cameraOptions: CameraOptions(
-                  center: Point.fromJson({
-                    'coordinates': [
-                      systemController.currentLocation.longitude,
-                      systemController.currentLocation.latitude
-                    ]
-                  }),
-                  zoom: 14.0,
-                  bearing: 0.0,
-                  pitch: 0.0,
-                ),
-                onMapCreated: systemController.onMapCreated,
-                onCameraChangeListener: _onCameraChangeListener,
-              ),
-              if (markerScreenPosition != null)
+              MapboxMapWidget(
+                  systemController: systemController,
+                  onCameraChangeListener: _onCameraChangeListener),
+              if (startMarkerScreenPosition != null)
                 Positioned(
-                  left: markerScreenPosition!.dx - 20,
-                  top: markerScreenPosition!.dy - 40,
+                  left: startMarkerScreenPosition!.dx - 20,
+                  top: startMarkerScreenPosition!.dy - 40,
                   child: StartMapMarker(),
+                ),
+              if (endMarkerScreenPosition != null)
+                Positioned(
+                  left: endMarkerScreenPosition!.dx - 20,
+                  top: endMarkerScreenPosition!.dy - 40,
+                  child: EndMapMarker(),
                 ),
               Column(
                 children: <Widget>[
                   MapSearchWidget(
-                      message: 'Choose starting location',
-                      mapboxAccessToken: mapboxAccessToken,
-                      googleToken: googleToken,
-                      onSearch: _searchPlace),
-                  //     MapSearchWidget(
-                  //       message: 'Choose destination',
-                  //       mapboxAccessToken: mapboxAccessToken,
-                  //       googleToken: googleToken,
-                  //  onSearch: systemController.setCurrentLocation),
-                  //     ),
+                    message: 'Choose starting location',
+                    mapboxAccessToken: mapboxAccessToken,
+                    googleToken: googleToken,
+                    onSearch: _searchPlace,
+                    boxType: true,
+                  ),
+                  MapSearchWidget(
+                    message: 'Choose destination',
+                    mapboxAccessToken: mapboxAccessToken,
+                    googleToken: googleToken,
+                    onSearch: _searchPlace,
+                    boxType: false,
+                  ),
                 ],
               )
             ],
@@ -85,16 +84,20 @@ class _MapPageState extends State<MapPage> {
     _updateMarkerPosition();
   }
 
-  void _searchPlace(LatLng location) {
-    systemController.setCurrentLocation(location);
+  void _searchPlace(LatLng location, bool isStartMarker) {
+    systemController.setCurrentLocation(location, isStartMarker);
     setState(() {});
     _updateMarkerPosition();
   }
 
   void _updateMarkerPosition() async {
-    final screenPosition = await systemController.getMarkerScreenPosition();
+    final startScreenPosition =
+        await systemController.getStartMarkerScreenPosition();
+    final endScreenPosition =
+        await systemController.getEndMarkerScreenPosition();
     setState(() {
-      markerScreenPosition = screenPosition;
+      startMarkerScreenPosition = startScreenPosition;
+      endMarkerScreenPosition = endScreenPosition;
     });
   }
 }

@@ -3,22 +3,38 @@ import 'package:latlong2/latlong.dart';
 import '../controller/search_controller.dart';
 import '../../map_search_box/presentation/search_box.dart';
 import '../../map_search_dropdown/presentation/search_dropdown.dart';
+// import '../../../system_ui/controller/system_controller.dart';
 
-class MapSearchWidget extends StatelessWidget {
-  MapSearchWidget(
-      {super.key,
-      required this.message,
-      required this.mapboxAccessToken,
-      required this.googleToken,
-      required this.onSearch})
-      : controller = MapSearchController(mapboxAccessToken, googleToken);
+class MapSearchWidget extends StatefulWidget {
+  const MapSearchWidget({
+    super.key,
+    required this.message,
+    required this.mapboxAccessToken,
+    required this.googleToken,
+    required this.onSearch,
+    required this.boxType,
+  });
 
   final String message;
   final String mapboxAccessToken;
   final String googleToken;
-  final Function(LatLng) onSearch;
-  final MapSearchController controller;
+  final Function(LatLng, bool) onSearch;
+  final bool boxType;
+
+  @override
+  State<MapSearchWidget> createState() => _MapSearchWidgetState();
+}
+
+class _MapSearchWidgetState extends State<MapSearchWidget> {
+  late final MapSearchController controller;
   final ValueNotifier<bool> isTyping = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        MapSearchController(widget.mapboxAccessToken, widget.googleToken);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +44,18 @@ class MapSearchWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SearchBoxWidget(
-            message: message,
+            message: widget.message,
             controller: controller,
             isTyping: isTyping,
-            onSearch: onSearch,
+            onSearch: widget.onSearch,
+            boxType: widget.boxType,
           ),
           SearchDropdownWidget(
-            message: message,
+            message: widget.message,
             controller: controller,
             isTyping: isTyping,
-            onSearch: onSearch,
+            onSearch: widget.onSearch,
+            boxType: widget.boxType,
           ),
         ],
       ),

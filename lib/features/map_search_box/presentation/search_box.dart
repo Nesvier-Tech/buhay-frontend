@@ -2,33 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../../map_search/controller/search_controller.dart';
 
-class SearchBoxWidget extends StatelessWidget {
+class SearchBoxWidget extends StatefulWidget {
   const SearchBoxWidget({
     super.key,
     required this.message,
     required this.controller,
     required this.isTyping,
     required this.onSearch,
+    required this.boxType,
   });
 
   final String message;
   final MapSearchController controller;
   final ValueNotifier<bool> isTyping;
-  final Function(LatLng) onSearch;
+  final Function(LatLng, bool) onSearch;
+  final bool boxType;
 
+  @override
+  State<SearchBoxWidget> createState() => _SearchBoxWidgetState();
+}
+
+class _SearchBoxWidgetState extends State<SearchBoxWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(4.0),
       color: Colors.white,
       child: TextField(
-        controller: controller.textController,
+        controller: widget.controller.textController,
         decoration: InputDecoration(
-          hintText: message,
+          hintText: widget.message,
           suffixIcon: IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              controller.searchPlace(controller.textController.text);
+              widget.controller
+                  .searchPlace(widget.controller.textController.text);
             },
           ),
           border: const OutlineInputBorder(
@@ -36,15 +44,15 @@ class SearchBoxWidget extends StatelessWidget {
           ),
         ),
         onSubmitted: (value) async {
-          final latLng = await controller.searchPlace(value);
+          final latLng = await widget.controller.searchPlace(value);
           if (latLng != null) {
-            onSearch(latLng);
+            widget.onSearch(latLng, widget.boxType);
           }
-          isTyping.value = false;
+          widget.isTyping.value = false;
         },
         onChanged: (value) {
-          isTyping.value = value.isNotEmpty;
-          controller.getSuggestions(value);
+          widget.isTyping.value = value.isNotEmpty;
+          widget.controller.getSuggestions(value);
         },
       ),
     );
