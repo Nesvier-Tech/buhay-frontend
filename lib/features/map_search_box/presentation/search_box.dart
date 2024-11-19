@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../../map_search/controller/search_controller.dart';
 
 class SearchBoxWidget extends StatefulWidget {
@@ -36,7 +37,13 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
             icon: Icon(Icons.search),
             onPressed: () {
               widget.controller
-                  .searchPlace(widget.controller.textController.text);
+                  .searchPlace(widget.controller.textController.text)
+                  .then((latLng) {
+                if (latLng != null) {
+                  widget.onSearch(latLng, widget.boxType);
+                }
+              });
+              widget.isTyping.value = false;
             },
           ),
           border: const OutlineInputBorder(
