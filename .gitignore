@@ -44,7 +44,3 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
-
-# Envied (safekeeping for environment variables).
-.env
-env.g.dart

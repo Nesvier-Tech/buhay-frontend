@@ -1,4 +1,4 @@
-package com.nesvier.buhay
+package com.example.buhay_frontend
 
 import io.flutter.embedding.android.FlutterActivity
 
