@@ -9,7 +9,7 @@ class MapSubmitController {
 
   final MapSubmitApi mapSubmitApi;
 
-  Future<List> getRoute(
+  Future<Map<String, dynamic>> getRoute(
       LatLng? startMarkerPosition, LatLng? endMarkerPosition) async {
     final test = await mapSubmitApi.getRouteCoordinates(
         startMarkerPosition!, endMarkerPosition!);
