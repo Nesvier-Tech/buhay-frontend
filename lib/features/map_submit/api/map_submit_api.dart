@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:logger/logger.dart';
 
 class MapSubmitApi {
   Future<Map<String, dynamic>> getRouteCoordinates(
@@ -15,7 +13,6 @@ class MapSubmitApi {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      GetIt.I<Logger>().d('Data: $data');
       final route = data['geojson'];
       return route;
     } else {

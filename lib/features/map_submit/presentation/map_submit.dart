@@ -7,9 +7,11 @@ class MapSubmitWidget extends StatefulWidget {
   const MapSubmitWidget({
     super.key,
     required this.systemController,
+    required this.onSubmit,
   });
 
   final SystemController systemController;
+  final Function(Future<Map<String, dynamic>>) onSubmit;
 
   @override
   State<MapSubmitWidget> createState() => _MapSubmitWidgetState();
@@ -33,9 +35,10 @@ class _MapSubmitWidgetState extends State<MapSubmitWidget> {
   }
 
   void _onPressed() {
-    mapSubmitController.getRoute(
+    Future<Map<String, dynamic>> data = mapSubmitController.getRoute(
       widget.systemController.startMarkerPosition,
       widget.systemController.endMarkerPosition,
     );
+    widget.onSubmit(data);
   }
 }

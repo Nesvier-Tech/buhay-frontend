@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:logger/logger.dart';
 
 class MapSearchApi {
   MapSearchApi(this.mapboxAccessToken, this.googleToken);
@@ -18,8 +16,6 @@ class MapSearchApi {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-
-      GetIt.I<Logger>().d("Extracted");
 
       if (data['results'].isNotEmpty) {
         final feature = data['results'][0];

@@ -76,8 +76,9 @@ class _MapPageState extends State<MapPage> {
                   if (systemController.isValidRouteRequest())
                     Padding(
                       padding: const EdgeInsets.only(bottom: 100.0),
-                      child:
-                          MapSubmitWidget(systemController: systemController),
+                      child: MapSubmitWidget(
+                          systemController: systemController,
+                          onSubmit: systemController.onSubmit),
                     ),
                 ],
               ),
@@ -92,10 +93,11 @@ class _MapPageState extends State<MapPage> {
     _updateMarkerPosition();
   }
 
-  void _searchPlace(LatLng location, bool isStartMarker) {
+  void _searchPlace(LatLng location, bool isStartMarker) async {
     systemController.setCurrentLocation(location, isStartMarker);
     setState(() {});
     _updateMarkerPosition();
+    await systemController.clearRoute(systemController.id);
   }
 
   void _updateMarkerPosition() async {
