@@ -1,3 +1,5 @@
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import '../../env/env.dart';
 import '../../features/mapbox/presentation/mapbox.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +80,7 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.only(bottom: 100.0),
                       child: MapSubmitWidget(
                           systemController: systemController,
-                          onSubmit: systemController.onSubmit),
+                          onSubmit: _onSubmitRoute),
                     ),
                 ],
               ),
@@ -109,5 +111,52 @@ class _MapPageState extends State<MapPage> {
       startMarkerScreenPosition = startScreenPosition;
       endMarkerScreenPosition = endScreenPosition;
     });
+  }
+
+  void _onSubmitRoute(Future<Map<String, dynamic>> futureData) async {
+    try {
+      showDialog<AlertDialog>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Calculating Route...'),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                LoadingAnimationWidget.discreteCircle(
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 100.0,
+                ),
+              ],
+            ),
+          );
+        },
+      );
+      await systemController.onSubmit(futureData);
+
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      await showDialog<AlertDialog>(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: <TextButton>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

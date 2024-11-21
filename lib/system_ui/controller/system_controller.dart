@@ -125,7 +125,7 @@ class SystemController {
     }
   }
 
-  void onSubmit(Future<Map<String, dynamic>> futureData) async {
+  Future<void> onSubmit(Future<Map<String, dynamic>> futureData) async {
     final data = await futureData;
     addPolylineLayer(data);
   }
