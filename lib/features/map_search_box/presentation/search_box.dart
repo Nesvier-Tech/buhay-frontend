@@ -11,6 +11,7 @@ class SearchBoxWidget extends StatefulWidget {
     required this.isTyping,
     required this.onSearch,
     required this.boxType,
+    required this.focusNode,
   });
 
   final String message;
@@ -18,12 +19,24 @@ class SearchBoxWidget extends StatefulWidget {
   final ValueNotifier<bool> isTyping;
   final Function(LatLng, bool) onSearch;
   final bool boxType;
+  final FocusNode focusNode;
 
   @override
   State<SearchBoxWidget> createState() => _SearchBoxWidgetState();
 }
 
 class _SearchBoxWidgetState extends State<SearchBoxWidget> {
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(() {
+      if (!widget.focusNode.hasFocus) {
+        widget.isTyping.value = false;
+        widget.controller.suggestions.value = [];
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,6 +74,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
           widget.isTyping.value = value.isNotEmpty;
           widget.controller.getSuggestions(value);
         },
+        focusNode: widget.focusNode,
       ),
     );
   }

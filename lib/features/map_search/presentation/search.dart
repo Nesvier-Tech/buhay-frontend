@@ -28,6 +28,7 @@ class MapSearchWidget extends StatefulWidget {
 class _MapSearchWidgetState extends State<MapSearchWidget> {
   late final MapSearchController controller;
   final ValueNotifier<bool> isTyping = ValueNotifier(false);
+  final FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -49,6 +50,7 @@ class _MapSearchWidgetState extends State<MapSearchWidget> {
             isTyping: isTyping,
             onSearch: widget.onSearch,
             boxType: widget.boxType,
+            focusNode: focusNode,
           ),
           SearchDropdownWidget(
             message: widget.message,
