@@ -20,7 +20,7 @@
     "unfocus",
     "vertexai"
   ],
-  "dart.flutterSdkPath": ".fvm/versions/3.24.4",
+  "dart.flutterSdkPath": ".fvm/versions/3.24.5",
   "java.configuration.updateBuildConfiguration": "interactive",
   "autoHide.autoHideSideBar": false,
   "autoHide.autoHidePanel": false
