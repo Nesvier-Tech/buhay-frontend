@@ -5,9 +5,8 @@ import 'package:latlong2/latlong.dart';
 class MapSubmitApi {
   Future<Map<String, dynamic>> getRouteCoordinates(
       LatLng start, LatLng end) async {
-    // TODO: update the URL to match server
     final url =
-        'http://10.0.2.2:8000/directions?start=${start.longitude},${start.latitude}&end=${end.longitude},${end.latitude}';
+        'http://49.13.218.27:8080/directions?start=${start.longitude},${start.latitude}&end=${end.longitude},${end.latitude}';
 
     final response = await http.get(Uri.parse(url));
 
