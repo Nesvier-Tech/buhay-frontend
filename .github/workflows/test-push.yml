@@ -1,0 +1,102 @@
+name: Analyze, Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  semantic-pull-request:
+    name: Semantic
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  test:
+    name: Test
+    needs: [semantic-pull-request]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.2
+
+      - name: Create .env file
+        run: |
+          cat <<EOT >> .env
+          # LLMs
+          OPENAI_API_KEY_1="${{ secrets.OPENAI_API_KEY_1 }}"
+          GOOGLE_GEMINI_API_KEY_1="${{ secrets.GOOGLE_GEMINI_API_KEY_1 }}"
+          PERPLEXITY_API_KEY_1="${{ secrets.PERPLEXITY_API_KEY_1 }}"
+
+          # Google Maps
+          GOOGLE_MAPS_API_KEY_ANDROID_1="${{ secrets.GOOGLE_MAPS_API_KEY_ANDROID_1 }}"
+          GOOGLE_MAPS_API_KEY_WEB_1="${{ secrets.GOOGLE_MAPS_API_KEY_WEB_1 }}"
+          GOOGLE_MAPS_API_KEY_IP_1="${{ secrets.GOOGLE_MAPS_API_KEY_IP_1 }}"
+          GOOGLE_MAPS_API_KEY_1="${{ secrets.GOOGLE_MAPS_API_KEY_1 }}"
+
+          # Appwrite
+          APPWRITE_PROJECT_ID="${{ secrets.APPWRITE_PROJECT_ID }}"
+          APPWRITE_ENDPOINT="${{ secrets.APPWRITE_ENDPOINT }}"
+          APPWRITE_DEV_DATABASE_ID="${{ secrets.APPWRITE_DEV_DATABASE_ID }}"
+          APPWRITE_FLOOD_DATA_COLLECTION_ID="${{ secrets.APPWRITE_FLOOD_DATA_COLLECTION_ID }}"
+          APPWRITE_EVACUATION_SITES_COLLECTION_ID="${{ secrets.APPWRITE_EVACUATION_SITES_COLLECTION_ID }}"
+
+          # Mapbox
+          MAPBOX_SECRET_ACCESS_TOKEN_1="${{ secrets.MAPBOX_SECRET_ACCESS_TOKEN_1 }}"
+          MAPBOX_PUBLIC_ACCESS_TOKEN_1="${{ secrets.MAPBOX_PUBLIC_ACCESS_TOKEN_1 }}"
+          EOT
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Envied Code Generation
+        run: dart run build_runner build
+
+      - name: Flutter Test
+        run: flutter test --reporter expanded
+
+      - name: Build the web app
+        run: flutter build web --release
+
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/web
+
+      - name: Flutter Test
+        run: flutter test --reporter expanded
+
+      # - name: Build the web app
+      #   run: flutter build web --release
+
+      # - name: Archive Production Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build
+      #     path: build/web
+#   deploy:
+#     name: Deploy
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+
+#       - name: Download Artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: build
+#           path: build/web
+
+#       - name: Deploy to firebase
+#         uses: FirebaseExtended/action-hosting-deploy@v0
+#         with:
+#           repoToken: "${{ secrets.GITHUB_TOKEN }}"
+#           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAVEN_430610 }}"
+#           channelId: live
+#           projectId: maven-430610

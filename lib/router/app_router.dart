@@ -71,11 +71,12 @@ class AppRouter {
       ),
 
       GoRoute(
-          path: '/system-map',
-          builder: (BuildContext context, GoRouterState state) {
-            return const MapPage();
-          },
-          pageBuilder: pageBuilder(child: const MapPage()))
+        path: '/system-map',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MapPage();
+        },
+        pageBuilder: pageBuilder(child: const MapPage()),
+      )
     ],
   );
 
