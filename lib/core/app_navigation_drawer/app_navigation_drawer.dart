@@ -79,12 +79,20 @@ class AppNavigationDrawer extends StatelessWidget {
         //   },
         // ),
 
+        // System Map.
+        ListTile(
+          leading: const Icon(Icons.map),
+          title: const Text('System Map'),
+          onTap: () {
+            GoRouter.of(context).push('/system-map');
+          },
+        ),
+
         // Sign Out.
         ListTile(
           leading: const Icon(Icons.logout),
           title: const Text('Sign Out'),
           onTap: () {
-            // User GoRouter to navigate to the Sign In Page.
             GoRouter.of(context).go('/sign-in');
           },
         ),
