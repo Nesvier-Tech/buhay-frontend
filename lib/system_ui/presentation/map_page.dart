@@ -1,16 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../../env/env.dart';
-import '../../features/mapbox/presentation/mapbox.dart';
-import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../../features/map_search/presentation/search.dart';
-import '../controller/system_controller.dart';
-import '../../features/map_markers/presentation/start_map_marker.dart';
 import '../../features/map_markers/presentation/end_map_marker.dart';
+import '../../features/map_markers/presentation/start_map_marker.dart';
+import '../../features/map_search/presentation/search.dart';
 import '../../features/map_submit/presentation/map_submit.dart';
+import '../../features/mapbox/presentation/mapbox.dart';
+import '../controller/system_controller.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});

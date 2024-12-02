@@ -79,6 +79,15 @@ class AppNavigationDrawer extends StatelessWidget {
         //   },
         // ),
 
+        // Dashboard.
+        ListTile(
+          leading: const Icon(Icons.dashboard),
+          title: const Text('Dashboard'),
+          onTap: () {
+            GoRouter.of(context).go('/dashboard');
+          },
+        ),
+
         // System Map.
         ListTile(
           leading: const Icon(Icons.map),

@@ -1,3 +1,4 @@
+import 'package:buhay/constants/constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,13 @@ class BuhayApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Buhay - Disaster Response App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        scaffoldBackgroundColor: backgroundColor,
+        brightness: Brightness.dark,
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle:
+              SystemUiOverlayStyle.light, // White status bar icons
+        ),
       ),
       routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,

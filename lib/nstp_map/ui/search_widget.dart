@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../controller/search_controller.dart' as local;
 
 class SearchWidget extends StatelessWidget {

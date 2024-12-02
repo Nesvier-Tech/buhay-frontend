@@ -1,3 +1,4 @@
+import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +15,8 @@ class AppRouter {
 
   static final GoRouter router = GoRouter(
     // initialLocation: '/sign-in',
-    initialLocation: '/system-map',
+    // initialLocation: '/system-map',
+    initialLocation: '/dashboard',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(
@@ -23,6 +25,15 @@ class AppRouter {
           return const SignInPage();
         },
         pageBuilder: pageBuilder(child: const SignInPage()),
+      ),
+
+      // Dashboard Page.
+      GoRoute(
+        path: '/dashboard',
+        builder: (BuildContext context, GoRouterState state) {
+          return const HomePage();
+        },
+        pageBuilder: pageBuilder(child: const DashboardPage()),
       ),
 
       // Home Page.
