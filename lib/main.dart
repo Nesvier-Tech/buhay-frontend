@@ -1,3 +1,12 @@
+/*
+  TODO:
+    - Finish Edit Profile
+    - Refactor code
+    - Add documentation
+    - Create Tests (for edit profile)
+    - Finish Settings Page
+*/
+
 import 'package:flutter/material.dart';
 
 void main() {
