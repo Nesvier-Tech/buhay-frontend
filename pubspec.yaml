@@ -56,7 +56,7 @@ dependencies:
   bloc_test: ^9.1.7
   envied: ^1.0.0
   google_maps_flutter: ^2.9.0
-  mapbox_maps_flutter: ^2.3.0
+  mapbox_maps_flutter: ^2.4.1
   permission_handler: ^11.3.1
   flutter_map:
   latlong2:

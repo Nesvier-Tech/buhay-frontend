@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class SystemController {
   SystemController({required this.currentLocation});
@@ -11,7 +12,7 @@ class SystemController {
   MapboxMap? mapboxMap;
   LatLng? startMarkerPosition;
   LatLng? endMarkerPosition;
-  String id = 'unique_id';
+  String uniqueId = Uuid().v4();
 
   // Initialization
   void onMapCreated(MapboxMap map) {
@@ -118,10 +119,10 @@ class SystemController {
   }
 
   // Route Drawing
-  Future<void> clearRoute(String id) async {
+  Future<void> clearRoute(String layerId) async {
     if (mapboxMap != null) {
-      await mapboxMap!.style.removeStyleLayer(id);
-      await mapboxMap!.style.removeStyleSource(id);
+      await mapboxMap!.style.removeStyleLayer(layerId);
+      await mapboxMap!.style.removeStyleSource(layerId);
     }
   }
 
@@ -132,19 +133,23 @@ class SystemController {
 
   void addPolylineLayer(Map<String, dynamic> data) async {
     if (mapboxMap != null) {
+      uniqueId = Uuid().v4();
+
       await mapboxMap!.style.addSource(
         GeoJsonSource(
-          id: id,
+          id: uniqueId,
           data: jsonEncode(data),
         ),
       );
       await mapboxMap!.style.addLayer(LineLayer(
-          id: id,
-          sourceId: id,
+          id: uniqueId,
+          sourceId: uniqueId,
           lineJoin: LineJoin.ROUND,
           lineCap: LineCap.ROUND,
           lineColor: Colors.blue.value,
           lineWidth: 6.0));
+
+      // await clearRoute(uniqueId);
     }
   }
 }

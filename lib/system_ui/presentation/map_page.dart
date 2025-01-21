@@ -99,7 +99,7 @@ class _MapPageState extends State<MapPage> {
     systemController.setCurrentLocation(location, isStartMarker);
     setState(() {});
     _updateMarkerPosition();
-    await systemController.clearRoute(systemController.id);
+    await systemController.clearRoute(systemController.uniqueId);
   }
 
   void _updateMarkerPosition() async {
