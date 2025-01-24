@@ -49,9 +49,10 @@ class MapboxResultExperimentPageState
               ]
             },
             "properties": {}
-          }
-        ]
+          },
+        ],
       },
+      "distance": 150,
     },
     {
       "title": "Quezon City",
@@ -113,6 +114,7 @@ class MapboxResultExperimentPageState
           }
         ],
       },
+      "distance": 160,
     }
   ];
 
@@ -142,27 +144,97 @@ class MapboxResultExperimentPageState
             ),
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.3,
-            minChildSize: 0.10,
+            initialChildSize: 0.2,
+            minChildSize: 0.15,
             maxChildSize: 0.75,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
-                color: Colors.white,
+                margin: const EdgeInsets.only(top: 8.0),
+                width: 30.0,
+                height: 3.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  child: Column(
-                    children: _locations.map((location) {
-                      return ListTile(
-                        title: Text(location['title']),
-                        onTap: () async {
-                          systemController
-                              .clearRoute(systemController.uniqueId);
-                          await systemController
-                              .onSubmit(Future.value(location['geojson']));
-                          setState(() {});
-                        },
-                      );
-                    }).toList(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Column(
+                      children: _locations.map((location) {
+                        return ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Left column: Coordinates
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Location ${_locations.indexOf(location) + 1}',
+                                    ),
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Start: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                "${location['geojson']['features'][0]['geometry']['coordinates'][0].join(', ')}\n",
+                                          ),
+                                          TextSpan(
+                                            text: "End: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                "${location['geojson']['features'][0]['geometry']['coordinates'].last.join(', ')}",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Right column: Distance
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Wrap the distance in a Column to separate the number and the unit
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${location['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
+                                        style: TextStyle(
+                                            fontSize: 26,
+                                            fontWeight: FontWeight
+                                                .bold), // Adjust font size as needed
+                                      ),
+                                      Text("meters"),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          onTap: () async {
+                            systemController
+                                .clearRoute(systemController.uniqueId);
+                            await systemController
+                                .onSubmit(Future.value(location['geojson']));
+                            setState(() {});
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               );
