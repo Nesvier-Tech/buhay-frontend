@@ -15,8 +15,8 @@ class AppRouter {
 
   static final GoRouter router = GoRouter(
     // initialLocation: '/sign-in',
-    // initialLocation: '/mapbox_result_experiment',
-    initialLocation: '/system-map',
+    initialLocation: '/mapbox_result_experiment',
+    // initialLocation: '/system-map',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(

@@ -115,7 +115,7 @@ class MapboxResultExperimentPageState
         ],
       },
       "distance": 160,
-    }
+    },
   ];
 
   @override
@@ -146,7 +146,7 @@ class MapboxResultExperimentPageState
           DraggableScrollableSheet(
             initialChildSize: 0.2,
             minChildSize: 0.15,
-            maxChildSize: 0.75,
+            maxChildSize: 0.60,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
                 margin: const EdgeInsets.only(top: 8.0),
@@ -158,83 +158,101 @@ class MapboxResultExperimentPageState
                 ),
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Column(
-                      children: _locations.map((location) {
-                        return ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // Left column: Coordinates
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Location ${_locations.indexOf(location) + 1}',
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "Start: ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${location['geojson']['features'][0]['geometry']['coordinates'][0].join(', ')}\n",
-                                          ),
-                                          TextSpan(
-                                            text: "End: ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                "${location['geojson']['features'][0]['geometry']['coordinates'].last.join(', ')}",
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Right column: Distance
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: _locations.map((location) {
+                      return ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Left column: Coordinates
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Wrap the distance in a Column to separate the number and the unit
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "${location['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
-                                        style: TextStyle(
-                                            fontSize: 26,
-                                            fontWeight: FontWeight
-                                                .bold), // Adjust font size as needed
-                                      ),
-                                      Text("meters"),
-                                    ],
+                                  Text(
+                                    'Location ${_locations.indexOf(location) + 1}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "Start: ",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              "${location['geojson']['features'][0]['geometry']['coordinates'][0].join(', ')}\n",
+                                        ),
+                                        TextSpan(
+                                          text: "End: ",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              "${location['geojson']['features'][0]['geometry']['coordinates'].last.join(', ')}",
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          onTap: () async {
-                            systemController
-                                .clearRoute(systemController.uniqueId);
-                            await systemController
-                                .onSubmit(Future.value(location['geojson']));
-                            setState(() {});
-                          },
-                        );
-                      }).toList(),
-                    ),
+                            ),
+                            // Right column: Distance
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Wrap the distance in a Column to separate the number and the unit
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "${location['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
+                                      style: TextStyle(
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text("meters"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        onTap: () async {
+                          systemController
+                              .clearRoute(systemController.uniqueId);
+                          await systemController
+                              .onSubmit(Future.value(location['geojson']));
+
+                          var midpointData = systemController.calculateMidpoint(
+                            location['geojson']['features'][0]['geometry']
+                                ['coordinates'][0][1],
+                            location['geojson']['features'][0]['geometry']
+                                ['coordinates'][0][0],
+                            location['geojson']['features'][0]['geometry']
+                                    ['coordinates']
+                                .last[1],
+                            location['geojson']['features'][0]['geometry']
+                                    ['coordinates']
+                                .last[0],
+                          );
+
+                          systemController.flyOperation(
+                              midpointData['midpoint'].longitude,
+                              midpointData['midpoint'].latitude,
+                              midpointData['zoom']);
+
+                          setState(() {});
+                        },
+                      );
+                    }).toList(),
                   ),
                 ),
               );

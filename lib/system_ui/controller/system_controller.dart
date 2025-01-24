@@ -33,57 +33,70 @@ class SystemController {
     currentLocation = newLatLng;
   }
 
+  Map<dynamic, dynamic> calculateMidpoint(
+      startLatitude, startLongitude, endLatitude, endLongitude) {
+    // Calculate the midpoint
+    final midpoint = LatLng(
+      (startLatitude + endLatitude) / 2,
+      (startLongitude + endLongitude) / 2,
+    );
+
+    // Calculate the distance between the two markers
+    final distance = Distance().as(
+      LengthUnit.Kilometer,
+      LatLng(startLatitude, startLongitude),
+      LatLng(endLatitude, endLongitude),
+    );
+
+    double zoom;
+    if (distance >= 5) {
+      zoom = 11;
+    } else if (distance >= 2) {
+      zoom = 13;
+    } else if (distance >= 1) {
+      zoom = 14;
+    } else {
+      zoom = 16;
+    }
+
+    return {
+      'midpoint': midpoint,
+      'zoom': zoom,
+    };
+  }
+
+  void flyOperation(longitude, latitude, zoom) {
+    mapboxMap?.flyTo(
+      CameraOptions(
+        center: Point.fromJson({
+          'coordinates': [longitude, latitude]
+        }),
+        zoom: zoom,
+      ),
+      MapAnimationOptions(duration: 500),
+    );
+  }
+
   // Marker Drawing
   void flyToLocation(LatLng location) {
     if (startMarkerPosition != null &&
         endMarkerPosition != null &&
         startMarkerPosition != endMarkerPosition) {
-      // Calculate the midpoint
-      final midpoint = LatLng(
-        (startMarkerPosition!.latitude + endMarkerPosition!.latitude) / 2,
-        (startMarkerPosition!.longitude + endMarkerPosition!.longitude) / 2,
-      );
+      final midpointData = calculateMidpoint(
+          startMarkerPosition!.latitude,
+          startMarkerPosition!.longitude,
+          endMarkerPosition!.latitude,
+          endMarkerPosition!.longitude);
+      final midpoint = midpointData['midpoint'];
+      final zoom = midpointData['zoom'];
 
-      // Calculate the distance between the two markers
-      final distance = Distance().as(
-        LengthUnit.Kilometer,
-        startMarkerPosition!,
-        endMarkerPosition!,
-      );
+      flyOperation(midpoint.longitude, midpoint.latitude, zoom);
 
       // Determine zoom level (approximate based on distance)
-      double zoom;
-      if (distance >= 5) {
-        zoom = 11;
-      } else if (distance >= 2) {
-        zoom = 13;
-      } else if (distance >= 1) {
-        zoom = 14;
-      } else {
-        zoom = 16;
-      }
-
       // Fly to the calculated center with determined zoom
-      mapboxMap?.flyTo(
-        CameraOptions(
-          center: Point.fromJson({
-            'coordinates': [midpoint.longitude, midpoint.latitude]
-          }),
-          zoom: zoom,
-        ),
-        MapAnimationOptions(duration: 500),
-      );
     } else {
       currentLocation = location;
-      mapboxMap?.flyTo(
-        CameraOptions(
-          center: Point.fromJson({
-            'coordinates': [location.longitude, location.latitude]
-          }),
-          zoom: 16.0,
-        ),
-        MapAnimationOptions(duration: 500),
-      );
+      flyOperation(location.longitude, location.latitude, 16.0);
     }
   }
 
