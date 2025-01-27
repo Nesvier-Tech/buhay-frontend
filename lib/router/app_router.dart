@@ -8,15 +8,16 @@ import '../features/home/presentation/home_page.dart';
 import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
 import '../nstp_map/ui/map.dart';
 import '../system_ui/presentation/map_page.dart';
-import '../features/mapbox_result_experiment/presentation/map_result.dart';
+import '../system_ui/presentation/map_dashboard.dart';
+import '../system_ui/presentation/map_result.dart';
 
 class AppRouter {
   const AppRouter._();
 
   static final GoRouter router = GoRouter(
     // initialLocation: '/sign-in',
-    initialLocation: '/mapbox_result_experiment',
     // initialLocation: '/system-map',
+    initialLocation: '/map-dashboard',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(
@@ -81,11 +82,19 @@ class AppRouter {
       ),
 
       GoRoute(
-          path: '/mapbox_result_experiment',
+          path: '/mapbox_result',
           builder: (BuildContext context, GoRouterState state) {
-            return const MapboxResultExperimentPage();
+            return const MapboxResultPage();
           },
-          pageBuilder: pageBuilder(child: const MapboxResultExperimentPage())),
+          pageBuilder: pageBuilder(child: const MapboxResultPage())),
+
+      GoRoute(
+        path: '/map-dashboard',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MapDashboard();
+        },
+        pageBuilder: pageBuilder(child: const MapDashboard()),
+      )
     ],
   );
 
