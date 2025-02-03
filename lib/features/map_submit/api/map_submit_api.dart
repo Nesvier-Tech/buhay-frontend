@@ -8,6 +8,7 @@ class MapSubmitApi {
     // final url =
     // 'http://49.13.218.27:8080/directions?start=${start.longitude},${start.latitude}&end=${end.longitude},${end.latitude}';
 
+    // To update the URL to the remote server
     final url = 'http://10.0.2.2:8000/directions';
 
     final body = json.encode({

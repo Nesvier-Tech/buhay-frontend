@@ -38,55 +38,54 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Center(
-          child: Stack(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Single Search Page'),
+      ),
+      body: Stack(
+        children: <Widget>[
+          MapboxMapWidget(
+              systemController: systemController,
+              onCameraChangeListener: _onCameraChangeListener),
+          if (startMarkerScreenPosition != null)
+            Positioned(
+              left: startMarkerScreenPosition!.dx - 20,
+              top: startMarkerScreenPosition!.dy - 40,
+              child: StartMapMarker(),
+            ),
+          if (endMarkerScreenPosition != null)
+            Positioned(
+              left: endMarkerScreenPosition!.dx - 20,
+              top: endMarkerScreenPosition!.dy - 40,
+              child: EndMapMarker(),
+            ),
+          Column(
             children: <Widget>[
-              MapboxMapWidget(
-                  systemController: systemController,
-                  onCameraChangeListener: _onCameraChangeListener),
-              if (startMarkerScreenPosition != null)
-                Positioned(
-                  left: startMarkerScreenPosition!.dx - 20,
-                  top: startMarkerScreenPosition!.dy - 40,
-                  child: StartMapMarker(),
-                ),
-              if (endMarkerScreenPosition != null)
-                Positioned(
-                  left: endMarkerScreenPosition!.dx - 20,
-                  top: endMarkerScreenPosition!.dy - 40,
-                  child: EndMapMarker(),
-                ),
-              Column(
-                children: <Widget>[
-                  MapSearchWidget(
-                    message: 'Choose starting location',
-                    mapboxAccessToken: mapboxAccessToken,
-                    googleToken: googleToken,
-                    onSearch: _searchPlace,
-                    boxType: true,
-                  ),
-                  MapSearchWidget(
-                    message: 'Choose destination',
-                    mapboxAccessToken: mapboxAccessToken,
-                    googleToken: googleToken,
-                    onSearch: _searchPlace,
-                    boxType: false,
-                  ),
-                  Spacer(),
-                  if (systemController.isValidRouteRequest())
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 100.0),
-                      child: MapSubmitWidget(
-                          systemController: systemController,
-                          onSubmit: _onSubmitRoute),
-                    ),
-                ],
+              MapSearchWidget(
+                message: 'Choose starting location',
+                mapboxAccessToken: mapboxAccessToken,
+                googleToken: googleToken,
+                onSearch: _searchPlace,
+                boxType: true,
               ),
+              MapSearchWidget(
+                message: 'Choose destination',
+                mapboxAccessToken: mapboxAccessToken,
+                googleToken: googleToken,
+                onSearch: _searchPlace,
+                boxType: false,
+              ),
+              Spacer(),
+              if (systemController.isValidRouteRequest())
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 100.0),
+                  child: MapSubmitWidget(
+                      systemController: systemController,
+                      onSubmit: _onSubmitRoute),
+                ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
