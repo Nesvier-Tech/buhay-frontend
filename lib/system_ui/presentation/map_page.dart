@@ -11,6 +11,8 @@ import '../controller/system_controller.dart';
 import '../../features/map_markers/presentation/start_map_marker.dart';
 import '../../features/map_markers/presentation/end_map_marker.dart';
 import '../../features/map_submit/presentation/map_submit.dart';
+import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
+import '../controller/system_results_controller.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -23,6 +25,7 @@ class _MapPageState extends State<MapPage> {
   String mapboxAccessToken = "";
   String googleToken = "";
   late SystemController systemController;
+  late MapResultsController mapResultsController;
   Offset? startMarkerScreenPosition;
   Offset? endMarkerScreenPosition;
 
@@ -34,6 +37,7 @@ class _MapPageState extends State<MapPage> {
     googleToken = Env.googleMapsApiKey1;
 
     systemController = SystemController(currentLocation: defaultLocation);
+    mapResultsController = MapResultsController();
   }
 
   @override
@@ -95,6 +99,23 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _searchPlace(LatLng location, bool isStartMarker) async {
+    // Await the response from the asynchronous call
+    var response =
+        await mapResultsController.getCheckCoordinatesIfWithinBounds(location);
+
+    // Check if the location is outside bounds
+    if (response['message'] == "false") {
+      if (mounted) {
+        await showDialog<AlertDialog>(
+          context: context,
+          builder: (BuildContext context) {
+            return CheckCoordinateDialogBox();
+          },
+        );
+      }
+      return; // Exit the method if out of bounds
+    }
+
     systemController.setCurrentLocation(location, isStartMarker);
     setState(() {});
     _updateMarkerPosition();

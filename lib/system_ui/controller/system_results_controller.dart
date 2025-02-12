@@ -1,4 +1,5 @@
 import '../api/system_results_api.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapResultsController {
   MapResultsController() : mapResultsApi = MapResultsAPI();
@@ -16,5 +17,10 @@ class MapResultsController {
 
   Future<Map<String, dynamic>> getPing() async {
     return await mapResultsApi.getPing();
+  }
+
+  Future<Map<String, dynamic>> getCheckCoordinatesIfWithinBounds(
+      LatLng point) async {
+    return await mapResultsApi.getcheckCoordinatesIfWithinBounds(point);
   }
 }
