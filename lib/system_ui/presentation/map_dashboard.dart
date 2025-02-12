@@ -18,6 +18,43 @@ class MapDashboardState extends State<MapDashboard> {
   void initState() {
     super.initState();
     mapResultsController = MapResultsController();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    try {
+      var response = await mapResultsController.getPing();
+      if (response['message'] == 'pong') {
+        print('Ping successful');
+      } else {
+        print('Ping failed');
+      }
+    } catch (e) {
+      // Show dialog on error
+      _showErrorDialog();
+    }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Connection Error'),
+          content:
+              Text('Could not connect to the server. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Try Again'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                _initialize(); // Retry the connection
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

@@ -13,4 +13,8 @@ class MapResultsController {
     routes = await mapResultsApi.getRoutes();
     return routes;
   }
+
+  Future<Map<String, dynamic>> getPing() async {
+    return await mapResultsApi.getPing();
+  }
 }
