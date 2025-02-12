@@ -5,16 +5,17 @@ import '../../../system_ui/controller/system_controller.dart';
 
 import 'package:latlong2/latlong.dart';
 
-class MapboxResultPage extends StatefulWidget {
-  const MapboxResultPage({super.key});
+class MapResultPage extends StatefulWidget {
+  final MapResultsController mapResultsController;
+
+  const MapResultPage({super.key, required this.mapResultsController});
 
   @override
-  MapboxResultPageState createState() => MapboxResultPageState();
+  MapResultPageState createState() => MapResultPageState();
 }
 
-class MapboxResultPageState extends State<MapboxResultPage> {
+class MapResultPageState extends State<MapResultPage> {
   late SystemController systemController;
-  late SystemResultsController systemResultsController;
 
   @override
   void initState() {
@@ -22,7 +23,6 @@ class MapboxResultPageState extends State<MapboxResultPage> {
     LatLng defaultLocation = const LatLng(14.6539, 121.0685);
 
     systemController = SystemController(currentLocation: defaultLocation);
-    systemResultsController = SystemResultsController();
   }
 
   @override
@@ -59,7 +59,8 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                   controller: scrollController,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: systemResultsController.locations.map((location) {
+                    children:
+                        widget.mapResultsController.routes.map((location) {
                       return ListTile(
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +72,7 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Location ${systemResultsController.locations.indexOf(location) + 1}',
+                                    'Location ${widget.mapResultsController.routes.indexOf(location) + 1}',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
@@ -86,7 +87,7 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              "${location['geojson']['features'][0]['geometry']['coordinates'][0].join(', ')}\n",
+                                              "${location['start'][0]},${location['start'][1]}\n",
                                         ),
                                         TextSpan(
                                           text: "End: ",
@@ -95,7 +96,7 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              "${location['geojson']['features'][0]['geometry']['coordinates'].last.join(', ')}",
+                                              "${location['end'][0]},${location['end'][1]}\n",
                                         ),
                                       ],
                                     ),
@@ -112,12 +113,12 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${location['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
+                                      "${location['data']['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
                                       style: TextStyle(
                                           fontSize: 26,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text("meters"),
+                                    Text("kilometers"),
                                   ],
                                 ),
                               ],
@@ -127,20 +128,14 @@ class MapboxResultPageState extends State<MapboxResultPage> {
                         onTap: () async {
                           systemController
                               .clearRoute(systemController.uniqueId);
-                          await systemController
-                              .onSubmit(Future.value(location['geojson']));
+                          await systemController.onSubmit(
+                              Future.value(location['data']['geojson']));
 
                           var midpointData = systemController.calculateMidpoint(
-                            location['geojson']['features'][0]['geometry']
-                                ['coordinates'][0][1],
-                            location['geojson']['features'][0]['geometry']
-                                ['coordinates'][0][0],
-                            location['geojson']['features'][0]['geometry']
-                                    ['coordinates']
-                                .last[1],
-                            location['geojson']['features'][0]['geometry']
-                                    ['coordinates']
-                                .last[0],
+                            location['start'][1],
+                            location['start'][0],
+                            location['end'][1],
+                            location['end'][0],
                           );
 
                           systemController.flyOperation(

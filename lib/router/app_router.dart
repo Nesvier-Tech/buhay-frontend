@@ -9,7 +9,6 @@ import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
 import '../nstp_map/ui/map.dart';
 import '../system_ui/presentation/map_page.dart';
 import '../system_ui/presentation/map_dashboard.dart';
-import '../system_ui/presentation/map_result.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -80,13 +79,6 @@ class AppRouter {
         },
         pageBuilder: pageBuilder(child: const MapPage()),
       ),
-
-      GoRoute(
-          path: '/mapbox_result',
-          builder: (BuildContext context, GoRouterState state) {
-            return const MapboxResultPage();
-          },
-          pageBuilder: pageBuilder(child: const MapboxResultPage())),
 
       GoRoute(
         path: '/map-dashboard',

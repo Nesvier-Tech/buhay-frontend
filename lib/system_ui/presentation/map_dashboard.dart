@@ -2,8 +2,23 @@ import 'package:flutter/material.dart';
 import 'map_result.dart';
 import 'map_page.dart';
 
-class MapDashboard extends StatelessWidget {
+import 'package:buhay/system_ui/controller/system_results_controller.dart';
+
+class MapDashboard extends StatefulWidget {
   const MapDashboard({super.key});
+
+  @override
+  MapDashboardState createState() => MapDashboardState();
+}
+
+class MapDashboardState extends State<MapDashboard> {
+  late MapResultsController mapResultsController;
+
+  @override
+  void initState() {
+    super.initState();
+    mapResultsController = MapResultsController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,29 +47,35 @@ class MapDashboard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(200, 50),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MapboxResultPage()), // TO UPDATE
-                );
+              onPressed: () async {
+                await mapResultsController.getRoute();
+                if (mounted) {
+                  Navigator.push(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MapResultPage(
+                              mapResultsController: mapResultsController,
+                            )), // TO UPDATE
+                  );
+                }
               },
               child: Text('Interactive Map Search'),
             ),
-            SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(200, 50),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MapboxResultPage()), // TO UPDATE
-                );
-              },
-              child: Text('Manual Search'),
-            ),
+            // SizedBox(height: 40),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: Size(200, 50),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) => MapboxResultPage()), // TO UPDATE
+            //     );
+            //   },
+            //   child: Text('Manual Search'),
+            // ),
           ],
         ),
       ),
