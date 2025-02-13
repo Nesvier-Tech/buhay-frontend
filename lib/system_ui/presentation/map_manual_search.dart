@@ -73,35 +73,30 @@ class _MapManualSearchState extends State<MapManualSearch> {
 
             // Dynamically display MapSearchWidgets based on locationDataList
             for (var locationData in mapManualSearchController.locationDataList)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 2.0), // Adds vertical spacing
-                child: Row(
-                  key: ValueKey(locationData.id),
-                  children: [
-                    Expanded(
-                      child: MapSearchWidget(
-                        message: 'Choose another location',
-                        mapboxAccessToken: mapboxAccessToken,
-                        googleToken: googleToken,
-                        onSearch: (LatLng location, bool isStartMarker) =>
-                            _searchPlace(location, false, locationData.id),
-                        boxType: false,
-                      ),
+              Row(
+                key: ValueKey(locationData.id),
+                children: [
+                  Expanded(
+                    child: MapSearchWidget(
+                      message: 'Choose another location',
+                      mapboxAccessToken: mapboxAccessToken,
+                      googleToken: googleToken,
+                      onSearch: (LatLng location, bool isStartMarker) =>
+                          _searchPlace(location, false, locationData.id),
+                      boxType: false,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle,
-                          color:
-                              Colors.red), // Adds a color to indicate removal
-                      onPressed: () {
-                        setState(() {
-                          mapManualSearchController
-                              .removeLocationById(locationData.id);
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.remove_circle,
+                        color: Colors.red), // Adds a color to indicate removal
+                    onPressed: () {
+                      setState(() {
+                        mapManualSearchController
+                            .removeLocationById(locationData.id);
+                      });
+                    },
+                  ),
+                ],
               ),
 
             // Add Another Location Button
@@ -164,7 +159,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
         await showDialog<AlertDialog>(
           context: context,
           builder: (BuildContext context) {
-            return const CheckCoordinateDialogBox();
+            return CheckCoordinateDialogBox();
           },
         );
       }
@@ -177,6 +172,13 @@ class _MapManualSearchState extends State<MapManualSearch> {
       mapManualSearchController.updateLocation(id, location);
     }
 
+    print("\n\n");
+    print(
+        "Start Marker Position: ${mapManualSearchController.startMarkerPosition}");
+    for (var locationData in mapManualSearchController.locationDataList) {
+      print(locationData.location);
+    }
+    print("\n\n");
     setState(() {});
   }
 

@@ -30,6 +30,10 @@ class MapManualSearchController {
       if (data.location == LatLng(0, 0)) {
         return false;
       }
+
+      if (data.location == startMarkerPosition) {
+        return false;
+      }
     }
 
     return true;
