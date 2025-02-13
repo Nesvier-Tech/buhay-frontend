@@ -36,6 +36,14 @@ class MapManualSearchController {
       }
     }
 
+    for (var i = 0; i < locationDataList.length; i++) {
+      for (var j = i + 1; j < locationDataList.length; j++) {
+        if (locationDataList[i].location == locationDataList[j].location) {
+          return false;
+        }
+      }
+    }
+
     return true;
   }
 

@@ -36,11 +36,10 @@ class _MapManualSearchState extends State<MapManualSearch> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manual Route Search'),
-        centerTitle: true, // Centers the title for better balance
+        centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(
-            16.0), // Adds consistent padding around the content
+        padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
             const Text(
@@ -59,9 +58,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
                   _searchPlace(location, true, null),
               boxType: true,
             ),
-            const SizedBox(
-                height:
-                    16), // Adds spacing between widgets for better readability
+            const SizedBox(height: 16),
 
             const Text(
               "Locations to Visit",
@@ -87,8 +84,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.remove_circle,
-                        color: Colors.red), // Adds a color to indicate removal
+                    icon: Icon(Icons.remove_circle, color: Colors.red),
                     onPressed: () {
                       setState(() {
                         mapManualSearchController
@@ -125,7 +121,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
               child: Tooltip(
                 message: mapManualSearchController.isValidManualSearchRequest()
                     ? ''
-                    : 'Please fill in all required fields to submit the route.',
+                    : 'Please fill in all required fields to submit the route. Ensure each location is unique.',
                 child: ElevatedButton(
                   onPressed:
                       mapManualSearchController.isValidManualSearchRequest()
@@ -172,13 +168,6 @@ class _MapManualSearchState extends State<MapManualSearch> {
       mapManualSearchController.updateLocation(id, location);
     }
 
-    print("\n\n");
-    print(
-        "Start Marker Position: ${mapManualSearchController.startMarkerPosition}");
-    for (var locationData in mapManualSearchController.locationDataList) {
-      print(locationData.location);
-    }
-    print("\n\n");
     setState(() {});
   }
 
