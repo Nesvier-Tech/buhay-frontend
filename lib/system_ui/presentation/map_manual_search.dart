@@ -1,10 +1,9 @@
 import 'package:buhay/system_ui/controller/map_manual_search_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
-import '../../env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../env/env.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/system_results_controller.dart';
@@ -21,8 +20,6 @@ class _MapManualSearchState extends State<MapManualSearch> {
   String googleToken = "";
   late MapManualSearchController mapManualSearchController;
   late MapResultsController mapResultsController;
-  Offset? startMarkerScreenPosition;
-  Offset? endMarkerScreenPosition;
 
   @override
   void initState() {
@@ -38,65 +35,126 @@ class _MapManualSearchState extends State<MapManualSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Single Search Page'),
+        title: const Text('Manual Route Search'),
+        centerTitle: true, // Centers the title for better balance
       ),
-      body: ListView(
-        children: <Widget>[
-          MapSearchWidget(
-            message: "Choose a Starting Location",
-            mapboxAccessToken: mapboxAccessToken,
-            googleToken: googleToken,
-            onSearch: (LatLng location, bool isStartMarker) => _searchPlace,
-            boxType: true,
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(
+            16.0), // Adds consistent padding around the content
+        child: ListView(
+          children: <Widget>[
+            const Text(
+              "Start Location",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Starting Location Input
+            MapSearchWidget(
+              message: "Choose a Starting Location",
+              mapboxAccessToken: mapboxAccessToken,
+              googleToken: googleToken,
+              onSearch: (LatLng location, bool isStartMarker) =>
+                  _searchPlace(location, true, null),
+              boxType: true,
+            ),
+            const SizedBox(
+                height:
+                    16), // Adds spacing between widgets for better readability
 
-          // Dynamically display MapSearchWidgets based on locationDataList
-          for (var locationData in mapManualSearchController.locationDataList)
-            Row(
-              key: ValueKey(locationData.id), // Use unique ID as the key
-              children: [
-                Expanded(
-                  child: MapSearchWidget(
-                    message: 'Choose another location',
-                    mapboxAccessToken: mapboxAccessToken,
-                    googleToken: googleToken,
-                    onSearch: (LatLng location, bool isStartMarker) =>
-                        _searchPlace(
-                            location, false, locationData.id), // Pass the ID
-                    boxType: false,
-                  ),
+            const Text(
+              "Locations to Visit",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            // Dynamically display MapSearchWidgets based on locationDataList
+            for (var locationData in mapManualSearchController.locationDataList)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 2.0), // Adds vertical spacing
+                child: Row(
+                  key: ValueKey(locationData.id),
+                  children: [
+                    Expanded(
+                      child: MapSearchWidget(
+                        message: 'Choose another location',
+                        mapboxAccessToken: mapboxAccessToken,
+                        googleToken: googleToken,
+                        onSearch: (LatLng location, bool isStartMarker) =>
+                            _searchPlace(location, false, locationData.id),
+                        boxType: false,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.remove_circle,
+                          color:
+                              Colors.red), // Adds a color to indicate removal
+                      onPressed: () {
+                        setState(() {
+                          mapManualSearchController
+                              .removeLocationById(locationData.id);
+                        });
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.remove_circle),
+              ),
+
+            // Add Another Location Button
+            if (mapManualSearchController.locationDataList.length <
+                mapManualSearchController.maxLocations)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ElevatedButton.icon(
                   onPressed: () {
                     setState(() {
-                      mapManualSearchController
-                          .removeLocationById(locationData.id);
+                      mapManualSearchController.addLocation(LatLng(0, 0));
                     });
                   },
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Add Another Location'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0)),
+                  ),
                 ),
-              ],
-            ),
+              ),
 
-          if (mapManualSearchController.locationDataList.length <
-              mapManualSearchController.maxLocations)
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  mapManualSearchController
-                      .addLocation(LatLng(0, 0)); // Add a new location
-                });
-              },
-              child: const Text('Add Another Location'),
+            // Submit Route Button
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Tooltip(
+                message: mapManualSearchController.isValidManualSearchRequest()
+                    ? ''
+                    : 'Please fill in all required fields to submit the route.',
+                child: ElevatedButton(
+                  onPressed:
+                      mapManualSearchController.isValidManualSearchRequest()
+                          ? () {}
+                          : null, // Make button unclickable
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0)),
+                  ),
+                  child: const Text(
+                    "Submit Route",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
             ),
-
-          if (mapManualSearchController.isValidManualSearchRequest())
-            ElevatedButton(onPressed: () {}, child: const Text("Submit Route")),
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  // Search Place Function
   void _searchPlace(LatLng location, bool isStartMarker, String? id) async {
     var response =
         await mapResultsController.getCheckCoordinatesIfWithinBounds(location);
@@ -106,31 +164,30 @@ class _MapManualSearchState extends State<MapManualSearch> {
         await showDialog<AlertDialog>(
           context: context,
           builder: (BuildContext context) {
-            return CheckCoordinateDialogBox();
+            return const CheckCoordinateDialogBox();
           },
         );
       }
-      return; // Exit if the location is out of bounds
+      return;
     }
 
     if (isStartMarker) {
-      mapManualSearchController.startMarkerPosition =
-          location; // Set start marker position
+      mapManualSearchController.startMarkerPosition = location;
     } else if (id != null) {
-      mapManualSearchController.updateLocation(
-          id, location); // Update location by ID
+      mapManualSearchController.updateLocation(id, location);
     }
 
-    setState(() {}); // Refresh the UI
+    setState(() {});
   }
 
+  // Submit Route Function
   void _onSubmitRoute(Future<Map<String, dynamic>> futureData) async {
     try {
       showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Calculating Route...'),
+            title: const Text('Calculating Route...'),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -148,14 +205,11 @@ class _MapManualSearchState extends State<MapManualSearch> {
       // await systemController.onSubmit(futureData);
 
       if (context.mounted) {
-        // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
-
         // TODO: PUSH MAP RESULTS PAGE
       }
     } catch (e) {
       await showDialog<AlertDialog>(
-        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(

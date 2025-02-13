@@ -1,10 +1,5 @@
-// import 'dart:convert';
-
-// import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
-// import 'package:flutter/material.dart';
 
 class LocationData {
   final String id;
@@ -23,9 +18,21 @@ class MapManualSearchController {
 
   // Route Request
   bool isValidManualSearchRequest() {
-    return startMarkerPosition != null &&
-        locationDataList.length <= 5 &&
-        locationDataList.isNotEmpty;
+    if (startMarkerPosition == null) {
+      return false;
+    }
+
+    if (locationDataList.isEmpty) {
+      return false;
+    }
+
+    for (var data in locationDataList) {
+      if (data.location == LatLng(0, 0)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void addLocation(LatLng location) {
@@ -52,8 +59,5 @@ class MapManualSearchController {
     }
   }
 
-  // Future<void> onSubmit(Future<Map<String, dynamic>> futureData) async {
-  //   final data = await futureData;
-  //   addPolylineLayer(data);
-  // }
+  // Future<void> onSubmit(Future<Map<String, dynamic>> futureData) async {}
 }
