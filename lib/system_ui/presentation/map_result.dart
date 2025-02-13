@@ -28,10 +28,12 @@ class MapResultPageState extends State<MapResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Map Results'),
-        centerTitle: true,
-      ),
+          title: Text('Map Results'),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           MapWidget(

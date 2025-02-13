@@ -1,5 +1,8 @@
+import 'package:buhay/system_ui/models.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
+
+import 'map_results_controller.dart';
 
 class LocationData {
   final String id;
@@ -9,7 +12,10 @@ class LocationData {
 }
 
 class MapManualSearchController {
-  MapManualSearchController();
+  final MapResultsController mapResultsController;
+  List<Map<String, dynamic>> response = [];
+
+  MapManualSearchController() : mapResultsController = MapResultsController();
 
   LatLng? startMarkerPosition;
   List<LocationData> locationDataList = [];
@@ -71,5 +77,29 @@ class MapManualSearchController {
     }
   }
 
-  // Future<void> onSubmit(Future<Map<String, dynamic>> futureData) async {}
+  Future<RouteRequest> manualSearchDataParsing() async {
+    List<List<double>> locationCoordinatesList = [];
+
+    for (var locationData in locationDataList) {
+      locationCoordinatesList.add(
+        [locationData.location.longitude, locationData.location.latitude],
+      );
+    }
+
+    RouteRequest body = RouteRequest(
+        startCoordinates: {
+          "coordinates": [
+            startMarkerPosition!.latitude,
+            startMarkerPosition!.longitude
+          ]
+        },
+        otherPointsCoordinates: locationCoordinatesList
+            .map((coords) => {
+                  'coordinates': [coords[1], coords[0]]
+                })
+            .toList()
+            .cast<Map<String, List<double>>>());
+
+    return body;
+  }
 }

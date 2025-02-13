@@ -43,10 +43,12 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Single Search'),
-        centerTitle: true,
-      ),
+          title: Text('Single Search'),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: <Widget>[
           MapboxMapWidget(

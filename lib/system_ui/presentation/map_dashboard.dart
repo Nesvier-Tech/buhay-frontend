@@ -22,49 +22,15 @@ class MapDashboardState extends State<MapDashboard> {
     _initialize();
   }
 
-  Future<void> _initialize() async {
-    try {
-      var response = await mapResultsController.getPing();
-      if (response['message'] == 'pong') {
-        print('Ping successful');
-      } else {
-        print('Ping failed');
-      }
-    } catch (e) {
-      // Show dialog on error
-      _showErrorDialog();
-    }
-  }
-
-  void _showErrorDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Connection Error'),
-          content:
-              Text('Could not connect to the server. Please try again later.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Try Again'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                _initialize(); // Retry the connection
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Project Buhay'),
-        centerTitle: true,
-      ),
+          title: Text('Project Buhay'),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +53,7 @@ class MapDashboardState extends State<MapDashboard> {
                 minimumSize: Size(200, 50),
               ),
               onPressed: () async {
-                await mapResultsController.getRoute();
+                await mapResultsController.testRoutes();
                 if (mounted) {
                   Navigator.push(
                     // ignore: use_build_context_synchronously
@@ -127,6 +93,42 @@ class MapDashboardState extends State<MapDashboard> {
           style: TextStyle(fontSize: 14), // Smaller font size for disclaimer
         ),
       ),
+    );
+  }
+
+  Future<void> _initialize() async {
+    try {
+      var response = await mapResultsController.getPing();
+      if (response['message'] == 'pong') {
+        print('Ping successful');
+      } else {
+        print('Ping failed');
+      }
+    } catch (e) {
+      // Show dialog on error
+      _showErrorDialog();
+    }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Connection Error'),
+          content:
+              Text('Could not connect to the server. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Try Again'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                _initialize(); // Retry the connection
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

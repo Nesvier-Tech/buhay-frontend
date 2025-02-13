@@ -7,6 +7,7 @@ import '../../env/env.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_results_controller.dart';
+import 'map_result.dart';
 
 class MapManualSearch extends StatefulWidget {
   const MapManualSearch({super.key});
@@ -34,10 +35,12 @@ class _MapManualSearchState extends State<MapManualSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Manual Route Search'),
-        centerTitle: true,
-      ),
+          title: const Text('Manual Route Search'),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -125,7 +128,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
                 child: ElevatedButton(
                   onPressed:
                       mapManualSearchController.isValidManualSearchRequest()
-                          ? () {}
+                          ? _onSubmitRoute
                           : null, // Make button unclickable
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -172,7 +175,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
   }
 
   // Submit Route Function
-  void _onSubmitRoute(Future<Map<String, dynamic>> futureData) async {
+  void _onSubmitRoute() async {
     try {
       showDialog<AlertDialog>(
         context: context,
@@ -192,15 +195,31 @@ class _MapManualSearchState extends State<MapManualSearch> {
         },
       );
 
-      // TODO: IMPLEMENT FOR MULTISEARCH ENDPOINT
-      // await systemController.onSubmit(futureData);
+      // ignore: unused_local_variable
+      var parsedBody =
+          await mapManualSearchController.manualSearchDataParsing();
+
+      // TODO: Uncomment the line below to enable route drawing based on input
+      // await mapResultsController.getRoute(parsedBody);
+      await mapResultsController.testRoutes();
 
       if (context.mounted) {
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
-        // TODO: PUSH MAP RESULTS PAGE
+      }
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MapResultPage(
+                    mapResultsController: mapResultsController,
+                  )),
+        );
       }
     } catch (e) {
       await showDialog<AlertDialog>(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
