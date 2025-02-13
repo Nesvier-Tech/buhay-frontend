@@ -44,7 +44,8 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Single Search Page'),
+        title: Text('Single Search'),
+        centerTitle: true,
       ),
       body: Stack(
         children: <Widget>[

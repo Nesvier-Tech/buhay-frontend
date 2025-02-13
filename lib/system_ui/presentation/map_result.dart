@@ -29,7 +29,8 @@ class MapResultPageState extends State<MapResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mapbox Results Page'),
+        title: Text('Map Results'),
+        centerTitle: true,
       ),
       body: Stack(
         children: [

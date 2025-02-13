@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'map_result.dart';
 import 'map_page.dart';
+import 'map_manual_search.dart';
 
 import 'package:buhay/system_ui/controller/system_results_controller.dart';
 
@@ -62,6 +63,7 @@ class MapDashboardState extends State<MapDashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Project Buhay'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -99,20 +101,20 @@ class MapDashboardState extends State<MapDashboard> {
               },
               child: Text('Interactive Map Search'),
             ),
-            // SizedBox(height: 40),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(
-            //     minimumSize: Size(200, 50),
-            //   ),
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => MapboxResultPage()), // TO UPDATE
-            //     );
-            //   },
-            //   child: Text('Manual Search'),
-            // ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(200, 50),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MapManualSearch()), // TO UPDATE
+                );
+              },
+              child: Text('Manual Search'),
+            ),
           ],
         ),
       ),
