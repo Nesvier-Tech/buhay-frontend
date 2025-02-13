@@ -3,7 +3,7 @@ import 'map_result.dart';
 import 'map_page.dart';
 import 'map_manual_search.dart';
 
-import 'package:buhay/system_ui/controller/system_results_controller.dart';
+import 'package:buhay/system_ui/controller/map_results_controller.dart';
 
 class MapDashboard extends StatefulWidget {
   const MapDashboard({super.key});

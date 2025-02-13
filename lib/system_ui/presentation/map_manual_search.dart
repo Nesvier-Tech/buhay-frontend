@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import '../../env/env.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
-import '../controller/system_results_controller.dart';
+import '../controller/map_results_controller.dart';
 
 class MapManualSearch extends StatefulWidget {
   const MapManualSearch({super.key});
