@@ -116,7 +116,7 @@ class MapResultPageState extends State<MapResultPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${location['data']['distance'].toStringAsFixed(2)}", // Rounding to 2 decimal places
+                                      "${location['data']['route']['distanceKm'].toStringAsFixed(2)}", // Rounding to 2 decimal places
                                       style: TextStyle(
                                           fontSize: 26,
                                           fontWeight: FontWeight.bold),

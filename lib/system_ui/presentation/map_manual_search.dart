@@ -200,8 +200,8 @@ class _MapManualSearchState extends State<MapManualSearch> {
           await mapManualSearchController.manualSearchDataParsing();
 
       // TODO: Uncomment the line below to enable route drawing based on input
-      // await mapResultsController.getRoute(parsedBody);
-      await mapResultsController.testRoutes();
+      await mapResultsController.getRoute(parsedBody);
+      // await mapResultsController.testRoutes();
 
       if (context.mounted) {
         // ignore: use_build_context_synchronously
