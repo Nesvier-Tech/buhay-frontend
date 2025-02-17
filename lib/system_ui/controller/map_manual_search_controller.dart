@@ -89,13 +89,13 @@ class MapManualSearchController {
     RouteRequest body = RouteRequest(
         startCoordinates: {
           "coordinates": [
-            startMarkerPosition!.latitude,
-            startMarkerPosition!.longitude
+            startMarkerPosition!.longitude,
+            startMarkerPosition!.latitude
           ]
         },
         otherPointsCoordinates: locationCoordinatesList
             .map((coords) => {
-                  'coordinates': [coords[1], coords[0]]
+                  'coordinates': [coords[0], coords[1]]
                 })
             .toList()
             .cast<Map<String, List<double>>>());
