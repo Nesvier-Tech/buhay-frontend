@@ -13,6 +13,7 @@ import '../../features/map_markers/presentation/end_map_marker.dart';
 import '../../features/map_submit/presentation/map_submit.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_results_controller.dart';
+import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -38,6 +39,8 @@ class _MapPageState extends State<MapPage> {
 
     systemController = SystemController(currentLocation: defaultLocation);
     mapResultsController = MapResultsController();
+
+    mapResultsController.checkIfConnected();
   }
 
   @override
@@ -103,6 +106,11 @@ class _MapPageState extends State<MapPage> {
 
   void _searchPlace(LatLng location, bool isStartMarker) async {
     // Await the response from the asynchronous call
+    if (!(await mapResultsController.checkIfConnected())) {
+      _showErrorDialog();
+      return;
+    }
+
     var response =
         await mapResultsController.getCheckCoordinatesIfWithinBounds(location);
 
@@ -137,6 +145,10 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onSubmitRoute(Future<Map<String, dynamic>> futureData) async {
+    if (!(await mapResultsController.checkIfConnected())) {
+      _showErrorDialog();
+      return;
+    }
     try {
       showDialog<AlertDialog>(
         context: context,
@@ -181,5 +193,14 @@ class _MapPageState extends State<MapPage> {
         },
       );
     }
+  }
+
+  Future<void> _showErrorDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: mapResultsController);
+      },
+    );
   }
 }

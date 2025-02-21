@@ -28,4 +28,22 @@ class MapResultsController {
       LatLng point) async {
     return await mapResultsApi.getcheckCoordinatesIfWithinBounds(point);
   }
+
+  Future<bool> checkIfConnected() async {
+    try {
+      var response = await getPing();
+      if (response['message'] == 'pong') {
+        print('Ping successful');
+        return true; // Connection successful
+      } else {
+        print('Ping failed');
+        return false; // Connection failed
+      }
+    } catch (e) {
+      // Show dialog on error
+      print("Ping failed now in catch");
+      print(e);
+      return false; // Connection failed
+    }
+  }
 }

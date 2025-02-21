@@ -8,6 +8,7 @@ import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_results_controller.dart';
 import 'map_result.dart';
+import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapManualSearch extends StatefulWidget {
   const MapManualSearch({super.key});
@@ -30,6 +31,8 @@ class _MapManualSearchState extends State<MapManualSearch> {
 
     mapManualSearchController = MapManualSearchController();
     mapResultsController = MapResultsController();
+
+    mapResultsController.checkIfConnected();
   }
 
   @override
@@ -150,6 +153,11 @@ class _MapManualSearchState extends State<MapManualSearch> {
 
   // Search Place Function
   void _searchPlace(LatLng location, bool isStartMarker, String? id) async {
+    if (!(await mapResultsController.checkIfConnected())) {
+      _showErrorDialog();
+      return;
+    }
+
     var response =
         await mapResultsController.getCheckCoordinatesIfWithinBounds(location);
 
@@ -177,7 +185,13 @@ class _MapManualSearchState extends State<MapManualSearch> {
   // Submit Route Function
   void _onSubmitRoute() async {
     try {
+      if (!(await mapResultsController.checkIfConnected())) {
+        _showErrorDialog();
+        return;
+      }
+
       showDialog<AlertDialog>(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -199,9 +213,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
       var parsedBody =
           await mapManualSearchController.manualSearchDataParsing();
 
-      // TODO: Uncomment the line below to enable route drawing based on input
       await mapResultsController.getRoute(parsedBody);
-      // await mapResultsController.testRoutes();
 
       if (context.mounted) {
         // ignore: use_build_context_synchronously
@@ -237,5 +249,14 @@ class _MapManualSearchState extends State<MapManualSearch> {
         },
       );
     }
+  }
+
+  Future<void> _showErrorDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: mapResultsController);
+      },
+    );
   }
 }
