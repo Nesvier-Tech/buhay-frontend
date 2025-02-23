@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'map_result.dart';
+import 'map_interactive_search.dart';
 import 'map_page.dart';
 import 'map_manual_search.dart';
 
@@ -56,13 +56,12 @@ class MapDashboardState extends State<MapDashboard> {
                 await mapResultsController.testRoutes();
                 if (mounted) {
                   Navigator.push(
-                    // ignore: use_build_context_synchronously
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MapResultPage(
-                              mapResultsController: mapResultsController,
-                            )), // TO UPDATE
-                  );
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MapInteractiveSearch()) // TO UPDATE
+                      );
                 }
               },
               child: Text('Interactive Map Search'),
