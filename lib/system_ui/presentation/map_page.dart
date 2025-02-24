@@ -46,7 +46,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Single Search'),
@@ -71,7 +71,8 @@ class _MapPageState extends State<MapPage> {
               top: endMarkerScreenPosition!.dy - 40,
               child: EndMapMarker(),
             ),
-          SingleChildScrollView(
+          Align(
+            alignment: Alignment.topCenter,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -89,18 +90,19 @@ class _MapPageState extends State<MapPage> {
                   onSearch: _searchPlace,
                   boxType: false,
                 ),
-                // add space between
-                SizedBox(height: 500),
-                if (systemController.isValidRouteRequest())
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 100.0),
-                    child: MapSubmitWidget(
-                        systemController: systemController,
-                        onSubmit: _onSubmitRoute),
-                  ),
               ],
             ),
           ),
+          if (systemController.isValidRouteRequest())
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100.0),
+                child: MapSubmitWidget(
+                    systemController: systemController,
+                    onSubmit: _onSubmitRoute),
+              ),
+            )
         ],
       ),
     );
