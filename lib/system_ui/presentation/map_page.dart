@@ -46,12 +46,14 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-          title: Text('Single Search'),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black)),
+        title: Text('Single Search'),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: Stack(
         children: <Widget>[
           MapboxMapWidget(
@@ -69,31 +71,35 @@ class _MapPageState extends State<MapPage> {
               top: endMarkerScreenPosition!.dy - 40,
               child: EndMapMarker(),
             ),
-          Column(
-            children: <Widget>[
-              MapSearchWidget(
-                message: 'Choose starting location',
-                mapboxAccessToken: mapboxAccessToken,
-                googleToken: googleToken,
-                onSearch: _searchPlace,
-                boxType: true,
-              ),
-              MapSearchWidget(
-                message: 'Choose destination',
-                mapboxAccessToken: mapboxAccessToken,
-                googleToken: googleToken,
-                onSearch: _searchPlace,
-                boxType: false,
-              ),
-              Spacer(),
-              if (systemController.isValidRouteRequest())
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 100.0),
-                  child: MapSubmitWidget(
-                      systemController: systemController,
-                      onSubmit: _onSubmitRoute),
+          SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                MapSearchWidget(
+                  message: 'Choose starting location',
+                  mapboxAccessToken: mapboxAccessToken,
+                  googleToken: googleToken,
+                  onSearch: _searchPlace,
+                  boxType: true,
                 ),
-            ],
+                MapSearchWidget(
+                  message: 'Choose destination',
+                  mapboxAccessToken: mapboxAccessToken,
+                  googleToken: googleToken,
+                  onSearch: _searchPlace,
+                  boxType: false,
+                ),
+                // add space between
+                SizedBox(height: 500),
+                if (systemController.isValidRouteRequest())
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 100.0),
+                    child: MapSubmitWidget(
+                        systemController: systemController,
+                        onSubmit: _onSubmitRoute),
+                  ),
+              ],
+            ),
           ),
         ],
       ),
