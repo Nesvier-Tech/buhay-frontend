@@ -59,9 +59,7 @@ class MapDashboardState extends State<MapDashboard> {
                       // ignore: use_build_context_synchronously
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              MapInteractiveSearch()) // TO UPDATE
-                      );
+                          builder: (context) => InteractiveSearch()));
                 }
               },
               child: Text('Interactive Map Search'),
@@ -72,11 +70,8 @@ class MapDashboardState extends State<MapDashboard> {
                 minimumSize: Size(200, 50),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MapManualSearch()), // TO UPDATE
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MapManualSearch()));
               },
               child: Text('Manual Search'),
             ),
