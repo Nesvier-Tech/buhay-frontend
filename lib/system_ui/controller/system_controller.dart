@@ -13,6 +13,8 @@ class SystemController {
   LatLng? startMarkerPosition;
   LatLng? endMarkerPosition;
   String uniqueId = Uuid().v4();
+  String startMarkerId = '';
+  String endMarkerId = '';
 
   // Initialization
   void onMapCreated(MapboxMap map) {
@@ -164,5 +166,42 @@ class SystemController {
 
       // await clearRoute(uniqueId);
     }
+  }
+
+  void addCircleAnnotation(LatLng position, String id, Color color) async {
+    if (mapboxMap != null) {
+      await mapboxMap!.style.addSource(
+        GeoJsonSource(
+          id: id,
+          data: jsonEncode({
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [position.longitude, position.latitude],
+            },
+          }),
+        ),
+      );
+
+      await mapboxMap!.style.addLayer(CircleLayer(
+        id: id,
+        sourceId: id,
+        circleRadius: 8.0,
+        circleColor: color.value,
+      ));
+    }
+  }
+
+  Future<void> removeCircleAnnotation(String id) async {
+    if (mapboxMap != null) {
+      await mapboxMap!.style.removeStyleLayer(id);
+      await mapboxMap!.style.removeStyleSource(id);
+    }
+  }
+
+  // Method to generate unique IDs for markers
+  void generateMarkerIds() {
+    startMarkerId = Uuid().v4();
+    endMarkerId = Uuid().v4();
   }
 }

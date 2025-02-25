@@ -90,7 +90,7 @@ class MapResultPageState extends State<MapResultPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              "${location['start'][0]},${location['start'][1]}\n",
+                                              "${location['start'][0].toStringAsFixed(7)},${location['start'][1].toStringAsFixed(7)}\n",
                                         ),
                                         TextSpan(
                                           text: "End: ",
@@ -99,7 +99,7 @@ class MapResultPageState extends State<MapResultPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              "${location['end'][0]},${location['end'][1]}\n",
+                                              "${location['end'][0].toStringAsFixed(7)},${location['end'][1].toStringAsFixed(7)}\n",
                                         ),
                                       ],
                                     ),
@@ -131,8 +131,28 @@ class MapResultPageState extends State<MapResultPage> {
                         onTap: () async {
                           systemController
                               .clearRoute(systemController.uniqueId);
+                          systemController.removeCircleAnnotation(
+                              systemController.startMarkerId);
+                          systemController.removeCircleAnnotation(
+                              systemController.endMarkerId);
+
+                          systemController.generateMarkerIds();
+
                           await systemController.onSubmit(
                               Future.value(location['data']['geojson']));
+
+                          // Add circle annotations for start and end markers
+                          systemController.addCircleAnnotation(
+                            LatLng(location['start'][1], location['start'][0]),
+                            systemController.startMarkerId,
+                            Colors.blue,
+                          );
+
+                          systemController.addCircleAnnotation(
+                            LatLng(location['end'][1], location['end'][0]),
+                            systemController.endMarkerId,
+                            Colors.red,
+                          );
 
                           var midpointData = systemController.calculateMidpoint(
                             location['start'][1],
