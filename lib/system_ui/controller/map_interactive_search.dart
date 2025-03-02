@@ -27,9 +27,7 @@ class MapManualSearchController {
   }
 
   void addLocation(LatLng location) {
-    locationDataList.add(
-      location
-    );
+    locationDataList.add(location);
     currentLocationCount++;
   }
 

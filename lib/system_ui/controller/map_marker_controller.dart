@@ -6,7 +6,7 @@ import 'map_results_controller.dart';
 
 class MarkerController {
   // BANDAID SOLUTION TO DELETE MARKER BUG
-  bool delete = false;
+  // bool delete = false;
 
   // To be assigned by paramters
   MapResultsController mapResultsController;
@@ -41,10 +41,10 @@ class MarkerController {
       double lng = coords.lng.toDouble();
       LatLng position = LatLng(lat, lng);
 
-      if (delete) {
-        delete = !delete;
-        return;
-      }
+      // if (delete) {
+      //   delete = !delete;
+      //   return;
+      // }
 
       if (startingPoint == null) {
         markerColor = Colors.blue.value;
@@ -67,8 +67,7 @@ class MarkerController {
 
       circleAnnotationManager
           ?.addOnCircleAnnotationClickListener(AnnotationClickListener(
-        onAnnotationClick: (annotation) =>
-            deleteCircleAnnotation(annotation, position),
+        onAnnotationClick: (annotation) => deleteCircleAnnotation(annotation),
       ));
     }
   }
@@ -76,7 +75,12 @@ class MarkerController {
   bool canAddMarker() => markerCounter < maxMarkers;
 
   // Deletes circle annotation
-  deleteCircleAnnotation(CircleAnnotation annotation, LatLng currLatLng) {
+  deleteCircleAnnotation(CircleAnnotation annotation) async {
+    Position coords = annotation.geometry.coordinates;
+    double lat = coords.lat.toDouble();
+    double lng = coords.lng.toDouble();
+    LatLng currLatLng = LatLng(lat, lng);
+
     markerCounter -= 1;
 
     if (currLatLng == startingPoint) {
@@ -92,7 +96,7 @@ class MarkerController {
 
     circleAnnotationManager?.delete(annotation);
 
-    delete = true;
+    // delete = true;
   }
 }
 

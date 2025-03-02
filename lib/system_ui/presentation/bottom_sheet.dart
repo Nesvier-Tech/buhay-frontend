@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'map_result.dart';
 import '../controller/map_marker_controller.dart';
+import '../controller/map_results_controller.dart';
+import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 // Renamed to CustomBottomSheet as BottomSheet exists in flutter library
 class CustomBottomSheet extends StatefulWidget {
@@ -14,13 +16,23 @@ class CustomBottomSheet extends StatefulWidget {
 }
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
+  late MapResultsController mapResultsController;
+
   @override
   void initState() {
     super.initState();
+
+    mapResultsController = MapResultsController();
   }
 
 // Submit Route Function
   void _onSubmitRoute() async {
+    // Checks if app has connection to server
+    if (!(await mapResultsController.checkIfConnected())) {
+      _showErrorDialog();
+      return;
+    }
+
     try {
       showDialog<AlertDialog>(
         context: context,
@@ -42,7 +54,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       var parsedBody = await widget.markerController?.mapManualSearchController
           .manualSearchDataParsing();
 
-      await widget.markerController?.mapResultsController.testRoutes();
       await widget.markerController?.mapResultsController.getRoute(parsedBody!);
 
       if (context.mounted) {
@@ -80,6 +91,15 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         },
       );
     }
+  }
+
+  Future<void> _showErrorDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: mapResultsController);
+      },
+    );
   }
 
   @override

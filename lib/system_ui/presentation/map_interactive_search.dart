@@ -5,6 +5,7 @@ import '../controller/map_results_controller.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_marker_controller.dart';
 import 'bottom_sheet.dart';
+import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class InteractiveSearch extends StatefulWidget {
   const InteractiveSearch({super.key});
@@ -29,6 +30,9 @@ class InteractiveSearchState extends State<InteractiveSearch> {
 
     mapManualSearchController = MapManualSearchController();
     mapResultsController = MapResultsController();
+
+    // Checks if app has connection to server
+    mapResultsController.checkIfConnected();
   }
 
   // Initializes circleAnnotationManager for adding circles
@@ -43,6 +47,13 @@ class InteractiveSearchState extends State<InteractiveSearch> {
   // Adds circle at tapped coordinate on map
   Future<void> _onTap(
       MapContentGestureContext mapContext, BuildContext buildContext) async {
+    // Checks if app has connection to server
+    if (!(await mapResultsController.checkIfConnected())) {
+      print('lang wifi');
+      _showErrorDialog();
+      return;
+    }
+
     Position coords = mapContext.point.coordinates;
 
     // Check if coords is valid (within QC)
@@ -66,6 +77,16 @@ class InteractiveSearchState extends State<InteractiveSearch> {
     setState(() {}); // Updates UI
   }
 
+  Future<void> _showErrorDialog() async {
+    print('hello');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: mapResultsController);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Define options for your camera
@@ -78,24 +99,23 @@ class InteractiveSearchState extends State<InteractiveSearch> {
 
     // Overlap the BottomSheet in front of the map
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          title: const Text('Interactive Search'),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black)),
-      body: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          MapWidget(
-            cameraOptions: camera,
-            onTapListener: (MapContentGestureContext gestureContext) =>
-                _onTap(gestureContext, context),
-            onMapCreated: _onMapCreated,
-          ),
-          CustomBottomSheet(markerController: markerController),
-        ],
-      ),
-    );
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            title: const Text('Interactive Search'),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black)),
+        body: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            MapWidget(
+              cameraOptions: camera,
+              onTapListener: (MapContentGestureContext gestureContext) =>
+                  _onTap(gestureContext, context),
+              onMapCreated: _onMapCreated,
+            ),
+            CustomBottomSheet(markerController: markerController),
+          ],
+        ));
   }
 }
