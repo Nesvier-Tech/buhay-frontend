@@ -35,6 +35,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
     try {
       showDialog<AlertDialog>(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -132,45 +133,60 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                    child: Text(
-                  widget.markerController?.startingPoint == null
-                      ? "Select Starting Point"
-                      : "Select ${widget.markerController!.maxMarkers - widget.markerController!.markerCounter} End Points",
-                  style: TextStyle(
-                    fontSize: 21,
-                    color: Colors.black,
-                    decoration: TextDecoration.none,
-                  ),
-                )),
+                ValueListenableBuilder<int>(
+                  valueListenable:
+                      widget.markerController?.markerCountNotifier ??
+                          ValueNotifier<int>(0),
+                  builder: (context, markerCount, child) {
+                    return Center(
+                      child: Text(
+                        widget.markerController?.startingPoint == null
+                            ? "Select Starting Point"
+                            : "Select ${widget.markerController!.maxMarkers - markerCount} End Points",
+                        style: TextStyle(
+                          fontSize: 21,
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: MediaQuery.of(context).size.height * 0.05,
-                  child: ElevatedButton(
-                    onPressed:
-                        (widget.markerController?.startingPoint == null ||
+                  child: ValueListenableBuilder<int>(
+                    valueListenable:
+                        widget.markerController?.markerCountNotifier ??
+                            ValueNotifier<int>(0),
+                    builder: (context, markerCount, child) {
+                      return ElevatedButton(
+                        onPressed: (widget.markerController?.startingPoint ==
+                                    null ||
                                 (widget.markerController?.endPoints.isEmpty ??
                                     true))
                             ? null
                             : () {
                                 _onSubmitRoute();
                               },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(43, 58, 103, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      "Confirm",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(43, 58, 103, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          "Confirm",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

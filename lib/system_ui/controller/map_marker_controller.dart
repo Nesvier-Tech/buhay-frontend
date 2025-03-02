@@ -35,6 +35,7 @@ class MarkerController {
         .getCheckCoordinatesIfWithinBounds(position);
   }
 
+  ValueNotifier<int> markerCountNotifier = ValueNotifier<int>(0);
   void addMarker(Position coords) {
     if (canAddMarker()) {
       double lat = coords.lat.toDouble();
@@ -59,16 +60,19 @@ class MarkerController {
       onMarkersUpdated?.call();
 
       markerCounter++;
+      markerCountNotifier.value = markerCounter;
+
       CircleAnnotationOptions circleAnnotationOptions = CircleAnnotationOptions(
           geometry: Point(coordinates: coords),
           circleColor: markerColor,
           circleRadius: 12.0);
       circleAnnotationManager?.create(circleAnnotationOptions);
 
-      circleAnnotationManager
-          ?.addOnCircleAnnotationClickListener(AnnotationClickListener(
-        onAnnotationClick: (annotation) => deleteCircleAnnotation(annotation),
-      ));
+      circleAnnotationManager?.addOnCircleAnnotationClickListener(
+          AnnotationClickListener(onAnnotationClick: (annotation) {
+        deleteCircleAnnotation(annotation);
+        onMarkersUpdated?.call();
+      }));
     }
   }
 
@@ -82,6 +86,7 @@ class MarkerController {
     LatLng currLatLng = LatLng(lat, lng);
 
     markerCounter -= 1;
+    markerCountNotifier.value = markerCounter;
 
     if (currLatLng == startingPoint) {
       startingPoint = null;
