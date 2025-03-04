@@ -35,18 +35,18 @@ class MapDashboardState extends State<MapDashboard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(200, 50),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MapPage()),
-                );
-              },
-              child: Text('Single Search'),
-            ),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: Size(200, 50),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => MapPage()),
+            //     );
+            //   },
+            //   child: Text('Single Search'),
+            // ),
             SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
