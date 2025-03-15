@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'map_interactive_search.dart';
 // import 'map_page.dart';
 import 'map_manual_search.dart';
+import 'package:async/async.dart';
 
 import 'package:buhay/system_ui/controller/map_results_controller.dart';
 
@@ -14,12 +15,14 @@ class MapDashboard extends StatefulWidget {
 
 class MapDashboardState extends State<MapDashboard> {
   late MapResultsController mapResultsController;
+  late RestartableTimer timer;
 
   @override
   void initState() {
     super.initState();
     mapResultsController = MapResultsController();
     _initialize();
+    timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
   @override
@@ -53,15 +56,21 @@ class MapDashboardState extends State<MapDashboard> {
                 minimumSize: Size(200, 50),
               ),
               onPressed: () async {
-                if (mounted) {
-                  Navigator.push(
-                      // ignore: use_build_context_synchronously
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InteractiveSearch()));
+                if (timer.isActive) {
+                  timer.reset();
+                } else {
+                  timer = RestartableTimer(Duration(milliseconds: 500), () {
+                    if (mounted) {
+                      Navigator.push(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InteractiveSearch()));
+                    }
+                  });
                 }
               },
-              child: Text('Interactive Map Search'),
+              child: Text('Interactive Search'),
             ),
             SizedBox(height: 40),
             ElevatedButton(
@@ -69,8 +78,19 @@ class MapDashboardState extends State<MapDashboard> {
                 minimumSize: Size(200, 50),
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MapManualSearch()));
+                if (timer.isActive) {
+                  timer.reset();
+                } else {
+                  timer = RestartableTimer(Duration(milliseconds: 500), () {
+                    if (mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapManualSearch()),
+                      );
+                    }
+                  });
+                }
               },
               child: Text('Manual Search'),
             ),
