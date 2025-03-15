@@ -10,6 +10,7 @@ import '../nstp_map/ui/map.dart';
 import '../system_ui/presentation/map_page.dart';
 import '../system_ui/presentation/map_dashboard.dart';
 import '../system_ui/presentation/map_manual_search.dart';
+import '../features/websocket_playground/presentation/test_login.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -18,6 +19,7 @@ class AppRouter {
     // initialLocation: '/sign-in',
     // initialLocation: '/system-map',
     initialLocation: '/map-dashboard',
+    // initialLocation: '/map-test-login',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(
@@ -95,6 +97,13 @@ class AppRouter {
           return const MapDashboard();
         },
         pageBuilder: pageBuilder(child: const MapDashboard()),
+      ),
+      GoRoute(
+        path: '/map-test-login',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MapTestLogin();
+        },
+        pageBuilder: pageBuilder(child: const MapTestLogin()),
       )
     ],
   );
