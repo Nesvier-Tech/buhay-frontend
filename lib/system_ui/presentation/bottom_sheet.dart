@@ -4,6 +4,7 @@ import 'map_result.dart';
 import '../controller/map_marker_controller.dart';
 import '../controller/map_results_controller.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
+import 'package:async/async.dart';
 
 // Renamed to CustomBottomSheet as BottomSheet exists in flutter library
 class CustomBottomSheet extends StatefulWidget {
@@ -17,16 +18,26 @@ class CustomBottomSheet extends StatefulWidget {
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
   late MapResultsController mapResultsController;
+  late RestartableTimer timer;
 
   @override
   void initState() {
     super.initState();
 
     mapResultsController = MapResultsController();
+    timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
 // Submit Route Function
   void _onSubmitRoute() async {
+    if (timer.isActive) {
+      timer.reset();
+    } else {
+      timer = RestartableTimer(Duration(milliseconds: 500), _submitAction);
+    }
+  }
+
+  void _submitAction() async {
     // Checks if app has connection to server
     if (!(await mapResultsController.checkIfConnected())) {
       _showErrorDialog();
