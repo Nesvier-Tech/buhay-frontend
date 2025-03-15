@@ -53,7 +53,6 @@ class MapDashboardState extends State<MapDashboard> {
                 minimumSize: Size(200, 50),
               ),
               onPressed: () async {
-                await mapResultsController.testRoutes();
                 if (mounted) {
                   Navigator.push(
                       // ignore: use_build_context_synchronously
