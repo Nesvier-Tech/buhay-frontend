@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'sample_data_page.dart';
+// import 'sample_data_page.dart';
+import '../../../system_ui/presentation/rescuer/rescuer_loading.dart';
 import 'package:async/async.dart';
-import '../controller/test_login_controller.dart';
+// import '../controller/test_login_controller.dart';
 
 class MapTestLogin extends StatefulWidget {
   const MapTestLogin({super.key});
@@ -11,22 +12,22 @@ class MapTestLogin extends StatefulWidget {
 }
 
 class MapTestLoginState extends State<MapTestLogin> {
-  late MapTestLoginController mapTestLoginController;
+  // late MapTestLoginController mapTestLoginController;
   late RestartableTimer timer;
 
   @override
   void initState() {
     super.initState();
-    mapTestLoginController = MapTestLoginController();
+    // mapTestLoginController = MapTestLoginController();
     timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
-  @override
-  void dispose() {
-    mapTestLoginController.dispose();
-    timer.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   mapTestLoginController.dispose();
+  //   timer.cancel();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +52,22 @@ class MapTestLoginState extends State<MapTestLogin> {
                   timer.reset();
                 } else {
                   timer = RestartableTimer(Duration(milliseconds: 500), () {
-                    mapTestLoginController.data =
-                        []; // Clear data before connecting
-                    mapTestLoginController
-                        .connectWebSocket(); // Connect to WebSocket here
+                    // mapTestLoginController.data =
+                    //     []; // Clear data before connecting
+                    // mapTestLoginController
+                    //     .connectWebSocket(); // Connect to WebSocket here
                     if (mounted) {
                       Navigator.push(
                           context,
+                          // MaterialPageRoute(
+                          //     builder: (context) => SampleDataPage(
+                          //           controller: mapTestLoginController,
+                          //           initialData: mapTestLoginController
+                          //               .data, // Pass current data
+                          //         )));
                           MaterialPageRoute(
-                              builder: (context) => SampleDataPage(
-                                    controller: mapTestLoginController,
-                                    initialData: mapTestLoginController
-                                        .data, // Pass current data
-                                  )));
+                              builder: (context) =>
+                                  RescuerLoading(rescuerId: "125")));
                     }
                   });
                 }
