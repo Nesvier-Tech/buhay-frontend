@@ -62,114 +62,132 @@ class MapResultPageState extends State<MapResultPage> {
                   controller: scrollController,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children:
-                        widget.mapResultsController.routes.map((location) {
-                      return ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Left column: Coordinates
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Location ${widget.mapResultsController.routes.indexOf(location) + 1}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "Start: ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              "${location['start'][0].toStringAsFixed(7)},${location['start'][1].toStringAsFixed(7)}\n",
-                                        ),
-                                        TextSpan(
-                                          text: "End: ",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              "${location['end'][0].toStringAsFixed(7)},${location['end'][1].toStringAsFixed(7)}\n",
-                                        ),
-                                      ],
+                    children: [
+                      ...widget.mapResultsController.routes.map((location) {
+                        return ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Left column: Coordinates
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Location ${widget.mapResultsController.routes.indexOf(location) + 1}',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Start: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                "${location['start'][0].toStringAsFixed(7)},${location['start'][1].toStringAsFixed(7)}\n",
+                                          ),
+                                          TextSpan(
+                                            text: "End: ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                "${location['end'][0].toStringAsFixed(7)},${location['end'][1].toStringAsFixed(7)}\n",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Right column: Distance
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Wrap the distance in a Column to separate the number and the unit
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${location['data']['route']['distanceKm'].toStringAsFixed(2)}", // Rounding to 2 decimal places
+                                        style: TextStyle(
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text("kilometers"),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
-                            // Right column: Distance
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Wrap the distance in a Column to separate the number and the unit
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "${location['data']['route']['distanceKm'].toStringAsFixed(2)}", // Rounding to 2 decimal places
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text("kilometers"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
+                          onTap: () async {
+                            systemController
+                                .clearRoute(systemController.uniqueId);
+                            systemController.removeCircleAnnotation(
+                                systemController.startMarkerId);
+                            systemController.removeCircleAnnotation(
+                                systemController.endMarkerId);
+
+                            systemController.generateMarkerIds();
+
+                            await systemController.onSubmit(
+                                Future.value(location['data']['geojson']));
+
+                            // Add circle annotations for start and end markers
+                            systemController.addCircleAnnotation(
+                              LatLng(
+                                  location['start'][1], location['start'][0]),
+                              systemController.startMarkerId,
+                              Colors.blue,
+                            );
+
+                            systemController.addCircleAnnotation(
+                              LatLng(location['end'][1], location['end'][0]),
+                              systemController.endMarkerId,
+                              Colors.red,
+                            );
+
+                            var midpointData =
+                                systemController.calculateMidpoint(
+                              location['start'][1],
+                              location['start'][0],
+                              location['end'][1],
+                              location['end'][0],
+                            );
+
+                            systemController.flyOperation(
+                                midpointData['midpoint'].longitude,
+                                midpointData['midpoint'].latitude,
+                                midpointData['zoom']);
+
+                            setState(() {});
+                          },
+                        );
+                      }),
+                      // Add a button called finish rescue
+                      Padding(
+                        padding: EdgeInsets.only(top: 2.0, bottom: 20.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 150, vertical: 15),
+                          ),
+                          onPressed: () {
+                            print('Finish Rescue');
+                          },
+                          child: Text('Finish Rescue'),
                         ),
-                        onTap: () async {
-                          systemController
-                              .clearRoute(systemController.uniqueId);
-                          systemController.removeCircleAnnotation(
-                              systemController.startMarkerId);
-                          systemController.removeCircleAnnotation(
-                              systemController.endMarkerId);
-
-                          systemController.generateMarkerIds();
-
-                          await systemController.onSubmit(
-                              Future.value(location['data']['geojson']));
-
-                          // Add circle annotations for start and end markers
-                          systemController.addCircleAnnotation(
-                            LatLng(location['start'][1], location['start'][0]),
-                            systemController.startMarkerId,
-                            Colors.blue,
-                          );
-
-                          systemController.addCircleAnnotation(
-                            LatLng(location['end'][1], location['end'][0]),
-                            systemController.endMarkerId,
-                            Colors.red,
-                          );
-
-                          var midpointData = systemController.calculateMidpoint(
-                            location['start'][1],
-                            location['start'][0],
-                            location['end'][1],
-                            location['end'][0],
-                          );
-
-                          systemController.flyOperation(
-                              midpointData['midpoint'].longitude,
-                              midpointData['midpoint'].latitude,
-                              midpointData['zoom']);
-
-                          setState(() {});
-                        },
-                      );
-                    }).toList(),
+                      ),
+                    ],
                   ),
                 ),
               );
