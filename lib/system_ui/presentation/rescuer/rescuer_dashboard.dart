@@ -14,6 +14,7 @@ class RescuerDashboard extends StatefulWidget {
 class RescuerDashboardState extends State<RescuerDashboard> {
   late RescuerController rescuerController;
   late RestartableTimer timer;
+  String routeInfoId = "1";
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class RescuerDashboardState extends State<RescuerDashboard> {
                   timer =
                       RestartableTimer(Duration(milliseconds: 500), () async {
                     if (mounted) {
-                      await rescuerController.getRouteInfo();
+                      await rescuerController.getRouteInfo(routeInfoId);
                       Navigator.push(
                           // ignore: use_build_context_synchronously
                           context,

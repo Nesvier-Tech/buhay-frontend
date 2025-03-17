@@ -24,7 +24,7 @@ class RescuerController extends MapResultsController {
     // print("Connecting to WebSocket...");
     _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
 
-    print(_channel);
+    // print(_channel);
 
     // Add the current data to the stream immediately
     if (data.isNotEmpty && !_controller.isClosed) {
@@ -33,7 +33,7 @@ class RescuerController extends MapResultsController {
 
     _channel!.stream.listen((message) {
       final decodedMessage = jsonDecode(message);
-      print("WebSocket message: $decodedMessage");
+      // print("WebSocket message: $decodedMessage");
       if (decodedMessage is List) {
         data = List<Map<String, dynamic>>.from(decodedMessage);
       } else {
@@ -59,8 +59,13 @@ class RescuerController extends MapResultsController {
     _controller.close();
   }
 
-  Future<List<Map<String, dynamic>>> getRouteInfo() async {
+  Future<List<Map<String, dynamic>>> getRouteInfo(String routeInfoId) async {
+    // routes = await rescuerApi.getRouteInfoApi(routeInfoId);
     routes = await rescuerApi.testRoutes();
     return routes;
+  }
+
+  void updateRescued(String requestId) async {
+    await rescuerApi.updateRescuedApi(requestId);
   }
 }
