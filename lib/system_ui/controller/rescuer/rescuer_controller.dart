@@ -70,7 +70,11 @@ class RescuerController extends MapResultsController {
     return routes;
   }
 
-  void updateRescued(String requestId) async {
+  Future<void> updateRescued(String requestId) async {
     await rescuerApi.updateRescuedApi(requestId);
+  }
+
+  Future<void> updateOngoing(String requestId) async {
+    await rescuerApi.updateOngoingApi(requestId);
   }
 }

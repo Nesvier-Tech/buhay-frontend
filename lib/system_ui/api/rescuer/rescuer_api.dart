@@ -69,4 +69,26 @@ class RescuerApi {
       return;
     }
   }
+
+  Future<void> updateOngoingApi(String requestId) async {
+    final url = '$startURL/update_ongoing';
+
+    final requestBody = json.encode({
+      'request_id': requestId,
+    });
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return;
+    }
+  }
 }

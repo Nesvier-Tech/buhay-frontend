@@ -7,8 +7,10 @@ import 'package:latlong2/latlong.dart';
 
 class MapResultPage extends StatefulWidget {
   final MapResultsController mapResultsController;
+  final String? rescuerId;
 
-  const MapResultPage({super.key, required this.mapResultsController});
+  const MapResultPage(
+      {super.key, required this.mapResultsController, this.rescuerId});
 
   @override
   MapResultPageState createState() => MapResultPageState();
@@ -16,6 +18,7 @@ class MapResultPage extends StatefulWidget {
 
 class MapResultPageState extends State<MapResultPage> {
   late SystemController systemController;
+  late String rescuerId;
 
   @override
   void initState() {
@@ -23,6 +26,11 @@ class MapResultPageState extends State<MapResultPage> {
     LatLng defaultLocation = const LatLng(14.6539, 121.0685);
 
     systemController = SystemController(currentLocation: defaultLocation);
+    if (widget.rescuerId != null) {
+      rescuerId = widget.rescuerId!;
+    } else {
+      rescuerId = "";
+    }
   }
 
   @override
@@ -183,6 +191,11 @@ class MapResultPageState extends State<MapResultPage> {
                           ),
                           onPressed: () {
                             print('Finish Rescue');
+
+                            // Ensure we handle the navigation more gracefully
+                            if (!mounted) return;
+
+                            Navigator.pop(context);
                           },
                           child: Text('Finish Rescue'),
                         ),

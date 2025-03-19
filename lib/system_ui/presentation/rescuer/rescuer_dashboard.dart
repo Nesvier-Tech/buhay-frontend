@@ -1,31 +1,28 @@
+import 'package:buhay/system_ui/presentation/rescuer/rescuer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:async/async.dart';
-import '../../controller/rescuer/rescuer_controller.dart';
-import '../map_result.dart';
 
 class RescuerDashboard extends StatefulWidget {
-  final RescuerController controller;
-  const RescuerDashboard({super.key, required this.controller});
+  final String rescuerId; // Accept initial data
+  const RescuerDashboard({super.key, required this.rescuerId});
 
   @override
   RescuerDashboardState createState() => RescuerDashboardState();
 }
 
 class RescuerDashboardState extends State<RescuerDashboard> {
-  late RescuerController rescuerController;
+  late String rescuerId;
   late RestartableTimer timer;
-  String routeInfoId = "1";
 
   @override
   void initState() {
     super.initState();
-    rescuerController = widget.controller;
+    rescuerId = widget.rescuerId;
     timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
   @override
   void dispose() {
-    rescuerController.dispose();
     timer.cancel();
     super.dispose();
   }
@@ -55,13 +52,12 @@ class RescuerDashboardState extends State<RescuerDashboard> {
                   timer =
                       RestartableTimer(Duration(milliseconds: 500), () async {
                     if (mounted) {
-                      await rescuerController.getRouteInfo(routeInfoId);
                       Navigator.push(
                           // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MapResultPage(
-                                    mapResultsController: rescuerController,
+                              builder: (context) => RescuerLoading(
+                                    rescuerId: rescuerId,
                                   )));
                     }
                   });

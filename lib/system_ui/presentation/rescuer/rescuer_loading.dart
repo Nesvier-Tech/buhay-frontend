@@ -1,6 +1,6 @@
+import 'package:buhay/system_ui/presentation/map_result.dart';
 import 'package:flutter/material.dart';
 import '../../controller/rescuer/rescuer_controller.dart';
-import 'rescuer_dashboard.dart';
 
 class RescuerLoading extends StatefulWidget {
   final String rescuerId; // Accept initial data
@@ -18,19 +18,18 @@ class RescuerLoading extends StatefulWidget {
 class _RescuerLoadingState extends State<RescuerLoading> {
   late RescuerController controller;
   late List<Map<String, dynamic>> data; // Local data to display immediately
-  String rescuerId = ""; // Local data to display immediately
   bool isLoading = true; // Track loading state
+  String routeInfoId = "1";
 
   @override
   void initState() {
     super.initState();
-    rescuerId = widget.rescuerId; // Initialize with the provided data
     data = []; // Initialize with the provided data
     isLoading = data.isEmpty; // Only show loading if initial data is empty
 
-    print("Rescuer ID: $rescuerId");
-
-    controller = RescuerController(rescuerId: rescuerId);
+    controller = RescuerController(rescuerId: widget.rescuerId);
+    // print rescuer id stored in controller)
+    print("Rescuer ID: ${widget.rescuerId}");
     controller.connectWebSocket(); // Connect to WebSocket here)
 
     // Listen to the stream for updates
@@ -40,8 +39,8 @@ class _RescuerLoadingState extends State<RescuerLoading> {
           // print("New Data: $newData");
           data = newData; // Update the local data when new data arrives
 
-          // print(data);
-          // data = newData; // Update the local data when new data arrives
+          // print("data: $data");
+          // print("data[0]['id']: ${data[0]['id']}");
           isLoading = false; // Stop loading once data is received
         });
       }
@@ -58,12 +57,20 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     // ignore: prefer_is_not_empty
     if (!isLoading && !data.isEmpty) {
       // Navigate when data is loaded
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("\n\nid: ${data[0]['id']}");
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        // Uncomment the following lines to update the ongoing status of the rescuer and get the route info
+        // await controller.updateOngoing(data[0]['id'].toString());
+        // await controller.getRouteInfo(data[0]['route_info_id'].toString());
+        await controller.getRouteInfo(routeInfoId);
         Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
-            builder: (context) => RescuerDashboard(
-              controller: controller,
+            builder: (context) => MapResultPage(
+              mapResultsController: controller,
+              rescuerId: controller.rescuerId,
             ),
           ),
         );
@@ -71,7 +78,12 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text("Sample Data")),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+          title: Text('Project Buhay'),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

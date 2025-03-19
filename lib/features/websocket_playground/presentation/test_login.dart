@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'sample_data_page.dart';
-import '../../../system_ui/presentation/rescuer/rescuer_loading.dart';
+import '../../../system_ui/presentation/rescuer/rescuer_dashboard.dart';
 import 'package:async/async.dart';
 // import '../controller/test_login_controller.dart';
 
@@ -67,7 +67,7 @@ class MapTestLoginState extends State<MapTestLogin> {
                           //         )));
                           MaterialPageRoute(
                               builder: (context) =>
-                                  RescuerLoading(rescuerId: "126")));
+                                  RescuerDashboard(rescuerId: "126")));
                     }
                   });
                 }
@@ -75,15 +75,6 @@ class MapTestLoginState extends State<MapTestLogin> {
               child: Text('LOGIN'),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(10),
-        color: Colors.grey[200], // Light background for the disclaimer
-        child: Text(
-          'Routes that will be shown are based on walking data.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14), // Smaller font size for disclaimer
         ),
       ),
     );
