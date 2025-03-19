@@ -37,13 +37,10 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     controller.stream.listen((newData) {
       if (mounted) {
         setState(() {
-          print("New Data: $newData");
-          if (newData.isNotEmpty) {
-            data = newData; // Update the local data when new data arrives
-          } else {
-            data = [];
-          }
-          print(data);
+          // print("New Data: $newData");
+          data = newData; // Update the local data when new data arrives
+
+          // print(data);
           // data = newData; // Update the local data when new data arrives
           isLoading = false; // Stop loading once data is received
         });
@@ -75,18 +72,20 @@ class _RescuerLoadingState extends State<RescuerLoading> {
 
     return Scaffold(
       appBar: AppBar(title: Text("Sample Data")),
-      body: isLoading
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16), // Add some spacing
-                  Text("Gathering Data..."),
-                ],
-              ),
-            ) // Show loading icon
-          : Center(child: Text("No data available")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 24),
+            Text(isLoading
+                ? "Gathering Data..."
+                : data.isEmpty
+                    ? "No new data available. Waiting for new assignments..."
+                    : "Processing data..."),
+          ],
+        ),
+      ),
     );
   }
 }
