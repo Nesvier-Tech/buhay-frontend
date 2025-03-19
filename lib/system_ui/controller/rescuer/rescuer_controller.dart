@@ -15,29 +15,34 @@ class RescuerController extends MapResultsController {
       StreamController<List<Map<String, dynamic>>>.broadcast();
 
   List<Map<String, dynamic>> data = [];
-  String url = "buhay-backend-production.up.railway.app";
+  String url = '10.0.2.2:8000';
+  // String url = "buhay-backend-production.up.railway.app";
 
   // Public getter for the broadcast stream
   Stream<List<Map<String, dynamic>>> get stream => _controller.stream;
 
   void connectWebSocket() {
     // print("Connecting to WebSocket...");
-    _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
-
-    // print(_channel);
+    // _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
+    _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
+    // print("WebSocket connected");
 
     // Add the current data to the stream immediately
     if (data.isNotEmpty && !_controller.isClosed) {
+      // print("Data is not empty");
       _controller.sink.add(data);
     }
 
     _channel!.stream.listen((message) {
       final decodedMessage = jsonDecode(message);
       // print("WebSocket message: $decodedMessage");
+
       if (decodedMessage is List) {
         data = List<Map<String, dynamic>>.from(decodedMessage);
+        // print("Data is a list");
       } else {
         data.add(decodedMessage);
+        // print("Data is not a list");
       }
       if (!_controller.isClosed) {
         _controller.sink.add(data); // Add updated data to the broadcast stream
