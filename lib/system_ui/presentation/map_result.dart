@@ -197,10 +197,6 @@ class MapResultPageState extends State<MapResultPage> {
                           ),
                           onPressed: () {
                             _onPressed();
-                            if (mounted) {
-                              // Check if widget is still mounted before navigating
-                              Navigator.pop(context);
-                            }
                           },
                           child: Text('Finish Rescue'),
                         ),
@@ -239,6 +235,11 @@ class MapResultPageState extends State<MapResultPage> {
 
       // Add the logic for finishing the rescue here
       await widget.rescuerController.updateRescued(widget.rescuerId!);
+
+      if (mounted) {
+        // Check if widget is still mounted before navigating
+        Navigator.pop(context);
+      }
     } catch (e) {
       if (!mounted) return; // Check if still mounted
       await showDialog<AlertDialog>(
