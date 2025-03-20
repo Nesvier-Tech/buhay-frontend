@@ -27,7 +27,7 @@ class RescuerApi {
     final url = '$startURL/get_route_info';
 
     final requestBody = json.encode({
-      'route_info_id': routeInfoId,
+      'route_id': routeInfoId,
     });
 
     final response = await http.post(
@@ -39,7 +39,8 @@ class RescuerApi {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      var data = json.decode(response.body);
+      data = json.decode(data['payload']['route_data']);
       final List<dynamic> routes = data['routes'];
 
       return List<Map<String, dynamic>>.from(routes);

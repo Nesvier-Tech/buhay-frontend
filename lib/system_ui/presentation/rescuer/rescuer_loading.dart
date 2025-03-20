@@ -20,7 +20,7 @@ class _RescuerLoadingState extends State<RescuerLoading> {
   late RescuerController controller;
   late List<Map<String, dynamic>> data; // Local data to display immediately
   bool isLoading = true; // Track loading state
-  String routeInfoId = "1";
+  // String routeInfoId = "1";
 
   @override
   void initState() {
@@ -65,13 +65,14 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     // ignore: prefer_is_not_empty
     if (!isLoading && !data.isEmpty) {
       // Navigate when data is loaded
-      print("\n\nid: ${data[0]['id']}");
+      print("\n\nid: ${data[0]['rescuer_id']}");
+      // print("data: $data\n\n");
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         // Uncomment the following lines to update the ongoing status of the rescuer and get the route info
+        await controller.getRouteInfo(data[0]['route_info_id'].toString());
         // await controller.updateOngoing(data[0]['id'].toString());
-        // await controller.getRouteInfo(data[0]['route_info_id'].toString());
-        await controller.getRouteInfo(routeInfoId);
+        // await controller.getRouteInfo(routeInfoId);
         Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
           context,

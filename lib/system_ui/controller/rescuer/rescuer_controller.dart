@@ -65,8 +65,8 @@ class RescuerController extends MapResultsController {
   }
 
   Future<List<Map<String, dynamic>>> getRouteInfo(String routeInfoId) async {
-    // routes = await rescuerApi.getRouteInfoApi(routeInfoId);
-    routes = await rescuerApi.testRoutes();
+    routes = await rescuerApi.getRouteInfoApi(routeInfoId);
+    // routes = await rescuerApi.testRoutes();
     return routes;
   }
 
