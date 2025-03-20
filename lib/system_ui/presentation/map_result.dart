@@ -5,7 +5,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import '../../../system_ui/controller/system_controller.dart';
 import 'package:async/async.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:latlong2/latlong.dart';
 
