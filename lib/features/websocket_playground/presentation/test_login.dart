@@ -67,7 +67,7 @@ class MapTestLoginState extends State<MapTestLogin> {
                           //         )));
                           MaterialPageRoute(
                               builder: (context) =>
-                                  RescuerDashboard(rescuerId: "126")));
+                                  RescuerDashboard(rescuerId: "2")));
                     }
                   });
                 }

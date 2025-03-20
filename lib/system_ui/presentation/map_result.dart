@@ -10,10 +10,10 @@ import 'package:latlong2/latlong.dart';
 
 class MapResultPage extends StatefulWidget {
   final RescuerController rescuerController;
-  final String? rescuerId;
+  final String? requestId;
 
   const MapResultPage(
-      {super.key, required this.rescuerController, this.rescuerId});
+      {super.key, required this.rescuerController, this.requestId});
 
   @override
   MapResultPageState createState() => MapResultPageState();
@@ -21,7 +21,7 @@ class MapResultPage extends StatefulWidget {
 
 class MapResultPageState extends State<MapResultPage> {
   late SystemController systemController;
-  late String rescuerId;
+  late String requestId;
   late RestartableTimer timer;
 
   @override
@@ -30,10 +30,11 @@ class MapResultPageState extends State<MapResultPage> {
     LatLng defaultLocation = const LatLng(14.6539, 121.0685);
 
     systemController = SystemController(currentLocation: defaultLocation);
-    if (widget.rescuerId != null) {
-      rescuerId = widget.rescuerId!;
+    if (widget.requestId != null) {
+      print('Request ID: ${widget.requestId}');
+      requestId = widget.requestId!;
     } else {
-      rescuerId = "";
+      requestId = "";
     }
 
     timer = RestartableTimer(Duration(milliseconds: 500), () {});
@@ -234,7 +235,7 @@ class MapResultPageState extends State<MapResultPage> {
       print('Finish Rescue');
 
       // Add the logic for finishing the rescue here
-      await widget.rescuerController.updateRescued(widget.rescuerId!);
+      await widget.rescuerController.updateRescued(widget.requestId!);
 
       if (mounted) {
         // Check if widget is still mounted before navigating
