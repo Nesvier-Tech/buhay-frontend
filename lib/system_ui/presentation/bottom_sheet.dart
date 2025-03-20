@@ -72,16 +72,16 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       }
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MapResultPage(
-                    mapResultsController:
-                        widget.markerController!.mapResultsController,
-                  )),
-        );
-      }
+      // if (mounted) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => MapResultPage(
+      //               mapResultsController:
+      //                   widget.markerController!.mapResultsController,
+      //             )),
+      //   );
+      // }
       // ignore: unused_local_variable
     } catch (e) {
       await showDialog<AlertDialog>(

@@ -231,15 +231,15 @@ class _MapManualSearchState extends State<MapManualSearch> {
         Navigator.of(context).pop();
       }
 
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MapResultPage(
-                    mapResultsController: mapResultsController,
-                  )),
-        );
-      }
+      // if (mounted) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => MapResultPage(
+      //               mapResultsController: mapResultsController,
+      //             )),
+      //   );
+      // }
     } catch (e) {
       await showDialog<AlertDialog>(
         // ignore: use_build_context_synchronously
