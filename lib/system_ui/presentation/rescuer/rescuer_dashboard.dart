@@ -1,3 +1,4 @@
+import 'package:buhay/system_ui/controller/rescuer/rescuer_controller.dart';
 import 'package:buhay/system_ui/presentation/rescuer/rescuer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:async/async.dart';
@@ -13,11 +14,15 @@ class RescuerDashboard extends StatefulWidget {
 class RescuerDashboardState extends State<RescuerDashboard> {
   late String rescuerId;
   late RestartableTimer timer;
+  late RescuerController rescuerController;
 
   @override
   void initState() {
     super.initState();
     rescuerId = widget.rescuerId;
+    rescuerController = RescuerController(rescuerId: rescuerId);
+
+    rescuerController.checkIfConnected();
     timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
