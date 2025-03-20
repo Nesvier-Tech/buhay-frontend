@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'map_result.dart';
+// import 'map_result.dart';
 import '../controller/map_marker_controller.dart';
 import '../controller/map_results_controller.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';

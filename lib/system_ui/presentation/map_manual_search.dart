@@ -8,7 +8,7 @@ import '../../env/env.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_results_controller.dart';
-import 'map_result.dart';
+// import 'map_result.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapManualSearch extends StatefulWidget {
