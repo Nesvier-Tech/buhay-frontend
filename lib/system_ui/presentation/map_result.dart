@@ -1,16 +1,20 @@
-import 'package:buhay/system_ui/controller/map_results_controller.dart';
+// import 'package:buhay/system_ui/controller/map_results_controller.dart';
+import 'package:buhay/system_ui/controller/rescuer/rescuer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import '../../../system_ui/controller/system_controller.dart';
+import 'package:async/async.dart';
+import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:latlong2/latlong.dart';
 
 class MapResultPage extends StatefulWidget {
-  final MapResultsController mapResultsController;
+  final RescuerController rescuerController;
   final String? rescuerId;
 
   const MapResultPage(
-      {super.key, required this.mapResultsController, this.rescuerId});
+      {super.key, required this.rescuerController, this.rescuerId});
 
   @override
   MapResultPageState createState() => MapResultPageState();
@@ -19,6 +23,7 @@ class MapResultPage extends StatefulWidget {
 class MapResultPageState extends State<MapResultPage> {
   late SystemController systemController;
   late String rescuerId;
+  late RestartableTimer timer;
 
   @override
   void initState() {
@@ -31,6 +36,8 @@ class MapResultPageState extends State<MapResultPage> {
     } else {
       rescuerId = "";
     }
+
+    timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
   @override
@@ -71,7 +78,7 @@ class MapResultPageState extends State<MapResultPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ...widget.mapResultsController.routes.map((location) {
+                      ...widget.rescuerController.routes.map((location) {
                         return ListTile(
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,7 +90,7 @@ class MapResultPageState extends State<MapResultPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Location ${widget.mapResultsController.routes.indexOf(location) + 1}',
+                                      'Location ${widget.rescuerController.routes.indexOf(location) + 1}',
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
@@ -190,12 +197,11 @@ class MapResultPageState extends State<MapResultPage> {
                                 horizontal: 150, vertical: 15),
                           ),
                           onPressed: () {
-                            print('Finish Rescue');
-
-                            // Ensure we handle the navigation more gracefully
-                            if (!mounted) return;
-
-                            Navigator.pop(context);
+                            _onPressed();
+                            if (mounted) {
+                              // Check if widget is still mounted before navigating
+                              Navigator.pop(context);
+                            }
                           },
                           child: Text('Finish Rescue'),
                         ),
@@ -208,6 +214,60 @@ class MapResultPageState extends State<MapResultPage> {
           )
         ],
       ),
+    );
+  }
+
+  void _onPressed() {
+    // Add the logic for finishing the rescue here
+    if (timer.isActive) {
+      timer.reset();
+    } else {
+      timer = RestartableTimer(Duration(milliseconds: 500), () async {
+        await _submitAction(); // Wait for submit action to complete
+      });
+    }
+  }
+
+  Future<void> _submitAction() async {
+    try {
+      if (!(await widget.rescuerController.checkIfConnected())) {
+        if (!mounted) return; // Check if still mounted
+        _showErrorDialog();
+        return;
+      }
+
+      print('Finish Rescue');
+
+      // Add the logic for finishing the rescue here
+      await widget.rescuerController.updateRescued(widget.rescuerId!);
+    } catch (e) {
+      if (!mounted) return; // Check if still mounted
+      await showDialog<AlertDialog>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: <TextButton>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _showErrorDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: widget.rescuerController);
+      },
     );
   }
 }
