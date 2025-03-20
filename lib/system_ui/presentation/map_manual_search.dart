@@ -221,6 +221,16 @@ class _MapManualSearchState extends State<MapManualSearch> {
       );
 
       // ignore: unused_local_variable
+      var convertCoordinates =
+          await mapManualSearchController.convertCoordinatesParsing();
+
+      // TODO: convert coordinates to addresses using an api call
+      // TODO: store the addresses to a variable called coordinate_names
+
+      // TODO: parse the addresses, coordinates (convertCoordinates value) and person_id (from widget) to be called to /add_request in backend
+      // TODO: proceed to `OTW` page
+
+      // TODO: CODE BELOW SHOULD BE ON THE `OTW` PAGE initstate
       var parsedBody =
           await mapManualSearchController.manualSearchDataParsing();
 
