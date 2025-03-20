@@ -1,6 +1,7 @@
 import 'package:buhay/system_ui/presentation/map_result.dart';
 import 'package:flutter/material.dart';
 import '../../controller/rescuer/rescuer_controller.dart';
+import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class RescuerLoading extends StatefulWidget {
   final String rescuerId; // Accept initial data
@@ -26,22 +27,28 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     super.initState();
     data = []; // Initialize with the provided data
     isLoading = data.isEmpty; // Only show loading if initial data is empty
-
     controller = RescuerController(rescuerId: widget.rescuerId);
 
-    // print rescuer id stored in controller)
+    // Call initialization logic in a separate async method
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    if (!(await controller.checkIfConnected())) {
+      if (!mounted) return;
+      await _showErrorDialog();
+      return;
+    }
+
+    // print rescuer id stored in controller
     print("Rescuer ID: ${widget.rescuerId}");
-    controller.connectWebSocket(); // Connect to WebSocket here)
+    controller.connectWebSocket(); // Connect to WebSocket here
 
     // Listen to the stream for updates
     controller.stream.listen((newData) {
       if (mounted) {
         setState(() {
-          // print("New Data: $newData");
           data = newData; // Update the local data when new data arrives
-
-          // print("data: $data");
-          // print("data[0]['id']: ${data[0]['id']}");
           isLoading = false; // Stop loading once data is received
         });
       }
@@ -70,7 +77,7 @@ class _RescuerLoadingState extends State<RescuerLoading> {
           context,
           MaterialPageRoute(
             builder: (context) => MapResultPage(
-              mapResultsController: controller,
+              rescuerController: controller,
               rescuerId: controller.rescuerId,
             ),
           ),
@@ -100,5 +107,15 @@ class _RescuerLoadingState extends State<RescuerLoading> {
         ),
       ),
     );
+  }
+
+  Future<void> _showErrorDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MapConnectionErrorBox(controller: controller);
+      },
+    );
+    Navigator.pop(context);
   }
 }
