@@ -22,7 +22,7 @@ class RescuerDashboardState extends State<RescuerDashboard> {
     rescuerId = widget.rescuerId;
     rescuerController = RescuerController(rescuerId: rescuerId);
 
-    rescuerController.checkIfConnected();
+    initialize();
     timer = RestartableTimer(Duration(milliseconds: 500), () {});
   }
 
@@ -82,6 +82,42 @@ class RescuerDashboardState extends State<RescuerDashboard> {
           style: TextStyle(fontSize: 14), // Smaller font size for disclaimer
         ),
       ),
+    );
+  }
+
+  Future<void> initialize() async {
+    try {
+      var response = await rescuerController.getPing();
+      if (response['message'] == 'pong') {
+        print('Ping successful');
+      } else {
+        print('Ping failed');
+      }
+    } catch (e) {
+      // Show dialog on error
+      _showErrorDialog();
+    }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Connection Error'),
+          content:
+              Text('Could not connect to the server. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Try Again'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                initialize(); // Retry the connection
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

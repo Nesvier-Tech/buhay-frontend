@@ -28,7 +28,6 @@ class _RescuerLoadingState extends State<RescuerLoading> {
     isLoading = data.isEmpty; // Only show loading if initial data is empty
 
     controller = RescuerController(rescuerId: widget.rescuerId);
-    controller.checkIfConnected();
 
     // print rescuer id stored in controller)
     print("Rescuer ID: ${widget.rescuerId}");
