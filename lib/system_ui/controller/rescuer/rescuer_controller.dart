@@ -8,6 +8,9 @@ class RescuerController extends MapResultsController {
   final String rescuerId;
   final RescuerApi rescuerApi;
 
+  // String url = '10.0.2.2:8000';
+  String url = "buhay-backend-production.up.railway.app";
+
   RescuerController({required this.rescuerId}) : rescuerApi = RescuerApi();
 
   WebSocketChannel? _channel; // Make _channel nullable
@@ -15,16 +18,14 @@ class RescuerController extends MapResultsController {
       StreamController<List<Map<String, dynamic>>>.broadcast();
 
   List<Map<String, dynamic>> data = [];
-  String url = '10.0.2.2:8000';
-  // String url = "buhay-backend-production.up.railway.app";
 
   // Public getter for the broadcast stream
   Stream<List<Map<String, dynamic>>> get stream => _controller.stream;
 
   void connectWebSocket() {
     // print("Connecting to WebSocket...");
-    // _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
-    _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
+    _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
+    // _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
     // print("WebSocket connected");
 
     // Add the current data to the stream immediately
