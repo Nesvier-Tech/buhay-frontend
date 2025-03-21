@@ -4,8 +4,8 @@ import 'package:latlong2/latlong.dart';
 import '../models.dart';
 
 class MapResultsAPI {
-  var startURL = "http://10.0.2.2:8000";
-  // var startURL = "https://buhay-backend-production.up.railway.app";
+  // var startURL = "http://10.0.2.2:8000";
+  var startURL = "https://buhay-backend-production.up.railway.app";
 
   Future<Map<String, dynamic>> getcheckCoordinatesIfWithinBounds(
       LatLng point) async {
