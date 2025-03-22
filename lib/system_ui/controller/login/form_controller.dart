@@ -65,6 +65,12 @@ class FormController {
         // databaseData.saveDataToDatabase(formData, true);
 
         final data = await loginApi.getUser(formData);
+        if (data['access_control'] == 0) {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid Credentials')),
+          );
+        }
         return data;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

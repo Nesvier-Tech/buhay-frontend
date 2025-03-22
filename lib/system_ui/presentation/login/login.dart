@@ -4,6 +4,8 @@ import '../../controller/login/form_controller.dart';
 import '../constituent/map_dashboard.dart';
 import '../rescuer/rescuer_dashboard.dart';
 import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'wip.dart';
 import 'package:async/async.dart';
 
 class LoginPage extends StatefulWidget {
@@ -39,16 +41,39 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorDialog();
       return;
     }
-    Map<String, dynamic> loginData = await _controller.submitForm(context);
     _controller.formKey.currentState!.saveAndValidate();
 
     try {
+      _controller.formKey.currentState!.saveAndValidate();
+      showDialog<AlertDialog>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Validating Credentials...'),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                LoadingAnimationWidget.discreteCircle(
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 100.0,
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      Map<String, dynamic> loginData = await _controller.submitForm(context);
       if (loginData.isNotEmpty) {
         var type = loginData['access_control'];
         var personID = loginData['person_id'];
         print("Access Type ${type}");
         // For constituent
         if (type == 1) {
+          if (context.mounted) {
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).pop();
+          }
           if (mounted) {
             Navigator.push(
               context,
@@ -58,8 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                       )),
             );
           }
-        } // TODO: add type checker for rescuer
-        else if (type == 2) {
+          return;
+        } else if (type == 2) {
           if (mounted) {
             Navigator.push(
               context,
@@ -71,6 +96,8 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       }
+      // Pop DialogBox
+      Navigator.of(context, rootNavigator: true).pop();
     } catch (e) {
       await showDialog<AlertDialog>(
         // ignore: use_build_context_synchronously
@@ -100,6 +127,15 @@ class _LoginPageState extends State<LoginPage> {
         return MapConnectionErrorBox(controller: _controller);
       },
     );
+  }
+
+  void _onWIP() async {
+    if (mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WorkInProgress()),
+      );
+    }
   }
 
   @override
@@ -173,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 26),
                 Center(
+                    child: GestureDetector(
                   child: Text(
                     'Forgot Password?',
                     textAlign: TextAlign.center,
@@ -181,17 +218,21 @@ class _LoginPageState extends State<LoginPage> {
                       color: Color(0xFF87879D),
                     ),
                   ),
-                ),
+                  onTap: () => _onWIP(),
+                )),
                 SizedBox(height: 10),
                 Center(
-                  child: Text(
-                    "Don't have an account? Sign Up",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      color: Color(0xFF87879D),
+                  child: GestureDetector(
+                    child: Text(
+                      "Don't have an Account? Sign Up",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: Color(0xFF87879D),
+                      ),
                     ),
+                    onTap: () => _onWIP(),
                   ),
                 )
               ],
