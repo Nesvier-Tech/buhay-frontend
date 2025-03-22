@@ -41,10 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorDialog();
       return;
     }
-    _controller.formKey.currentState!.saveAndValidate();
 
     try {
-      _controller.formKey.currentState!.saveAndValidate();
       showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) {
@@ -62,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
       );
-
+      _controller.formKey.currentState!.saveAndValidate();
       Map<String, dynamic> loginData = await _controller.submitForm(context);
       if (loginData.isNotEmpty) {
         var type = loginData['access_control'];
@@ -98,8 +96,8 @@ class _LoginPageState extends State<LoginPage> {
                       )),
             );
           }
+          return;
         }
-        return;
       }
       // Pop DialogBox
       Navigator.of(context, rootNavigator: true).pop();
