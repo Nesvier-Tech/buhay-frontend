@@ -86,7 +86,9 @@ class MapDashboardState extends State<MapDashboard> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MapManualSearch()),
+                            builder: (context) => MapManualSearch(
+                                  personID: widget.personID,
+                                )),
                       );
                     }
                   });

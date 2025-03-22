@@ -9,7 +9,7 @@ import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
 import '../nstp_map/ui/map.dart';
 import '../system_ui/presentation/map_page.dart';
 // import '../system_ui/presentation/map_dashboard.dart';
-import '../system_ui/presentation/map_manual_search.dart';
+// import '../system_ui/presentation/map_manual_search.dart';
 import '../system_ui/presentation/login/login.dart';
 
 class AppRouter {
@@ -83,13 +83,13 @@ class AppRouter {
         pageBuilder: pageBuilder(child: const MapPage()),
       ),
 
-      GoRoute(
-        path: '/map-manual-search',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MapManualSearch();
-        },
-        pageBuilder: pageBuilder(child: const MapManualSearch()),
-      ),
+      // GoRoute(
+      //   path: '/map-manual-search',
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const MapManualSearch();
+      //   },
+      //   pageBuilder: pageBuilder(child: const MapManualSearch()),
+      // ),
 
       // GoRoute(
       //   path: '/map-dashboard',

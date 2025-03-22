@@ -8,11 +8,13 @@ import '../../env/env.dart';
 import '../../features/map_search/presentation/search.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
 import '../controller/map_results_controller.dart';
-// import 'map_result.dart';
+import 'login/otw.dart';
+import 'map_dashboard.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapManualSearch extends StatefulWidget {
-  const MapManualSearch({super.key});
+  final int personID;
+  const MapManualSearch({super.key, required this.personID});
 
   @override
   State<MapManualSearch> createState() => _MapManualSearchState();
@@ -31,7 +33,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
     mapboxAccessToken = Env.mapboxPublicAccessToken1;
     googleToken = Env.googleMapsApiKey1;
 
-    mapManualSearchController = MapManualSearchController();
+    mapManualSearchController = MapManualSearchController(widget.personID);
     mapResultsController = MapResultsController();
 
     mapResultsController.checkIfConnected();
@@ -206,7 +208,7 @@ class _MapManualSearchState extends State<MapManualSearch> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Calculating Route...'),
+            title: const Text('Sending Request...'),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -221,35 +223,35 @@ class _MapManualSearchState extends State<MapManualSearch> {
       );
 
       // ignore: unused_local_variable
-      var convertCoordinates =
-          await mapManualSearchController.convertCoordinatesParsing();
+      var request = await mapManualSearchController.addRequestParsing();
 
-      // TODO: convert coordinates to addresses using an api call
-      // TODO: store the addresses to a variable called coordinate_names
-
-      // TODO: parse the addresses, coordinates (convertCoordinates value) and person_id (from widget) to be called to /add_request in backend
-      // TODO: proceed to `OTW` page
-
-      // TODO: CODE BELOW SHOULD BE ON THE `OTW` PAGE initstate
-      var parsedBody =
-          await mapManualSearchController.manualSearchDataParsing();
-
-      await mapResultsController.getRoute(parsedBody);
+      // Call the api for addRequest, response stores the response of the call (can be used to debug)
+      var response = await mapManualSearchController
+          .mapResultsController.mapResultsApi
+          .addRequest(request);
 
       if (context.mounted) {
+        // Pop twice so we can go back to dashboard when pressing the back arrow from the otw page
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
-      }
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
 
-      // if (mounted) {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => MapResultPage(
-      //               mapResultsController: mapResultsController,
-      //             )),
-      //   );
-      // }
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  MapDashboard(personID: mapManualSearchController.personID)),
+        );
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(builder: (context) => OnTheWayPage()),
+        );
+      }
     } catch (e) {
       await showDialog<AlertDialog>(
         // ignore: use_build_context_synchronously

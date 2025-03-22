@@ -14,8 +14,10 @@ class LocationData {
 class MapManualSearchController {
   final MapResultsController mapResultsController;
   List<Map<String, dynamic>> response = [];
+  final int personID;
 
-  MapManualSearchController() : mapResultsController = MapResultsController();
+  MapManualSearchController(this.personID)
+      : mapResultsController = MapResultsController();
 
   LatLng? startMarkerPosition;
   List<LocationData> locationDataList = [];
@@ -117,6 +119,32 @@ class MapManualSearchController {
     );
 
     ConvertCoordinates body = ConvertCoordinates(
+      coordinates: locationCoordinatesList
+          .map((coords) => {
+                'coordinates': [coords[0], coords[1]]
+              })
+          .toList()
+          .cast<Map<String, List<double>>>(),
+    );
+
+    return body;
+  }
+
+  Future<AddRequest> addRequestParsing() async {
+    List<List<double>> locationCoordinatesList = [];
+
+    for (var locationData in locationDataList) {
+      locationCoordinatesList.add(
+        [locationData.location.longitude, locationData.location.latitude],
+      );
+    }
+
+    locationCoordinatesList.add(
+      [startMarkerPosition!.longitude, startMarkerPosition!.latitude],
+    );
+
+    AddRequest body = AddRequest(
+      personID: personID,
       coordinates: locationCoordinatesList
           .map((coords) => {
                 'coordinates': [coords[0], coords[1]]

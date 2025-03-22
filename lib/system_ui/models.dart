@@ -16,20 +16,6 @@ class RouteRequest {
   }
 }
 
-// class ConvertCoordinates {
-//   List<Map<String, List<double>>> coordinates;
-
-//   ConvertCoordinates({
-//     required this.coordinates,
-//   });
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'coordinates': coordinates,
-//     };
-//   }
-// }
-
 class ConvertCoordinates {
   List<Map<String, List<double>>> coordinates;
 

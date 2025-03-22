@@ -80,6 +80,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         Navigator.of(context).pop();
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
 
         Navigator.push(
           // ignore: use_build_context_synchronously
