@@ -24,8 +24,8 @@ class RescuerController extends MapResultsController {
 
   void connectWebSocket() {
     // print("Connecting to WebSocket...");
-    _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
-    // _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
+    // _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
+    _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
     // print("WebSocket connected");
 
     // Add the current data to the stream immediately

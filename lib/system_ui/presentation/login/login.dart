@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../../controller/login/form_controller.dart';
 import '../map_dashboard.dart';
+import '../rescuer/rescuer_dashboard.dart';
 import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 import 'package:async/async.dart';
 
@@ -48,10 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         print("Access Type ${type}");
         // For constituent
         if (type == 1) {
-          // if (context.mounted) {
-          //   // ignore: use_build_context_synchronously
-          //   Navigator.of(context).pop();
-          // }
           if (mounted) {
             Navigator.push(
               context,
@@ -62,9 +59,17 @@ class _LoginPageState extends State<LoginPage> {
             );
           }
         } // TODO: add type checker for rescuer
-        // else if () {
-
-        // }
+        else if (type == 2) {
+          if (mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => RescuerDashboard(
+                        rescuerId: personID.toString(),
+                      )),
+            );
+          }
+        }
       }
     } catch (e) {
       await showDialog<AlertDialog>(
