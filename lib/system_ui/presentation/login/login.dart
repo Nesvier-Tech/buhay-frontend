@@ -85,6 +85,10 @@ class _LoginPageState extends State<LoginPage> {
           }
           return;
         } else if (type == 2) {
+          if (context.mounted) {
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).pop();
+          }
           if (mounted) {
             Navigator.push(
               context,
@@ -95,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
             );
           }
         }
+        return;
       }
       // Pop DialogBox
       Navigator.of(context, rootNavigator: true).pop();
