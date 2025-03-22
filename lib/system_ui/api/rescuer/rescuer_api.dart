@@ -10,6 +10,8 @@ class RescuerApi {
   RescuerApi() {
     startURL = "http://$domainName";
     websocketUrl = "ws://$domainName/ws";
+    // startURL = "https://$domainName";
+    // websocketUrl = "wss://$domainName/ws";
   }
 
   Future<List<Map<String, dynamic>>> testRoutes() async {
