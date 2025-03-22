@@ -74,6 +74,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           .markerController!.mapResultsController.mapResultsApi
           .addRequest(request);
 
+      print("Request ID: ${response["request_id"]}");
+
       if (context.mounted) {
         // Pop twice so we can go back to dashboard when pressing the back arrow from the otw page
         // ignore: use_build_context_synchronously
@@ -94,7 +96,12 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         Navigator.push(
           // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: (context) => OnTheWayPage()),
+          MaterialPageRoute(
+              builder: (context) => OnTheWayPage(
+                    requestId: response["request_id"],
+                    mapInteractiveSearchController:
+                        widget.markerController!.mapInteractiveSearchController,
+                  )),
         );
       }
       // ignore: unused_local_variable

@@ -111,4 +111,27 @@ class MapResultsAPI {
       return {};
     }
   }
+
+  Future<void> saveRouteRequest(SaveRoute body) async {
+    final url = "$startURL/save_route";
+
+    final requestBody = json.encode({
+      'request_id': body.requestId,
+      'points': body.points,
+    });
+
+    final response = await http.post(
+      Uri.parse(url),
+      body: requestBody,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("Route saved successfully");
+    } else {
+      print("Route not saved");
+    }
+  }
 }

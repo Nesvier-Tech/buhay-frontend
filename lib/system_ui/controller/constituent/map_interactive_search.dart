@@ -117,4 +117,11 @@ class MapInteractiveSearchController {
 
     return body;
   }
+
+  Future<SaveRoute> saveRouteParsing(int requestId) async {
+    RouteRequest points = await interactiveSearchDataParsing();
+    SaveRoute body = SaveRoute(requestId: requestId, points: points);
+
+    return body;
+  }
 }

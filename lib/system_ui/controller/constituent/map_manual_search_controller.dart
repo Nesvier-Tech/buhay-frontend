@@ -155,4 +155,11 @@ class MapManualSearchController {
 
     return body;
   }
+
+  Future<SaveRoute> saveRouteParsing(int requestId) async {
+    RouteRequest points = await manualSearchDataParsing();
+    SaveRoute body = SaveRoute(requestId: requestId, points: points);
+
+    return body;
+  }
 }

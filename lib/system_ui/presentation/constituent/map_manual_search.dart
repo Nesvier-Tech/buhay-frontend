@@ -249,7 +249,10 @@ class _MapManualSearchState extends State<MapManualSearch> {
         Navigator.push(
           // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: (context) => OnTheWayPage()),
+          MaterialPageRoute(
+              builder: (context) => OnTheWayPage(
+                  requestId: response["request_id"],
+                  mapManualSearchController: mapManualSearchController)),
         );
       }
     } catch (e) {

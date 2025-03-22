@@ -47,15 +47,19 @@ class AddRequest {
   }
 }
 
-class TestData {}
+class SaveRoute {
+  int requestId;
+  RouteRequest points;
 
-// RouteRequest should accept the following
-// RouteRequest({
-// "start": [longitude, latitude],
-// "other_points": [
-//  {
-//   "coordinates": [longitude, latitude]
-// },
-// ]
-// })
+  SaveRoute({
+    required this.requestId,
+    required this.points,
+  });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'requestId': requestId,
+      'points': points,
+    };
+  }
+}
