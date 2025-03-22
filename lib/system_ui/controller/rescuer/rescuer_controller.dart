@@ -8,8 +8,8 @@ class RescuerController extends MapResultsController {
   final String rescuerId;
   final RescuerApi rescuerApi;
 
-  // String url = '10.0.2.2:8000';
-  String url = "buhay-backend-production.up.railway.app";
+  String url = '10.0.2.2:8000';
+  // String url = "buhay-backend-production.up.railway.app";
 
   RescuerController({required this.rescuerId}) : rescuerApi = RescuerApi();
 

@@ -11,11 +11,13 @@ class LocationData {
   LocationData({required this.id, required this.location});
 }
 
-class MapManualSearchController {
+class MapInteractiveSearchController {
   final MapResultsController mapResultsController;
   List<Map<String, dynamic>> response = [];
+  final int personID;
 
-  MapManualSearchController() : mapResultsController = MapResultsController();
+  MapInteractiveSearchController(this.personID)
+      : mapResultsController = MapResultsController();
 
   LatLng? startMarkerPosition;
   List<LatLng> locationDataList = [];
@@ -39,7 +41,7 @@ class MapManualSearchController {
     currentLocationCount--;
   }
 
-  Future<RouteRequest> manualSearchDataParsing() async {
+  Future<RouteRequest> interactiveSearchDataParsing() async {
     List<List<double>> locationCoordinatesList = [];
 
     for (var locationData in locationDataList) {
@@ -61,6 +63,57 @@ class MapManualSearchController {
                 })
             .toList()
             .cast<Map<String, List<double>>>());
+
+    return body;
+  }
+
+  Future<ConvertCoordinates> convertCoordinatesParsing() async {
+    List<List<double>> locationCoordinatesList = [];
+
+    for (var locationData in locationDataList) {
+      locationCoordinatesList.add(
+        [locationData.longitude, locationData.latitude],
+      );
+    }
+
+    locationCoordinatesList.add(
+      [startMarkerPosition!.longitude, startMarkerPosition!.latitude],
+    );
+
+    ConvertCoordinates body = ConvertCoordinates(
+      coordinates: locationCoordinatesList
+          .map((coords) => {
+                'coordinates': [coords[0], coords[1]]
+              })
+          .toList()
+          .cast<Map<String, List<double>>>(),
+    );
+
+    return body;
+  }
+
+  Future<AddRequest> addRequestParsing() async {
+    List<List<double>> locationCoordinatesList = [];
+
+    for (var locationData in locationDataList) {
+      locationCoordinatesList.add(
+        [locationData.longitude, locationData.latitude],
+      );
+    }
+
+    locationCoordinatesList.add(
+      [startMarkerPosition!.longitude, startMarkerPosition!.latitude],
+    );
+
+    AddRequest body = AddRequest(
+      personID: personID,
+      coordinates: locationCoordinatesList
+          .map((coords) => {
+                'coordinates': [coords[0], coords[1]]
+              })
+          .toList()
+          .cast<Map<String, List<double>>>(),
+    );
 
     return body;
   }

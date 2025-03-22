@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-// import 'map_result.dart';
+import 'map_dashboard.dart';
+import 'login/otw.dart';
 import '../controller/map_marker_controller.dart';
 import '../controller/map_results_controller.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
@@ -50,7 +51,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Calculating Route...'),
+            title: const Text('Sending Request...'),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -63,25 +64,37 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           );
         },
       );
-      var parsedBody = await widget.markerController?.mapManualSearchController
-          .manualSearchDataParsing();
+      // Parse the request
+      var request = await widget
+          .markerController!.mapInteractiveSearchController
+          .addRequestParsing();
 
-      await widget.markerController?.mapResultsController.getRoute(parsedBody!);
+      // Call the api for addRequest, response stores the response of the call (can be used to debug)
+      var response = await widget
+          .markerController!.mapResultsController.mapResultsApi
+          .addRequest(request);
 
       if (context.mounted) {
+        // Pop twice so we can go back to dashboard when pressing the back arrow from the otw page
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+              builder: (context) => MapDashboard(
+                  personID: widget.markerController!
+                      .mapInteractiveSearchController.personID)),
+        );
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(builder: (context) => OnTheWayPage()),
+        );
       }
-      // if (mounted) {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => MapResultPage(
-      //               mapResultsController:
-      //                   widget.markerController!.mapResultsController,
-      //             )),
-      //   );
-      // }
       // ignore: unused_local_variable
     } catch (e) {
       await showDialog<AlertDialog>(
@@ -153,7 +166,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       child: Text(
                         widget.markerController?.startingPoint == null
                             ? "Select Starting Point"
-                            : "Select ${widget.markerController!.maxMarkers - markerCount} End Points",
+                            : "Select ${widget.markerController!.maxMarkers - widget.markerController!.markerCounter} End Points",
                         style: TextStyle(
                           fontSize: 21,
                           color: Colors.black,

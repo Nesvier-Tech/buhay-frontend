@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'map_interactive_search.dart';
-// import 'map_page.dart';
+import '../controller/map_results_controller.dart';
 import 'map_manual_search.dart';
 import 'package:async/async.dart';
 
-import 'package:buhay/system_ui/controller/map_results_controller.dart';
-
 class MapDashboard extends StatefulWidget {
-  const MapDashboard({super.key});
+  final int personID;
+  const MapDashboard({super.key, required this.personID});
 
   @override
   MapDashboardState createState() => MapDashboardState();
@@ -65,7 +64,8 @@ class MapDashboardState extends State<MapDashboard> {
                           // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
-                              builder: (context) => InteractiveSearch()));
+                              builder: (context) => InteractiveSearch(
+                                  personID: widget.personID)));
                     }
                   });
                 }

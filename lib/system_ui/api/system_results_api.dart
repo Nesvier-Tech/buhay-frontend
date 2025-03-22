@@ -4,8 +4,8 @@ import 'package:latlong2/latlong.dart';
 import '../models.dart';
 
 class MapResultsAPI {
-  // var startURL = "http://10.0.2.2:8000";
-  var startURL = "https://buhay-backend-production.up.railway.app";
+  var startURL = "http://10.0.2.2:8000";
+  // var startURL = "https://buhay-backend-production.up.railway.app";
 
   Future<Map<String, dynamic>> getcheckCoordinatesIfWithinBounds(
       LatLng point) async {
@@ -83,6 +83,32 @@ class MapResultsAPI {
       return List<Map<String, dynamic>>.from(routes);
     } else {
       return [{}];
+    }
+  }
+
+  Future<Map<String, dynamic>> addRequest(AddRequest body) async {
+    print("addRequest body: ${body.coordinates}");
+
+    final url = "$startURL/add_request";
+
+    final requestBody = json.encode({
+      'person_id': body.personID,
+      'coordinates': body.coordinates,
+    });
+
+    final response = await http.post(
+      Uri.parse(url),
+      body: requestBody,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      return {};
     }
   }
 }

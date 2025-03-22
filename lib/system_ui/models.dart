@@ -16,6 +16,20 @@ class RouteRequest {
   }
 }
 
+// class ConvertCoordinates {
+//   List<Map<String, List<double>>> coordinates;
+
+//   ConvertCoordinates({
+//     required this.coordinates,
+//   });
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'coordinates': coordinates,
+//     };
+//   }
+// }
+
 class ConvertCoordinates {
   List<Map<String, List<double>>> coordinates;
 
@@ -25,6 +39,23 @@ class ConvertCoordinates {
 
   Map<String, dynamic> toJson() {
     return {
+      'coordinates': coordinates,
+    };
+  }
+}
+
+class AddRequest {
+  int personID;
+  List<Map<String, List<double>>> coordinates;
+
+  AddRequest({
+    required this.personID,
+    required this.coordinates,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'person_id': personID,
       'coordinates': coordinates,
     };
   }

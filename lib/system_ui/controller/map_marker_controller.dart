@@ -10,13 +10,16 @@ class MarkerController {
 
   // To be assigned by paramters
   MapResultsController mapResultsController;
-  MapManualSearchController mapManualSearchController;
+  MapInteractiveSearchController mapInteractiveSearchController;
   CircleAnnotationManager? circleAnnotationManager;
   VoidCallback? onMarkersUpdated;
 
   // Pass as parameters
-  MarkerController(this.mapResultsController, this.mapManualSearchController,
-      this.circleAnnotationManager, this.onMarkersUpdated);
+  MarkerController(
+      this.mapResultsController,
+      this.mapInteractiveSearchController,
+      this.circleAnnotationManager,
+      this.onMarkersUpdated);
 
   // Properties to keep track of markers and coordinates
   int maxMarkers = 6;
@@ -50,11 +53,11 @@ class MarkerController {
       if (startingPoint == null) {
         markerColor = Colors.blue.value;
         startingPoint = position;
-        mapManualSearchController.startMarkerPosition = position;
+        mapInteractiveSearchController.startMarkerPosition = position;
       } else {
         markerColor = Colors.red.value;
         endPoints.add(position);
-        mapManualSearchController.addLocation(position);
+        mapInteractiveSearchController.addLocation(position);
       }
 
       onMarkersUpdated?.call();
@@ -94,7 +97,7 @@ class MarkerController {
       endPoints.remove(currLatLng);
     }
 
-    mapManualSearchController.removeLocationByLatLng(currLatLng);
+    mapInteractiveSearchController.removeLocationByLatLng(currLatLng);
 
     // Notify BottomSheet of changes
     onMarkersUpdated?.call();

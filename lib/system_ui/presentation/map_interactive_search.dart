@@ -8,7 +8,8 @@ import 'bottom_sheet.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class InteractiveSearch extends StatefulWidget {
-  const InteractiveSearch({super.key});
+  final int personID;
+  const InteractiveSearch({super.key, required this.personID});
 
   @override
   State createState() => InteractiveSearchState();
@@ -17,7 +18,7 @@ class InteractiveSearch extends StatefulWidget {
 class InteractiveSearchState extends State<InteractiveSearch> {
   late MapboxMap mapboxMap;
   late MapResultsController mapResultsController;
-  late MapManualSearchController mapManualSearchController;
+  late MapInteractiveSearchController mapInteractiveSearchController;
   MarkerController? markerController;
   CircleAnnotationManager? circleAnnotationManager;
 
@@ -28,7 +29,8 @@ class InteractiveSearchState extends State<InteractiveSearch> {
   void initState() {
     super.initState();
 
-    mapManualSearchController = MapManualSearchController();
+    mapInteractiveSearchController =
+        MapInteractiveSearchController(widget.personID);
     mapResultsController = MapResultsController();
 
     // Checks if app has connection to server
@@ -40,8 +42,11 @@ class InteractiveSearchState extends State<InteractiveSearch> {
     this.mapboxMap = mapboxMap;
     circleAnnotationManager =
         await mapboxMap.annotations.createCircleAnnotationManager();
-    markerController = MarkerController(mapResultsController,
-        mapManualSearchController, circleAnnotationManager, onMarkersUpdated);
+    markerController = MarkerController(
+        mapResultsController,
+        mapInteractiveSearchController,
+        circleAnnotationManager,
+        onMarkersUpdated);
   }
 
   // Adds circle at tapped coordinate on map
