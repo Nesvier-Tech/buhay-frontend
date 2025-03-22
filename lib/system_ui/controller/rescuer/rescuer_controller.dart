@@ -8,10 +8,9 @@ class RescuerController extends MapResultsController {
   final String rescuerId;
   final RescuerApi rescuerApi;
 
-  String url = '10.0.2.2:8000';
-  // String url = "buhay-backend-production.up.railway.app";
-
   RescuerController({required this.rescuerId}) : rescuerApi = RescuerApi();
+
+  String get url => rescuerApi.websocketUrl;
 
   WebSocketChannel? _channel; // Make _channel nullable
   final StreamController<List<Map<String, dynamic>>> _controller =
@@ -24,8 +23,7 @@ class RescuerController extends MapResultsController {
 
   void connectWebSocket() {
     // print("Connecting to WebSocket...");
-    // _channel = WebSocketChannel.connect(Uri.parse('wss://$url/ws/$rescuerId'));
-    _channel = WebSocketChannel.connect(Uri.parse('ws://$url/ws/$rescuerId'));
+    _channel = WebSocketChannel.connect(Uri.parse('$url/$rescuerId'));
     // print("WebSocket connected");
 
     // Add the current data to the stream immediately
