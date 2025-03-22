@@ -1,4 +1,5 @@
 // import 'package:buhay/system_ui/controller/map_results_controller.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:buhay/system_ui/controller/rescuer/rescuer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -162,19 +163,19 @@ class MapResultPageState extends State<MapResultPage> {
                             // Add circle annotations for start and end markers
                             var access = location['data']['geojson']['features']
                                 [0]['geometry']['coordinates'];
-                            print('access: $access');
+                            // print('access: $access');
                             systemController.addCircleAnnotation(
                               LatLng(
                                   access[0][1],
                                   // location['start'][0]),
                                   access[0][0]),
                               systemController.startMarkerId,
-                              Colors.blue,
+                              Colors.red,
                             );
 
                             // get length of coordinates
                             int length = access.length;
-                            print('length: $length');
+                            // print('length: $length');
 
                             systemController.addCircleAnnotation(
                               LatLng(
@@ -182,7 +183,7 @@ class MapResultPageState extends State<MapResultPage> {
                                   // location['start'][0]),
                                   access[length - 1][0]),
                               systemController.endMarkerId,
-                              Colors.red,
+                              Colors.blue,
                             );
 
                             var midpointData =
@@ -246,13 +247,33 @@ class MapResultPageState extends State<MapResultPage> {
         return;
       }
 
-      print('Finish Rescue');
+      showDialog<AlertDialog>(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Finishing Rescue...'),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                LoadingAnimationWidget.discreteCircle(
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 100.0,
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      // print('Finish Rescue');
 
       // Add the logic for finishing the rescue here
       await widget.rescuerController.updateRescued(widget.requestId!);
 
       if (mounted) {
         // Check if widget is still mounted before navigating
+        Navigator.pop(context);
         Navigator.pop(context);
       }
     } catch (e) {
