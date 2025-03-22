@@ -105,7 +105,8 @@ class MapResultPageState extends State<MapResultPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                "${location['start'][0].toStringAsFixed(7)},${location['start'][1].toStringAsFixed(7)}\n",
+                                                // "${location['start'][0].toStringAsFixed(7)},${location['start'][1].toStringAsFixed(7)}\n",
+                                                "${location['start']}\n",
                                           ),
                                           TextSpan(
                                             text: "End: ",
@@ -114,7 +115,8 @@ class MapResultPageState extends State<MapResultPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                "${location['end'][0].toStringAsFixed(7)},${location['end'][1].toStringAsFixed(7)}\n",
+                                                // "${location['end'][0].toStringAsFixed(7)},${location['end'][1].toStringAsFixed(7)}\n",
+                                                "${location['end']}\n",
                                           ),
                                         ],
                                       ),
@@ -158,25 +160,37 @@ class MapResultPageState extends State<MapResultPage> {
                                 Future.value(location['data']['geojson']));
 
                             // Add circle annotations for start and end markers
+                            var access = location['data']['geojson']['features']
+                                [0]['geometry']['coordinates'];
+                            print('access: $access');
                             systemController.addCircleAnnotation(
                               LatLng(
-                                  location['start'][1], location['start'][0]),
+                                  access[0][1],
+                                  // location['start'][0]),
+                                  access[0][0]),
                               systemController.startMarkerId,
                               Colors.blue,
                             );
 
+                            // get length of coordinates
+                            int length = access.length;
+                            print('length: $length');
+
                             systemController.addCircleAnnotation(
-                              LatLng(location['end'][1], location['end'][0]),
+                              LatLng(
+                                  access[length - 1][1],
+                                  // location['start'][0]),
+                                  access[length - 1][0]),
                               systemController.endMarkerId,
                               Colors.red,
                             );
 
                             var midpointData =
                                 systemController.calculateMidpoint(
-                              location['start'][1],
-                              location['start'][0],
-                              location['end'][1],
-                              location['end'][0],
+                              access[0][1],
+                              access[0][0],
+                              access[length - 1][1],
+                              access[length - 1][0],
                             );
 
                             systemController.flyOperation(
