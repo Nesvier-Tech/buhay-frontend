@@ -12,7 +12,7 @@ import '../../features/map_markers/presentation/start_map_marker.dart';
 import '../../features/map_markers/presentation/end_map_marker.dart';
 import '../../features/map_submit/presentation/map_submit.dart';
 import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
-import '../controller/map_results_controller.dart';
+import '../controller/rescuer/map_results_controller.dart';
 import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapPage extends StatefulWidget {

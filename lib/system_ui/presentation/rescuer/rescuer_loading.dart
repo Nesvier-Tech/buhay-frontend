@@ -1,4 +1,4 @@
-import 'package:buhay/system_ui/presentation/map_result.dart';
+import 'package:buhay/system_ui/presentation/rescuer/map_result.dart';
 import 'package:flutter/material.dart';
 import '../../controller/rescuer/rescuer_controller.dart';
 import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';

@@ -1,8 +1,8 @@
-import '../models.dart';
+import '../../models.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:uuid/uuid.dart';
 
-import 'map_results_controller.dart';
+import '../rescuer/map_results_controller.dart';
 
 class LocationData {
   final String id;

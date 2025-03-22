@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import '../controller/map_interactive_search.dart';
-import '../controller/map_results_controller.dart';
-import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
-import '../controller/map_marker_controller.dart';
+import '../../controller/constituent/map_interactive_search.dart';
+import '../../controller/rescuer/map_results_controller.dart';
+import '../../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
+import '../../controller/constituent/map_marker_controller.dart';
 import 'bottom_sheet.dart';
-import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
+import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class InteractiveSearch extends StatefulWidget {
   final int personID;

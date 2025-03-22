@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'map_interactive_search.dart';
-import 'map_results_controller.dart';
+import '../rescuer/map_results_controller.dart';
 
 class MarkerController {
   // BANDAID SOLUTION TO DELETE MARKER BUG

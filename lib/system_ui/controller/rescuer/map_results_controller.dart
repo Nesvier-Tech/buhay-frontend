@@ -1,6 +1,6 @@
-import '../api/system_results_api.dart';
+import '../../api/system_results_api.dart';
 import 'package:latlong2/latlong.dart';
-import '../models.dart';
+import '../../models.dart';
 
 class MapResultsController {
   MapResultsController() : mapResultsApi = MapResultsAPI();

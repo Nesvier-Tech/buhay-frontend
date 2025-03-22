@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:buhay/system_ui/controller/map_results_controller.dart';
+import 'package:buhay/system_ui/controller/rescuer/map_results_controller.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../api/rescuer/rescuer_api.dart';
 

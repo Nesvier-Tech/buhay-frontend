@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'map_interactive_search.dart';
-import '../controller/map_results_controller.dart';
+import '../../controller/rescuer/map_results_controller.dart';
 import 'map_manual_search.dart';
 import 'package:async/async.dart';
 

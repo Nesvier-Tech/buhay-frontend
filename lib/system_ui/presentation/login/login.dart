@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../../controller/login/form_controller.dart';
-import '../map_dashboard.dart';
+import '../constituent/map_dashboard.dart';
 import '../rescuer/rescuer_dashboard.dart';
 import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 import 'package:async/async.dart';

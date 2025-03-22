@@ -1,16 +1,16 @@
-import 'package:buhay/system_ui/controller/map_manual_search_controller.dart';
+import 'package:buhay/system_ui/controller/constituent/map_manual_search_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:async/async.dart';
 
-import '../../env/env.dart';
-import '../../features/map_search/presentation/search.dart';
-import '../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
-import '../controller/map_results_controller.dart';
-import 'login/otw.dart';
+import '../../../env/env.dart';
+import '../../../features/map_search/presentation/search.dart';
+import '../../../features/map_check_coordinates/presentation/check_coordinate_dialog_box.dart';
+import '../../controller/rescuer/map_results_controller.dart';
+import '../login/otw.dart';
 import 'map_dashboard.dart';
-import '../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
+import '../../../features/map_error_dialog_box/presentation/map_error_dialog_box.dart';
 
 class MapManualSearch extends StatefulWidget {
   final int personID;
