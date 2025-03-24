@@ -8,13 +8,18 @@ import '../features/home/presentation/home_page.dart';
 import '../features/mapbox_experiment/presentation/mapbox_experiment_page.dart';
 import '../nstp_map/ui/map.dart';
 import '../system_ui/presentation/map_page.dart';
+// import '../system_ui/presentation/map_dashboard.dart';
+// import '../system_ui/presentation/map_manual_search.dart';
+import '../system_ui/presentation/login/login.dart';
 
 class AppRouter {
   const AppRouter._();
 
   static final GoRouter router = GoRouter(
     // initialLocation: '/sign-in',
-    initialLocation: '/system-map',
+    // initialLocation: '/system-map',
+    // initialLocation: '/map-dashboard',
+    initialLocation: '/login',
     routes: <RouteBase>[
       // SignIn Page.
       GoRoute(
@@ -76,6 +81,29 @@ class AppRouter {
           return const MapPage();
         },
         pageBuilder: pageBuilder(child: const MapPage()),
+      ),
+
+      // GoRoute(
+      //   path: '/map-manual-search',
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const MapManualSearch();
+      //   },
+      //   pageBuilder: pageBuilder(child: const MapManualSearch()),
+      // ),
+
+      // GoRoute(
+      //   path: '/map-dashboard',
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const MapDashboard();
+      //   },
+      //   pageBuilder: pageBuilder(child: const MapDashboard()),
+      // ),
+      GoRoute(
+        path: '/login',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginPage();
+        },
+        pageBuilder: pageBuilder(child: const LoginPage()),
       )
     ],
   );
