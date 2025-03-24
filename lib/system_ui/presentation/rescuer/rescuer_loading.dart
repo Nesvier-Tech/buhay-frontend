@@ -69,7 +69,9 @@ class _RescuerLoadingState extends State<RescuerLoading> {
       // print("data: $data\n\n");
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        // Uncomment the following lines to update the ongoing status of the rescuer and get the route info
+        // Update the ongoing status of the rescuer
+        await controller.updateOngoing(data[0]['request_id'].toString());
+        print("Ongoing status updated");
         await controller.getRouteInfo(data[0]['route_info_id'].toString());
         Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
